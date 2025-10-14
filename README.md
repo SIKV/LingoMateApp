@@ -1,0 +1,3 @@
+# LingoMate
+
+### 🚧 Work in progress 🚧
