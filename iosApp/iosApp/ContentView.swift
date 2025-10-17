@@ -2,17 +2,31 @@ import SwiftUI
 import Shared
 
 struct ContentView: View {
+    @StateObject private var appRouter = AppRouter()
+    
     var body: some View {
-        VStack {
-            Text("Hello, Mate!")
+        NavigationStack(path: $appRouter.path) {
+            TabView {
+                ChatView()
+                    .tabItem {
+                        Label("Chat", systemImage: "bubble.left.and.bubble.right.fill")
+                    }
+                HistoryView()
+                    .tabItem {
+                        Label("History", systemImage: "book.pages.fill")
+                    }
+                MoreView()
+                    .tabItem {
+                        Label("More", systemImage: "ellipsis.circle")
+                    }
+            }
+            .navigationDestination(for: Route.self) { route in
+                switch route {
+                case .chatDetails:
+                    ChatDetailsView()
+                }
+            }
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-        .padding()
-    }
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
+        .environmentObject(appRouter)
     }
 }
