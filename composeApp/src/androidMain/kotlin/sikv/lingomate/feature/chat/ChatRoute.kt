@@ -6,8 +6,8 @@ import kotlinx.serialization.Serializable
 sealed interface ChatRoute : NavKey {
 
     @Serializable
-    data object Root : ChatRoute
+    data object StartChat : ChatRoute
 
     @Serializable
-    data object ChatDetails : ChatRoute
+    data object Chat : ChatRoute
 }
