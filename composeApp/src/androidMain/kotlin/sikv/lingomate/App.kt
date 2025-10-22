@@ -19,6 +19,7 @@ import sikv.lingomate.feature.history.HistoryRouteComponent
 import sikv.lingomate.feature.more.MoreRouteComponent
 import sikv.lingomate.navigation.AppRoute
 import sikv.lingomate.navigation.NavBar
+import sikv.lingomate.ui.theme.LingoMateTheme
 import sikv.lingomate.ui.theme.LocalSpacing
 import sikv.lingomate.ui.theme.Spacing
 
@@ -33,7 +34,7 @@ fun App() {
         bottomBarVisibleState.value = show
     }
 
-    MaterialTheme {
+    LingoMateTheme {
         CompositionLocalProvider(
             LocalSpacing provides Spacing()
         ) {
