@@ -11,7 +11,9 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -45,6 +47,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import sikv.lingomate.R
+import sikv.lingomate.ui.isLandscape
 import sikv.lingomate.ui.theme.spacing
 
 @Composable
@@ -52,41 +55,88 @@ fun StartChatScreen(
     onNavigateToChat: () -> Unit
 ) {
     Scaffold { innerPadding ->
-        Column(
-            verticalArrangement = Arrangement.Center,
+        BoxWithConstraints(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding),
+                .padding(innerPadding)
         ) {
-            Section(
-                title = stringResource(R.string.start_chat_language_label),
-                modifier = Modifier
-                    .padding(
-                        start = MaterialTheme.spacing.medium,
-                        end = MaterialTheme.spacing.medium,
-                        bottom = MaterialTheme.spacing.medium
+            if (isLandscape()) {
+                Column (
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = MaterialTheme.spacing.small)
+                    ) {
+                        Section(
+                            title = stringResource(R.string.start_chat_language_label)
+                        ) {
+                            ChatLanguageDropdown(
+                                modifier = Modifier.fillMaxWidth(fraction = 0.3f)
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
+
+                        Section(
+                            title = stringResource(R.string.start_chat_length_label)
+                        ) {
+                            ChatLengthOptions(
+                                modifier = Modifier.fillMaxWidth(fraction = 0.7f)
+                            )
+                        }
+                    }
+
+                    StartChatButton(
+                        onClick = onNavigateToChat,
+                        modifier = Modifier
+                            .fillMaxWidth(fraction = 0.5f)
+                            .padding(MaterialTheme.spacing.extraMedium)
                     )
-            ) {
-                ChatLanguageDropdown()
-            }
+                }
+            } else {
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    Section(
+                        title = stringResource(R.string.start_chat_language_label),
+                        modifier = Modifier
+                            .padding(
+                                start = MaterialTheme.spacing.medium,
+                                end = MaterialTheme.spacing.medium,
+                                bottom = MaterialTheme.spacing.medium
+                            )
+                    ) {
+                        ChatLanguageDropdown(
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
 
-            Section(
-                title = stringResource(R.string.start_chat_length_label),
-                modifier = Modifier
-                    .padding(
-                        start = MaterialTheme.spacing.medium,
-                        end = MaterialTheme.spacing.medium,
-                        bottom = MaterialTheme.spacing.large
-                )
-            ) {
-                ChatLengthOptions()
-            }
+                    Section(
+                        title = stringResource(R.string.start_chat_length_label),
+                        modifier = Modifier
+                            .padding(
+                                start = MaterialTheme.spacing.medium,
+                                end = MaterialTheme.spacing.medium,
+                                bottom = MaterialTheme.spacing.large
+                            )
+                    ) {
+                        ChatLengthOptions()
+                    }
 
-            StartChatButton(
-                onClick = onNavigateToChat,
-                modifier = Modifier
-                    .padding(MaterialTheme.spacing.large)
-            )
+                    StartChatButton(
+                        onClick = onNavigateToChat,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(MaterialTheme.spacing.large)
+                    )
+                }
+            }
         }
     }
 }
@@ -144,7 +194,6 @@ fun StartChatButton(
     Box(
         modifier = modifier
             .height(64.dp)
-            .fillMaxWidth()
             .background(brush, shape = RoundedCornerShape(32.dp))
             .clickable(onClick = onClick),
         contentAlignment = Alignment.Center
@@ -171,7 +220,9 @@ fun StartChatButton(
 }
 
 @Composable
-fun ChatLanguageDropdown() {
+fun ChatLanguageDropdown(
+    modifier: Modifier = Modifier
+) {
     var expanded by remember { mutableStateOf(false) }
 
     // TODO: Use string res.
@@ -180,7 +231,7 @@ fun ChatLanguageDropdown() {
     val options = listOf("English", "Spanish")
 
     Column(
-        modifier = Modifier.fillMaxWidth()
+        modifier = modifier
     ) {
         FilledTonalButton(
             onClick = { expanded = true },
@@ -207,13 +258,15 @@ fun ChatLanguageDropdown() {
 }
 
 @Composable
-fun ChatLengthOptions() {
+fun ChatLengthOptions(
+    modifier: Modifier = Modifier
+) {
     // TODO: Replace with actual data.
     val options = listOf("Short", "Medium", "Long")
     var selectedIndex by remember { mutableIntStateOf(0) }
 
     Column(
-        modifier = Modifier.fillMaxWidth()
+        modifier = modifier
     ) {
         SingleChoiceSegmentedButtonRow(
             modifier = Modifier.fillMaxWidth()
