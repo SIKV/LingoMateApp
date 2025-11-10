@@ -8,12 +8,12 @@ struct StartChatView: View {
             if geo.isLandscape {
                 VStack {
                     HStack {
-                        SectionView("Chat Language") {
+                        SectionView(L10n.startChatSelectLanguageLabel) {
                             ChatLanguageView()
                         }
                         .padding()
                         
-                        SectionView("Chat Length") {
+                        SectionView(L10n.startChatSelectLengthLabel) {
                             ChatLengthView()
                         }
                         .padding()
@@ -28,12 +28,12 @@ struct StartChatView: View {
                 }
             } else {
                 VStack {
-                    SectionView("Chat Language") {
+                    SectionView(L10n.startChatSelectLanguageLabel) {
                         ChatLanguageView()
                     }
                     .padding()
                     
-                    SectionView("Chat Length") {
+                    SectionView(L10n.startChatSelectLengthLabel) {
                         ChatLengthView()
                     }
                     .padding()

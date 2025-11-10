@@ -9,15 +9,15 @@ struct ContentView: View {
             TabView {
                 StartChatView()
                     .tabItem {
-                        Label("Chat", systemImage: "bubble.left.and.bubble.right.fill")
+                        Label(L10n.tabChat, systemImage: "bubble.left.and.bubble.right.fill")
                     }
                 HistoryView()
                     .tabItem {
-                        Label("History", systemImage: "book.pages.fill")
+                        Label(L10n.tabHistory, systemImage: "book.pages.fill")
                     }
                 MoreView()
                     .tabItem {
-                        Label("More", systemImage: "ellipsis.circle")
+                        Label(L10n.tabHistory, systemImage: "ellipsis.circle")
                     }
             }
             .navigationDestination(for: Route.self) { route in

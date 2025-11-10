@@ -9,7 +9,7 @@ struct StartChatButton: View {
         Button(action: action) {
             HStack {
                 Spacer()
-                Text("Start Chat")
+                Text(L10n.startChatStartButton)
                 Spacer()
                 Image(systemName: "sparkles")
             }
