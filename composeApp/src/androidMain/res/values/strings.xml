@@ -1,6 +1,13 @@
 <resources>
     <string name="app_name">LingoMate</string>
 
+    <string name="chat_language_english">English</string>
+    <string name="chat_language_spanish">Spanish</string>
+
+    <string name="chat_length_short">Short</string>
+    <string name="chat_length_medium">Medium</string>
+    <string name="chat_length_long">Long</string>
+
     <string name="start_chat_language_label">Chat Language</string>
     <string name="start_chat_length_label">Chat Length</string>
     <string name="start_chat_start_button">Start Chat</string>

@@ -33,7 +33,6 @@ import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -46,14 +45,22 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.koin.compose.viewmodel.koinViewModel
 import sikv.lingomate.R
+import sikv.lingomate.data.chat.domain.ChatLanguage
+import sikv.lingomate.data.chat.domain.ChatLength
+import sikv.lingomate.feature.toLocalizedString
 import sikv.lingomate.ui.isLandscape
 import sikv.lingomate.ui.theme.spacing
 
 @Composable
 fun StartChatScreen(
-    onNavigateToChat: () -> Unit
+    onNavigateToChat: () -> Unit,
+    viewModel: StartChatViewModel = koinViewModel()
 ) {
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
+
     Scaffold { innerPadding ->
         BoxWithConstraints(
             modifier = Modifier
@@ -76,6 +83,11 @@ fun StartChatScreen(
                             title = stringResource(R.string.start_chat_language_label)
                         ) {
                             ChatLanguageDropdown(
+                                onSelect = {
+                                    viewModel.selectLanguage(it)
+                                },
+                                languages = state.chatLanguages,
+                                selectedLanguage = state.selectedLanguage,
                                 modifier = Modifier.fillMaxWidth(fraction = 0.3f)
                             )
                         }
@@ -86,6 +98,11 @@ fun StartChatScreen(
                             title = stringResource(R.string.start_chat_length_label)
                         ) {
                             ChatLengthOptions(
+                                onSelect =  {
+                                    viewModel.selectLength(it)
+                                },
+                                lengths = state.chatLengths,
+                                selectedLength = state.selectedLength,
                                 modifier = Modifier.fillMaxWidth(fraction = 0.7f)
                             )
                         }
@@ -113,6 +130,11 @@ fun StartChatScreen(
                             )
                     ) {
                         ChatLanguageDropdown(
+                            onSelect = {
+                                viewModel.selectLanguage(it)
+                            },
+                            languages = state.chatLanguages,
+                            selectedLanguage = state.selectedLanguage,
                             modifier = Modifier.fillMaxWidth()
                         )
                     }
@@ -126,7 +148,13 @@ fun StartChatScreen(
                                 bottom = MaterialTheme.spacing.large
                             )
                     ) {
-                        ChatLengthOptions()
+                        ChatLengthOptions(
+                            onSelect = {
+                                viewModel.selectLength(it)
+                            },
+                            lengths = state.chatLengths,
+                            selectedLength = state.selectedLength
+                        )
                     }
 
                     StartChatButton(
@@ -221,34 +249,34 @@ fun StartChatButton(
 
 @Composable
 fun ChatLanguageDropdown(
+    onSelect: (ChatLanguage) -> Unit,
+    languages: List<ChatLanguage>,
+    selectedLanguage: ChatLanguage?,
     modifier: Modifier = Modifier
 ) {
     var expanded by remember { mutableStateOf(false) }
 
-    // TODO: Use string res.
-    var selectedOption by remember { mutableStateOf("Select Language") }
-    // TODO: Replace with actual data.
-    val options = listOf("English", "Spanish")
-
     Column(
         modifier = modifier
     ) {
-        FilledTonalButton(
-            onClick = { expanded = true },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(selectedOption)
+        if (selectedLanguage != null) {
+            FilledTonalButton(
+                onClick = { expanded = true },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(selectedLanguage.toLocalizedString())
+            }
         }
 
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false }
         ) {
-            options.forEach { option ->
+            languages.forEach { language ->
                 DropdownMenuItem(
-                    text = { Text(option) },
+                    text = { Text(language.toLocalizedString()) },
                     onClick = {
-                        selectedOption = option
+                        onSelect(language)
                         expanded = false
                     }
                 )
@@ -259,25 +287,26 @@ fun ChatLanguageDropdown(
 
 @Composable
 fun ChatLengthOptions(
+    onSelect: (ChatLength) -> Unit,
+    lengths: List<ChatLength>,
+    selectedLength: ChatLength?,
     modifier: Modifier = Modifier
 ) {
-    // TODO: Replace with actual data.
-    val options = listOf("Short", "Medium", "Long")
-    var selectedIndex by remember { mutableIntStateOf(0) }
-
     Column(
         modifier = modifier
     ) {
         SingleChoiceSegmentedButtonRow(
             modifier = Modifier.fillMaxWidth()
         ) {
-            options.forEachIndexed { index, option ->
+            lengths.forEachIndexed { index, length ->
                 SegmentedButton(
-                    selected = selectedIndex == index,
-                    onClick = { selectedIndex = index },
-                    shape = SegmentedButtonDefaults.itemShape(index = index, count = options.size)
+                    selected = length == selectedLength,
+                    onClick = {
+                        onSelect(lengths[index])
+                    },
+                    shape = SegmentedButtonDefaults.itemShape(index = index, count = lengths.size)
                 ) {
-                    Text(option)
+                    Text(length.toLocalizedString())
                 }
             }
         }
