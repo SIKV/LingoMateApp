@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.nativeCoroutines)
 }
 
 kotlin {
@@ -24,11 +25,19 @@ kotlin {
     
     sourceSets {
         commonMain.dependencies {
-            // put your Multiplatform dependencies here
+            implementation(libs.kotlinx.coroutines.core)
+
+            api(libs.koin.core)
+            api(project(":data:chat"))
+            api(project(":feature:startChat"))
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }
+    }
+
+    sourceSets.all {
+        languageSettings.optIn("kotlin.experimental.ExperimentalObjCName")
     }
 }
 

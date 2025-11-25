@@ -30,3 +30,5 @@ dependencyResolutionManagement {
 
 include(":composeApp")
 include(":shared")
+include(":data:chat")
+include(":feature:startChat")
