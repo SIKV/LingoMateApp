@@ -1,7 +1,10 @@
 import SwiftUI
+import Shared
+import KMPNativeCoroutinesAsync
 
 struct StartChatView: View {
     @EnvironmentObject private var appRouter: AppRouter
+    @StateObject private var startChatModel = StartChatModel()
     
     var body: some View {
         GeometryReader { geo in
@@ -9,12 +12,24 @@ struct StartChatView: View {
                 VStack {
                     HStack {
                         SectionView(L10n.startChatSelectLanguageLabel) {
-                            ChatLanguageView()
+                            ChatLanguageView(
+                                languages: startChatModel.state.chatLanguages,
+                                selectedLanguage: Binding(
+                                    get: { startChatModel.state.selectedLanguage },
+                                    set: { startChatModel.selectLanguage(selectedLanguage: $0) }
+                                )
+                            )
                         }
                         .padding()
                         
                         SectionView(L10n.startChatSelectLengthLabel) {
-                            ChatLengthView()
+                            ChatLengthView(
+                                lengths: startChatModel.state.chatLengths,
+                                selectedLength: Binding(
+                                    get: { startChatModel.state.selectedLength },
+                                    set: { startChatModel.selectLength(selectedLength: $0) }
+                                )
+                            )
                         }
                         .padding()
                     }
@@ -29,12 +44,24 @@ struct StartChatView: View {
             } else {
                 VStack {
                     SectionView(L10n.startChatSelectLanguageLabel) {
-                        ChatLanguageView()
+                        ChatLanguageView(
+                            languages: startChatModel.state.chatLanguages,
+                            selectedLanguage: Binding(
+                                get: { startChatModel.state.selectedLanguage },
+                                set: { startChatModel.selectLanguage(selectedLanguage: $0) }
+                            )
+                        )
                     }
                     .padding()
                     
                     SectionView(L10n.startChatSelectLengthLabel) {
-                        ChatLengthView()
+                        ChatLengthView(
+                            lengths: startChatModel.state.chatLengths,
+                            selectedLength: Binding(
+                                get: { startChatModel.state.selectedLength },
+                                set: { startChatModel.selectLength(selectedLength: $0) }
+                            )
+                        )
                     }
                     .padding()
                     
@@ -47,6 +74,12 @@ struct StartChatView: View {
                 }
                 .padding()
             }
+        }
+        .task {
+            startChatModel.listenState()
+        }
+        .onDisappear {
+            startChatModel.cancel()
         }
     }
 }

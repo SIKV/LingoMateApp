@@ -6,6 +6,13 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		C52A1E032ECFAE390006A82C /* KMPNativeCoroutinesAsync in Frameworks */ = {isa = PBXBuildFile; productRef = C52A1E022ECFAE390006A82C /* KMPNativeCoroutinesAsync */; };
+		C52A1E052ECFAE390006A82C /* KMPNativeCoroutinesCombine in Frameworks */ = {isa = PBXBuildFile; productRef = C52A1E042ECFAE390006A82C /* KMPNativeCoroutinesCombine */; };
+		C52A1E072ECFAE390006A82C /* KMPNativeCoroutinesCore in Frameworks */ = {isa = PBXBuildFile; productRef = C52A1E062ECFAE390006A82C /* KMPNativeCoroutinesCore */; };
+		C52A1E092ECFAE390006A82C /* KMPNativeCoroutinesRxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = C52A1E082ECFAE390006A82C /* KMPNativeCoroutinesRxSwift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		CDEBB6388EA4A20D5FE0047C /* LingoMate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LingoMate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -41,6 +48,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C52A1E032ECFAE390006A82C /* KMPNativeCoroutinesAsync in Frameworks */,
+				C52A1E052ECFAE390006A82C /* KMPNativeCoroutinesCombine in Frameworks */,
+				C52A1E072ECFAE390006A82C /* KMPNativeCoroutinesCore in Frameworks */,
+				C52A1E092ECFAE390006A82C /* KMPNativeCoroutinesRxSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -85,6 +96,10 @@
 			);
 			name = iosApp;
 			packageProductDependencies = (
+				C52A1E022ECFAE390006A82C /* KMPNativeCoroutinesAsync */,
+				C52A1E042ECFAE390006A82C /* KMPNativeCoroutinesCombine */,
+				C52A1E062ECFAE390006A82C /* KMPNativeCoroutinesCore */,
+				C52A1E082ECFAE390006A82C /* KMPNativeCoroutinesRxSwift */,
 			);
 			productName = iosApp;
 			productReference = CDEBB6388EA4A20D5FE0047C /* LingoMate.app */;
@@ -114,6 +129,9 @@
 			);
 			mainGroup = E2264778FE38F651C83FC126;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				C52A1E012ECFAE390006A82C /* XCRemoteSwiftPackageReference "KMP-NativeCoroutines" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 75587AF2D6DA16E60E46083E /* Products */;
 			projectDirPath = "";
@@ -379,6 +397,40 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		C52A1E012ECFAE390006A82C /* XCRemoteSwiftPackageReference "KMP-NativeCoroutines" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/rickclephas/KMP-NativeCoroutines.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		C52A1E022ECFAE390006A82C /* KMPNativeCoroutinesAsync */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C52A1E012ECFAE390006A82C /* XCRemoteSwiftPackageReference "KMP-NativeCoroutines" */;
+			productName = KMPNativeCoroutinesAsync;
+		};
+		C52A1E042ECFAE390006A82C /* KMPNativeCoroutinesCombine */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C52A1E012ECFAE390006A82C /* XCRemoteSwiftPackageReference "KMP-NativeCoroutines" */;
+			productName = KMPNativeCoroutinesCombine;
+		};
+		C52A1E062ECFAE390006A82C /* KMPNativeCoroutinesCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C52A1E012ECFAE390006A82C /* XCRemoteSwiftPackageReference "KMP-NativeCoroutines" */;
+			productName = KMPNativeCoroutinesCore;
+		};
+		C52A1E082ECFAE390006A82C /* KMPNativeCoroutinesRxSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C52A1E012ECFAE390006A82C /* XCRemoteSwiftPackageReference "KMP-NativeCoroutines" */;
+			productName = KMPNativeCoroutinesRxSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = F7732907625BC822E4D820F2 /* Project object */;
 }
