@@ -2,9 +2,9 @@ import SwiftUI
 import Shared
 import KMPNativeCoroutinesAsync
 
-struct StartChatView: View {
+struct StartChatScreen: View {
     @EnvironmentObject private var appRouter: AppRouter
-    @StateObject private var startChatModel = StartChatModel()
+    @StateObject private var startChatVM = StartChatVM()
     
     var body: some View {
         GeometryReader { geo in
@@ -13,10 +13,10 @@ struct StartChatView: View {
                     HStack {
                         SectionView(L10n.startChatSelectLanguageLabel) {
                             ChatLanguageView(
-                                languages: startChatModel.state.chatLanguages,
+                                languages: startChatVM.state.chatLanguages,
                                 selectedLanguage: Binding(
-                                    get: { startChatModel.state.selectedLanguage },
-                                    set: { startChatModel.selectLanguage(selectedLanguage: $0) }
+                                    get: { startChatVM.state.selectedLanguage },
+                                    set: { startChatVM.selectLanguage(selectedLanguage: $0) }
                                 )
                             )
                         }
@@ -24,10 +24,10 @@ struct StartChatView: View {
                         
                         SectionView(L10n.startChatSelectLengthLabel) {
                             ChatLengthView(
-                                lengths: startChatModel.state.chatLengths,
+                                lengths: startChatVM.state.chatLengths,
                                 selectedLength: Binding(
-                                    get: { startChatModel.state.selectedLength },
-                                    set: { startChatModel.selectLength(selectedLength: $0) }
+                                    get: { startChatVM.state.selectedLength },
+                                    set: { startChatVM.selectLength(selectedLength: $0) }
                                 )
                             )
                         }
@@ -37,7 +37,9 @@ struct StartChatView: View {
                     Spacer()
                     
                     StartChatButton {
-                        appRouter.navigate(to: Route.chat)
+                        if let chatLanguage = startChatVM.state.selectedLanguage, let chatLength = startChatVM.state.selectedLength {
+                            appRouter.navigate(to: Route.chat(chatLanguage, chatLength))
+                        }
                     }
                     .padding()
                 }
@@ -45,10 +47,10 @@ struct StartChatView: View {
                 VStack {
                     SectionView(L10n.startChatSelectLanguageLabel) {
                         ChatLanguageView(
-                            languages: startChatModel.state.chatLanguages,
+                            languages: startChatVM.state.chatLanguages,
                             selectedLanguage: Binding(
-                                get: { startChatModel.state.selectedLanguage },
-                                set: { startChatModel.selectLanguage(selectedLanguage: $0) }
+                                get: { startChatVM.state.selectedLanguage },
+                                set: { startChatVM.selectLanguage(selectedLanguage: $0) }
                             )
                         )
                     }
@@ -56,10 +58,10 @@ struct StartChatView: View {
                     
                     SectionView(L10n.startChatSelectLengthLabel) {
                         ChatLengthView(
-                            lengths: startChatModel.state.chatLengths,
+                            lengths: startChatVM.state.chatLengths,
                             selectedLength: Binding(
-                                get: { startChatModel.state.selectedLength },
-                                set: { startChatModel.selectLength(selectedLength: $0) }
+                                get: { startChatVM.state.selectedLength },
+                                set: { startChatVM.selectLength(selectedLength: $0) }
                             )
                         )
                     }
@@ -68,7 +70,9 @@ struct StartChatView: View {
                     Spacer()
                     
                     StartChatButton {
-                        appRouter.navigate(to: Route.chat)
+                        if let chatLanguage = startChatVM.state.selectedLanguage, let chatLength = startChatVM.state.selectedLength {
+                            appRouter.navigate(to: Route.chat(chatLanguage, chatLength))
+                        }
                     }
                     .padding()
                 }
@@ -76,10 +80,10 @@ struct StartChatView: View {
             }
         }
         .task {
-            startChatModel.listenState()
+            startChatVM.listenState()
         }
         .onDisappear {
-            startChatModel.cancel()
+            startChatVM.cancel()
         }
     }
 }

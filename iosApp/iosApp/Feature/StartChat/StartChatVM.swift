@@ -4,7 +4,7 @@ import Shared
 import KMPNativeCoroutinesAsync
 
 @MainActor
-class StartChatModel: ObservableObject {
+class StartChatVM: ObservableObject {
     private let viewModel = ViewModels().getStartChatViewModel()
     
     @Published var state = StartChatState.companion.empty()

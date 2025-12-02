@@ -7,7 +7,7 @@ struct ContentView: View {
     var body: some View {
         NavigationStack(path: $appRouter.path) {
             TabView {
-                StartChatView()
+                StartChatScreen()
                     .tabItem {
                         Label(L10n.tabChat, systemImage: "bubble.left.and.bubble.right.fill")
                     }
@@ -22,8 +22,8 @@ struct ContentView: View {
             }
             .navigationDestination(for: Route.self) { route in
                 switch route {
-                case .chat:
-                    ChatView()
+                case .chat(let chatLanguage, let chatLength):
+                    ChatScreen(chatLanguage: chatLanguage, chatLength: chatLength)
                 case .chatDetails:
                     ChatDetailsView()
                 }
