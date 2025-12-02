@@ -1,12 +1,11 @@
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidKotlinMultiplatformLibrary)
-    alias(libs.plugins.nativeCoroutines)
 }
 
 kotlin {
     androidLibrary {
-        namespace = "sikv.lingomate.data.chat"
+        namespace = "sikv.lingomate.api"
         compileSdk = 36
         minSdk = 24
 
@@ -20,18 +19,20 @@ kotlin {
         }
     }
 
-    val xcfName = "data:chatKit"
+    val xcfName = "apiKit"
 
     iosX64 {
         binaries.framework {
             baseName = xcfName
         }
     }
+
     iosArm64 {
         binaries.framework {
             baseName = xcfName
         }
     }
+
     iosSimulatorArm64 {
         binaries.framework {
             baseName = xcfName
@@ -42,8 +43,9 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(libs.kotlin.stdlib)
+                implementation(libs.ktor.client.core)
+                implementation(libs.kotlinx.coroutines.core)
                 implementation(libs.koin.core)
-                implementation(project(":api"))
             }
         }
         commonTest {
@@ -52,7 +54,9 @@ kotlin {
             }
         }
         androidMain {
-            dependencies { }
+            dependencies {
+                implementation(libs.ktor.client.okhttp)
+            }
         }
         getByName("androidDeviceTest") {
             dependencies {
@@ -62,11 +66,9 @@ kotlin {
             }
         }
         iosMain {
-            dependencies { }
+            dependencies {
+                implementation(libs.ktor.client.darwin)
+            }
         }
-    }
-
-    sourceSets.all {
-        languageSettings.optIn("kotlin.experimental.ExperimentalObjCName")
     }
 }

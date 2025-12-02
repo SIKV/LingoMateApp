@@ -25,11 +25,15 @@ kotlin {
     
     sourceSets {
         commonMain.dependencies {
-            implementation(libs.kotlinx.coroutines.core)
-
             api(libs.koin.core)
+            api(libs.koin.compose)
+            api(libs.koin.compose.viewmodel)
             api(project(":data:chat"))
             api(project(":feature:startChat"))
+            api(project(":feature:chat"))
+
+            implementation(libs.kotlinx.coroutines.core)
+            implementation(project(":api"))
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
