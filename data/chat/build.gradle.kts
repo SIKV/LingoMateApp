@@ -7,8 +7,8 @@ plugins {
 kotlin {
     androidLibrary {
         namespace = "sikv.lingomate.data.chat"
-        compileSdk = 36
-        minSdk = 24
+        compileSdk = Configs.ANDROID_COMPILE_SDK
+        minSdk = Configs.ANDROID_MIN_SDK
 
         withHostTestBuilder {
         }

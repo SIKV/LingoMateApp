@@ -22,7 +22,6 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             implementation(libs.androidx.navigation3.runtime)
             implementation(libs.androidx.navigation3.ui)
-            implementation(libs.koin.android)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -34,7 +33,7 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
-            implementation(libs.koin.compose.viewmodel.nav)
+            implementation(libs.koin.compose.navigation3)
             implementation(projects.shared)
         }
         commonTest.dependencies {
@@ -45,12 +44,12 @@ kotlin {
 
 android {
     namespace = "sikv.lingomate"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
+    compileSdk = Configs.ANDROID_COMPILE_SDK
 
     defaultConfig {
         applicationId = "sikv.lingomate"
-        minSdk = libs.versions.android.minSdk.get().toInt()
-        targetSdk = libs.versions.android.targetSdk.get().toInt()
+        minSdk = Configs.ANDROID_MIN_SDK
+        targetSdk = Configs.ANDROID_TARGET_SDK
         versionCode = 1
         versionName = "1.0"
     }
