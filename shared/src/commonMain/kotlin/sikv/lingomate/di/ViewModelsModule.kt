@@ -16,12 +16,8 @@ val viewModelsModule = module {
         )
     }
 
-    // TODO: ViewModel is not cleared when the screen is closed. Needs to be fixed.
     viewModel { (chatLanguage: ChatLanguage, chatLength: ChatLength, chatModel: ChatModel) ->
         ChatViewModel(
-            chatLanguage = chatLanguage,
-            chatLength = chatLength,
-            chatModel = chatModel,
             chatService = get { parametersOf(chatLanguage, chatLength, chatModel) }
         )
     }
