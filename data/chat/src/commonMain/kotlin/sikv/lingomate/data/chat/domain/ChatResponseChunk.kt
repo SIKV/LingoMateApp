@@ -5,13 +5,16 @@ sealed class ChatResponseChunk {
     object Created : ChatResponseChunk()
 
     data class Completed(
-        // Includes chat history.
-        val content: List<ChatContent>
+        val content: ChatMessage
     ) : ChatResponseChunk()
 
-    object InProgress : ChatResponseChunk()
+    data class InProgress(
+        val content: ChatMessage
+    ) : ChatResponseChunk()
+
+    data class Failed(
+        val content: ChatMessage
+    ) : ChatResponseChunk()
 
     object Error : ChatResponseChunk()
-
-    object InternalError : ChatResponseChunk()
 }
