@@ -36,7 +36,10 @@ fun OpenAIResponsesResponseDTO.toDomain(id: String): ChatResponseChunk {
             )
         )
         ChatResponseChunkType.Completed -> {
-            val text = this.response?.output?.firstOrNull()?.content?.firstOrNull()?.text
+            val text = this.response?.output
+                ?.find { output -> output.content.isNotEmpty() }
+                ?.content?.firstOrNull()?.text
+
             ChatResponseChunk.Completed(
                 content = ChatMessage(
                     id = id,

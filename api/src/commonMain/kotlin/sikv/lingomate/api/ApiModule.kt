@@ -25,6 +25,8 @@ val apiModule = module {
     single {
         Json {
             ignoreUnknownKeys = true
+            isLenient = true
+            coerceInputValues = true
         }
     }
 

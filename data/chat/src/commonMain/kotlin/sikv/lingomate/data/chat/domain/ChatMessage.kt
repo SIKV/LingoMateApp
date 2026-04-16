@@ -1,5 +1,8 @@
 package sikv.lingomate.data.chat.domain
 
+import kotlin.native.ObjCName
+
+@ObjCName("ChatMessage", exact = true)
 data class ChatMessage(
     val id: String,
     val status: Status,

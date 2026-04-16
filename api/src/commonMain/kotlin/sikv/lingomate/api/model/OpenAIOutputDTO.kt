@@ -6,9 +6,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class OpenAIOutputDTO(
     @SerialName("role")
-    val role: String, // assistant | user
+    val role: String = "",
     @SerialName("content")
-    val content: List<Content>
+    val content: List<Content> = emptyList()
 ) {
     @Serializable
     data class Content(
