@@ -11,4 +11,8 @@
     <string name="start_chat_language_label">Chat Language</string>
     <string name="start_chat_length_label">Chat Length</string>
     <string name="start_chat_start_button">Start Chat</string>
+
+    <string name="chat_message_status_failed">Failed to send.</string>
+    <string name="chat_user_text_input_placeholder">Type a message…</string>
+    <string name="chat_send_message_button_content_description">Send message</string>
 </resources>
