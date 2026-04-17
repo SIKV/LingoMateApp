@@ -31,8 +31,7 @@ class ChatViewModel(
                 }
         }
 
-        // TODO: Only for testing.
-        chatService.sendMessage("Hi", viewModelScope)
+        chatService.startChat(viewModelScope)
     }
 
     fun sendMessage(message: String) {

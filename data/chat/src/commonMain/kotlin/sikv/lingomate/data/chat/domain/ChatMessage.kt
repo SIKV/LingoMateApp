@@ -17,6 +17,7 @@ data class ChatMessage(
     }
 
     enum class Role {
+        SYSTEM,
         ASSISTANT,
         USER
     }

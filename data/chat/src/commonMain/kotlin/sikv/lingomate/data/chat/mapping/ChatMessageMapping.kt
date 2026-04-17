@@ -12,6 +12,7 @@ internal fun ChatMessage.toInputDTO(): OpenAIInputDTO {
 
 internal fun ChatMessage.Role.toDTO(): String {
     return when (this) {
+        ChatMessage.Role.SYSTEM -> "system"
         ChatMessage.Role.ASSISTANT -> "assistant"
         ChatMessage.Role.USER -> "user"
     }
