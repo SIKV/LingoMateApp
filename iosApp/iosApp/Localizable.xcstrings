@@ -1,9 +1,6 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "Chat" : {
-
-    },
     "Chat Details" : {
 
     },
@@ -58,6 +55,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Short"
+          }
+        }
+      }
+    },
+    "chat_type_message_hint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Type a message…"
           }
         }
       }

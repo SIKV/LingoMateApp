@@ -15,4 +15,6 @@ enum L10n {
     static let startChatSelectLanguageLabel = LocalizedStringKey("start_chat_select_language_label")
     static let startChatSelectLengthLabel = LocalizedStringKey("start_chat_select_length_label")
     static let startChatStartButton = LocalizedStringKey("start_chat_start_button")
+    
+    static let chatTypeMessageHint = LocalizedStringKey("chat_type_message_hint")
 }
