@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import sikv.lingomate.api.OpenAIApi
 import sikv.lingomate.data.chat.domain.ChatLanguage
-import sikv.lingomate.data.chat.domain.ChatLength
 import sikv.lingomate.data.chat.domain.ChatMessage
 import sikv.lingomate.data.chat.domain.ChatModel
 import sikv.lingomate.data.chat.domain.ChatResponseChunk
@@ -21,7 +20,6 @@ import kotlin.uuid.Uuid
 
 class ChatService(
     private val chatLanguage: ChatLanguage,
-    private val chatLength: ChatLength,
     private val chatModel: ChatModel,
     private val openAIApi: OpenAIApi,
     private val promptBuilder: PromptBuilder
@@ -58,7 +56,7 @@ class ChatService(
                 .streamResponse(
                     model = chatModel.id,
                     input = listOf(startChatMessage.toInputDTO()),
-                    instructions = promptBuilder.buildSystemPrompt(chatLanguage, chatLength)
+                    instructions = promptBuilder.buildSystemPrompt(chatLanguage)
                 )
                 .map { result ->
                     result.fold(
@@ -120,7 +118,7 @@ class ChatService(
                 .streamResponse(
                     model = chatModel.id,
                     input = _chatHistory.value.map { it.toInputDTO() },
-                    instructions = promptBuilder.buildSystemPrompt(chatLanguage, chatLength)
+                    instructions = promptBuilder.buildSystemPrompt(chatLanguage)
                 )
                 .map { result ->
                     result.fold(

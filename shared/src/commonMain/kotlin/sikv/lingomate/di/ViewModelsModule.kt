@@ -4,7 +4,6 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.core.parameter.parametersOf
 import org.koin.dsl.module
 import sikv.lingomate.data.chat.domain.ChatLanguage
-import sikv.lingomate.data.chat.domain.ChatLength
 import sikv.lingomate.data.chat.domain.ChatModel
 import sikv.lingomate.feature.chat.ChatViewModel
 import sikv.lingomate.feature.startchat.StartChatViewModel
@@ -16,9 +15,9 @@ val viewModelsModule = module {
         )
     }
 
-    viewModel { (chatLanguage: ChatLanguage, chatLength: ChatLength, chatModel: ChatModel) ->
+    viewModel { (chatLanguage: ChatLanguage, chatModel: ChatModel) ->
         ChatViewModel(
-            chatService = get { parametersOf(chatLanguage, chatLength, chatModel) }
+            chatService = get { parametersOf(chatLanguage, chatModel) }
         )
     }
 }
