@@ -7,7 +7,6 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import sikv.lingomate.data.chat.domain.ChatLanguage
-import sikv.lingomate.data.chat.domain.ChatLength
 import sikv.lingomate.data.chat.domain.ChatModel
 import sikv.lingomate.feature.startchat.StartChatScreen
 
@@ -42,7 +41,6 @@ fun ChatRouteComponent(
                 ChatScreen(
                     // TODO: Only for testing.
                     chatLanguage = ChatLanguage.SPANISH,
-                    chatLength = ChatLength.MEDIUM_LENGTH,
                     chatModel = ChatModel.GPT_5_MINI,
                     onBackPressed = {
                         backStack.removeLastOrNull()

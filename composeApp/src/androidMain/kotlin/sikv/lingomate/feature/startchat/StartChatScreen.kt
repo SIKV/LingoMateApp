@@ -27,9 +27,6 @@ import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SegmentedButton
-import androidx.compose.material3.SegmentedButtonDefaults
-import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -49,7 +46,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.compose.viewmodel.koinViewModel
 import sikv.lingomate.R
 import sikv.lingomate.data.chat.domain.ChatLanguage
-import sikv.lingomate.data.chat.domain.ChatLength
 import sikv.lingomate.feature.toLocalizedString
 import sikv.lingomate.ui.isLandscape
 import sikv.lingomate.ui.theme.spacing
@@ -91,21 +87,6 @@ fun StartChatScreen(
                                 modifier = Modifier.fillMaxWidth(fraction = 0.3f)
                             )
                         }
-
-                        Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
-
-                        Section(
-                            title = stringResource(R.string.start_chat_length_label)
-                        ) {
-                            ChatLengthOptions(
-                                onSelect =  {
-                                    viewModel.selectLength(it)
-                                },
-                                lengths = state.chatLengths,
-                                selectedLength = state.selectedLength,
-                                modifier = Modifier.fillMaxWidth(fraction = 0.7f)
-                            )
-                        }
                     }
 
                     StartChatButton(
@@ -136,24 +117,6 @@ fun StartChatScreen(
                             languages = state.chatLanguages,
                             selectedLanguage = state.selectedLanguage,
                             modifier = Modifier.fillMaxWidth()
-                        )
-                    }
-
-                    Section(
-                        title = stringResource(R.string.start_chat_length_label),
-                        modifier = Modifier
-                            .padding(
-                                start = MaterialTheme.spacing.medium,
-                                end = MaterialTheme.spacing.medium,
-                                bottom = MaterialTheme.spacing.large
-                            )
-                    ) {
-                        ChatLengthOptions(
-                            onSelect = {
-                                viewModel.selectLength(it)
-                            },
-                            lengths = state.chatLengths,
-                            selectedLength = state.selectedLength
                         )
                     }
 
@@ -280,34 +243,6 @@ fun ChatLanguageDropdown(
                         expanded = false
                     }
                 )
-            }
-        }
-    }
-}
-
-@Composable
-fun ChatLengthOptions(
-    onSelect: (ChatLength) -> Unit,
-    lengths: List<ChatLength>,
-    selectedLength: ChatLength?,
-    modifier: Modifier = Modifier
-) {
-    Column(
-        modifier = modifier
-    ) {
-        SingleChoiceSegmentedButtonRow(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            lengths.forEachIndexed { index, length ->
-                SegmentedButton(
-                    selected = length == selectedLength,
-                    onClick = {
-                        onSelect(lengths[index])
-                    },
-                    shape = SegmentedButtonDefaults.itemShape(index = index, count = lengths.size)
-                ) {
-                    Text(length.toLocalizedString())
-                }
             }
         }
     }

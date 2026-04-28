@@ -48,7 +48,6 @@ import org.koin.core.annotation.KoinExperimentalAPI
 import org.koin.core.parameter.parametersOf
 import sikv.lingomate.R
 import sikv.lingomate.data.chat.domain.ChatLanguage
-import sikv.lingomate.data.chat.domain.ChatLength
 import sikv.lingomate.data.chat.domain.ChatMessage
 import sikv.lingomate.data.chat.domain.ChatModel
 import sikv.lingomate.ui.theme.spacing
@@ -58,10 +57,9 @@ import sikv.lingomate.ui.theme.spacing
 fun ChatScreen(
     onBackPressed: () -> Unit,
     chatLanguage: ChatLanguage,
-    chatLength: ChatLength,
     chatModel: ChatModel,
     viewModel: ChatViewModel = koinViewModel(
-        parameters = { parametersOf(chatLanguage, chatLength, chatModel) }
+        parameters = { parametersOf(chatLanguage, chatModel) }
     )
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
