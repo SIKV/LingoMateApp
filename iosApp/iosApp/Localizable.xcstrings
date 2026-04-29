@@ -1,6 +1,9 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "" : {
+
+    },
     "Chat Details" : {
 
     },
@@ -26,39 +29,6 @@
         }
       }
     },
-    "chat_length_long" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Long"
-          }
-        }
-      }
-    },
-    "chat_length_medium" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Medium"
-          }
-        }
-      }
-    },
-    "chat_length_short" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Short"
-          }
-        }
-      }
-    },
     "chat_type_message_hint" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -79,24 +49,24 @@
     "More" : {
 
     },
-    "start_chat_select_language_label" : {
+    "start_chat_greeting" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Select Language"
+            "value" : "Hi there 👋"
           }
         }
       }
     },
-    "start_chat_select_length_label" : {
+    "start_chat_info" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Select Length"
+            "value" : "Choose a language you’d like to practice\nand press Start Chat."
           }
         }
       }

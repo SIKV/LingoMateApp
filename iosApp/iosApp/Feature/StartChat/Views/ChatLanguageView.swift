@@ -9,7 +9,7 @@ struct ChatLanguageView: View {
         if languages.isEmpty {
             // FIXME: Show empty state.
         } else {
-            Picker(L10n.startChatSelectLanguageLabel, selection: $selectedLanguage) {
+            Picker("", selection: $selectedLanguage) {
                 ForEach(languages, id: \.self) { language in
                     Text(language.localizedName)
                         .tag(language)

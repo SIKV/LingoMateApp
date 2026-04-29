@@ -6,20 +6,17 @@ import KMPNativeCoroutinesAsync
 @MainActor
 class ChatVM: ObservableObject {
     let chatLanguage: ChatLanguage
-    let chatLength: ChatLength
     
     @Published var state = ChatState.companion.empty()
     
     private var stateTask: Task<Void, Never>?
     private let viewModel: ChatViewModel
     
-    init(chatLanguage: ChatLanguage, chatLength: ChatLength) {
+    init(chatLanguage: ChatLanguage) {
         self.chatLanguage = chatLanguage
-        self.chatLength = chatLength
         
         viewModel = ViewModels().getChatViewModel(
             chatLanguage: chatLanguage,
-            chatLength: chatLength,
             chatModel: ChatModel.gpt51 // FIXME: Hardcoded for now.
         )
     }

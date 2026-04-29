@@ -34,11 +34,6 @@ class StartChatVM: ObservableObject {
         }
     }
     
-    func selectLength(selectedLength: ChatLength?) {
-        if let length = selectedLength {
-            viewModel.selectLength(selectedLength: length)
-        }
-    }
     
     func cancel() {
         stateTask?.cancel()

@@ -15,15 +15,3 @@ extension ChatLanguage {
         }
     }
 }
-
-extension ChatLength {
-    var localizedName: LocalizedStringKey {
-        switch self {
-        case .shortLength: return L10n.chatLengthShort
-        case .mediumLength: return L10n.chatLengthMedium
-        case .longLength: return L10n.chatLengthLong
-        default:
-            fatalError("Unknown ChatLanguage value: \(self)")
-        }
-    }
-}

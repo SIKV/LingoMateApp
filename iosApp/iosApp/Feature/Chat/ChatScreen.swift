@@ -3,7 +3,6 @@ import Shared
 
 struct ChatScreen: View {
     let chatLanguage: ChatLanguage
-    let chatLength: ChatLength
     
     @EnvironmentObject private var appRouter: AppRouter
     @StateObject private var chatVM: ChatVM
@@ -15,13 +14,11 @@ struct ChatScreen: View {
         chatVM.state.messages.contains { $0.status == ChatMessage.Status.inProgress }
     }
     
-    init(chatLanguage: ChatLanguage, chatLength: ChatLength) {
+    init(chatLanguage: ChatLanguage) {
         self.chatLanguage = chatLanguage
-        self.chatLength = chatLength
         
         _chatVM = StateObject(wrappedValue: ChatVM(
-            chatLanguage: chatLanguage,
-            chatLength: chatLength
+            chatLanguage: chatLanguage
         ))
     }
     
