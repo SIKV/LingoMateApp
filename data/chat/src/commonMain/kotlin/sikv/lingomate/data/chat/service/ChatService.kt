@@ -101,6 +101,7 @@ class ChatService(
         message: String,
         scope: CoroutineScope
     ) {
+
         val userChatMessage = ChatMessage(
             id = Uuid.random().toHexString(),
             status = ChatMessage.Status.IN_PROGRESS,
@@ -169,6 +170,18 @@ class ChatService(
                     )
                 }
         }
+    }
+
+    fun retryMessage(messageId: String, scope: CoroutineScope) {
+        val messageToRetry = _chatHistory.value.find { it.id == messageId } ?: return
+
+        // Remove the failed message from the chat history.
+        _chatHistory.update { chatHistory ->
+            chatHistory.filterNot { it.id == messageId }
+        }
+
+        // Resend the message.
+        sendMessage(messageToRetry.text, scope)
     }
 
     private fun updateChatHistory(message: ChatMessage) {

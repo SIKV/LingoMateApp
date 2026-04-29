@@ -37,4 +37,8 @@ class ChatViewModel(
     fun sendMessage(message: String) {
         chatService.sendMessage(message, viewModelScope)
     }
+
+    fun retryMessage(messageId: String) {
+        chatService.retryMessage(messageId, viewModelScope)
+    }
 }
