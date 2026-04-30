@@ -1,8 +1,8 @@
 package sikv.lingomate.feature.chat
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -96,7 +96,12 @@ fun ChatScreen(
                 contentPadding = PaddingValues(vertical = MaterialTheme.spacing.medium)
             ) {
                 items(state.messages, key = { it.id }) { message ->
-                    ChatBubble(message = message)
+                    ChatBubble(
+                        onRetryPressed = {
+                            viewModel.retryMessage(message.id)
+                        },
+                        message = message
+                    )
                 }
             }
 
@@ -116,7 +121,10 @@ fun ChatScreen(
 }
 
 @Composable
-private fun ChatBubble(message: ChatMessage) {
+private fun ChatBubble(
+    onRetryPressed: () -> Unit,
+    message: ChatMessage
+) {
     val isUser = message.role == ChatMessage.Role.USER
     val bubbleColor = if (isUser) {
         MaterialTheme.colorScheme.primary
@@ -134,57 +142,83 @@ private fun ChatBubble(message: ChatMessage) {
         RoundedCornerShape(topStart = 4.dp, topEnd = 16.dp, bottomStart = 16.dp, bottomEnd = 16.dp)
     }
 
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = if (isUser) Arrangement.End else Arrangement.Start,
-        verticalAlignment = Alignment.Bottom
+    Column(
+        horizontalAlignment = if (isUser) Alignment.End else Alignment.Start,
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(enabled = message.isRetryable()) {
+                onRetryPressed()
+            }
     ) {
-        Surface(
-            shape = bubbleShape,
-            color = bubbleColor,
-            modifier = Modifier.widthIn(max = 280.dp)
-        ) {
-            Box(modifier = Modifier
-                .padding(
-                    horizontal = MaterialTheme.spacing.medium,
-                    vertical = MaterialTheme.spacing.small)
+        if (message.text.isNotBlank()) {
+            Surface(
+                shape = bubbleShape,
+                color = bubbleColor,
+                modifier = Modifier
+                    .widthIn(max = 280.dp)
+                    .padding(bottom = MaterialTheme.spacing.extraSmall)
             ) {
-                when (message.status) {
-                    ChatMessage.Status.IN_PROGRESS -> {
-                        if (message.text.isEmpty()) {
-                            CircularProgressIndicator(
-                                modifier = Modifier.size(18.dp),
-                                strokeWidth = 2.dp,
-                                strokeCap = StrokeCap.Round,
-                                color = textColor
-                            )
-                        } else {
-                            Text(
-                                text = message.text,
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = textColor
-                            )
-                        }
-                    }
-                    ChatMessage.Status.DELIVERED -> {
-                        Text(
-                            text = message.text,
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = textColor
+                Text(
+                    text = message.text,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = textColor,
+                    modifier = Modifier
+                        .padding(
+                            horizontal = MaterialTheme.spacing.medium,
+                            vertical = MaterialTheme.spacing.small
                         )
-                    }
-                    ChatMessage.Status.FAILED -> {
-                        Text(
-                            text = stringResource(R.string.chat_message_status_failed),
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.error
-                        )
-                    }
-                }
+                )
             }
         }
 
+        when (message.status) {
+            ChatMessage.Status.IN_PROGRESS -> InProgressIndicator(message)
+            ChatMessage.Status.DELIVERED -> DeliveredIndicator(message)
+            ChatMessage.Status.FAILED -> FailedIndicator(message)
+        }
     }
+}
+
+@Composable
+private fun InProgressIndicator(message: ChatMessage) {
+    when (message.role) {
+        ChatMessage.Role.SYSTEM,
+        ChatMessage.Role.ASSISTANT -> {
+            Text(
+                text = stringResource(R.string.chat_message_status_typing),
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
+        ChatMessage.Role.USER -> {
+            CircularProgressIndicator(
+                modifier = Modifier.size(18.dp),
+                strokeWidth = 2.dp,
+                strokeCap = StrokeCap.Round
+            )
+        }
+    }
+}
+
+@Composable
+private fun DeliveredIndicator(message: ChatMessage) {
+    if (message.role == ChatMessage.Role.USER) {
+        Text(
+            text = stringResource(R.string.chat_message_status_delivered),
+            style = MaterialTheme.typography.labelSmall
+        )
+    }
+}
+
+@Composable
+private fun FailedIndicator(message: ChatMessage) {
+    Text(
+        text = stringResource(
+            if (message.role == ChatMessage.Role.USER) R.string.chat_message_status_user_failed
+            else R.string.chat_message_status_assistant_failed
+        ),
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.error
+    )
 }
 
 @Composable
@@ -236,4 +270,8 @@ private fun MessageInputBar(
             }
         }
     }
+}
+
+fun ChatMessage.isRetryable(): Boolean {
+    return this.role == ChatMessage.Role.USER && this.status == ChatMessage.Status.FAILED
 }
