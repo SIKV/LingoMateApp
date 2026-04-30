@@ -35,8 +35,7 @@ class ChatService(
             id = Uuid.random().toHexString(),
             status = ChatMessage.Status.IN_PROGRESS,
             role = ChatMessage.Role.SYSTEM,
-            // TODO: For testing.
-            text = "You are a helpful assistant. Start the conversation by greeting the user and asking how you can help",
+            text = promptBuilder.buildSystemPrompt(chatLanguage)
         )
 
         scope.launch {
@@ -84,12 +83,12 @@ class ChatService(
                                     updateChatHistory(chunk.content)
                                 }
                                 ChatResponseChunk.Error -> {
-                                    // TODO: Mark message as failed.
+                                    markLastMessageAsFailed()
                                 }
                             }
                         },
                         onFailure = {
-                            // TODO: Mark message as failed.
+                            markLastMessageAsFailed()
                         }
                     )
                 }
@@ -101,7 +100,6 @@ class ChatService(
         message: String,
         scope: CoroutineScope
     ) {
-
         val userChatMessage = ChatMessage(
             id = Uuid.random().toHexString(),
             status = ChatMessage.Status.IN_PROGRESS,
@@ -136,36 +134,29 @@ class ChatService(
                                         userChatMessage.copy(status = ChatMessage.Status.DELIVERED)
                                     )
                                 }
+
                                 is ChatResponseChunk.InProgress -> {
-                                    // Mark user message as delivered.
-                                    updateChatHistory(
-                                        userChatMessage.copy(status = ChatMessage.Status.DELIVERED)
-                                    )
                                     // Add assistant message.
                                     updateChatHistory(chunk.content)
                                 }
+
                                 is ChatResponseChunk.Completed -> {
-                                    // Mark user message as delivered.
-                                    updateChatHistory(
-                                        userChatMessage.copy(status = ChatMessage.Status.DELIVERED)
-                                    )
                                     // Update assistant message as delivered.
                                     updateChatHistory(chunk.content)
                                 }
+
                                 is ChatResponseChunk.Failed -> {
                                     // Update assistant message as failed/not delivered.
                                     updateChatHistory(chunk.content)
                                 }
+
                                 ChatResponseChunk.Error -> {
-                                    // TODO: Mark message as failed.
+                                    markLastMessageAsFailed()
                                 }
                             }
                         },
                         onFailure = {
-                            // Mark user message as failed/not delivered.
-                            updateChatHistory(
-                                userChatMessage.copy(status = ChatMessage.Status.FAILED)
-                            )
+                            markLastMessageAsFailed()
                         }
                     )
                 }
@@ -195,6 +186,15 @@ class ChatService(
             } else {
                 chatHistory + message
             }
+        }
+    }
+
+    private fun markLastMessageAsFailed() {
+        // Mark the last message in chat as failed.
+        _chatHistory.value.lastOrNull()?.let { lastMessage ->
+            updateChatHistory(
+                lastMessage.copy(status = ChatMessage.Status.FAILED)
+            )
         }
     }
 }
