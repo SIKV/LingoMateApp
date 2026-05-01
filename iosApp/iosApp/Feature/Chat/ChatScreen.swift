@@ -30,7 +30,10 @@ struct ChatScreen: View {
                         ForEach(chatVM.state.messages, id: \.id) { message in
                             MessageRow(
                                 message: message,
-                                maxBubbleWidth: geo.size.width * 0.75
+                                maxBubbleWidth: geo.size.width * 0.75,
+                                onRetry: { message in
+                                    chatVM.retryMessage(message.id)
+                                }
                             )
                             .id(message.id)
                             .padding(.horizontal, Spacing.md)
@@ -99,6 +102,7 @@ struct ChatScreen: View {
 private struct MessageRow: View {
     let message: ChatMessage
     let maxBubbleWidth: CGFloat
+    var onRetry: ((ChatMessage) -> Void)? = nil
     
     @State private var animateTyping = false
     
@@ -141,28 +145,65 @@ private struct MessageRow: View {
     }
     
     private var bubbleContent: some View {
-        VStack(alignment: .trailing, spacing: Spacing.sm) {
-            Text(message.text)
-                .foregroundStyle(textColor)
-                .font(.body)
-                .multilineTextAlignment(.leading)
-                .padding(.vertical, Spacing.sm)
-                .padding(.horizontal, Spacing.md) // Internal bubble padding only.
-                .background(bubbleColor, in: RoundedRectangle(cornerRadius: Radius.lg, style: .continuous))
-                .overlay(
-                    RoundedRectangle(cornerRadius: Radius.lg, style: .continuous)
-                        .stroke(isUser ? Color.clear : Color.gray.opacity(0.15), lineWidth: 1)
-                )
-            
-            HStack {
+        return VStack(alignment: .trailing, spacing: Spacing.sm) {
+            // If the assistant message is failed suggest to start a new chat.
+            if message.status == .failed && message.role == ChatMessage.Role.assistant {
+                Text(L10n.chatMessageStatusAssistantFailed)
+                    .foregroundStyle(Color.red)
+                    .font(.caption)
+                    .multilineTextAlignment(.leading)
+                    .padding(.vertical, Spacing.sm)
+                    .padding(.horizontal, Spacing.md)
+            } else {
+                // The message bubble itself
+                let bubble = Text(message.text)
+                    .foregroundStyle(textColor)
+                    .font(.body)
+                    .multilineTextAlignment(.leading)
+                    .padding(.vertical, Spacing.sm)
+                    .padding(.horizontal, Spacing.md)
+                    .background(bubbleColor, in: RoundedRectangle(cornerRadius: Radius.lg, style: .continuous))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: Radius.lg, style: .continuous)
+                            .stroke(isUser ? Color.clear : Color.gray.opacity(0.15), lineWidth: 1)
+                    )
+                
+                // If user message failed, make the whole bubble tappable for retry
+                if isUser && message.status == .failed {
+                    bubble
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            onRetry?(message)
+                        }
+                        .accessibilityAddTraits(.isButton)
+                } else {
+                    bubble
+                }
+                
                 // This is shown only for user messages.
-                if message.status == ChatMessage.Status.inProgress {
-                    ProgressView()
-                        .scaleEffect(0.8)
-                } else if message.status == ChatMessage.Status.failed {
-                    Image(systemName: "exclamationmark.triangle.fill")
-                        .foregroundStyle(.yellow)
-                        .font(.caption)
+                if message.role == ChatMessage.Role.user {
+                    HStack {
+                        switch message.status {
+                        case ChatMessage.Status.delivered:
+                            Text(L10n.chatMessageStatusDelivered)
+                                .font(.caption2)
+                                .multilineTextAlignment(.leading)
+                        case ChatMessage.Status.inProgress:
+                            ProgressView()
+                                .scaleEffect(0.8)
+                        case ChatMessage.Status.failed:
+                            Text(L10n.chatMessageStatusUserFailed)
+                                .foregroundStyle(Color.red)
+                                .font(.caption)
+                                .multilineTextAlignment(.leading)
+                                .onTapGesture {
+                                    onRetry?(message)
+                                }
+                                .accessibilityAddTraits(.isButton)
+                        default:
+                            EmptyView()
+                        }
+                    }
                 }
             }
         }

@@ -43,6 +43,10 @@ class ChatVM: ObservableObject {
         viewModel.sendMessage(message: text)
     }
     
+    func retryMessage(_ id: String) {
+        viewModel.retryMessage(messageId: id)
+    }
+    
     func cancel() {
         stateTask?.cancel()
         stateTask = nil

@@ -29,6 +29,39 @@
         }
       }
     },
+    "chat_message_status_assistant_failed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Something went wrong.\nPlease start a new chat."
+          }
+        }
+      }
+    },
+    "chat_message_status_delivered" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delivered."
+          }
+        }
+      }
+    },
+    "chat_message_status_user_failed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Failed to send. Tap to retry."
+          }
+        }
+      }
+    },
     "chat_type_message_hint" : {
       "extractionState" : "manual",
       "localizations" : {
