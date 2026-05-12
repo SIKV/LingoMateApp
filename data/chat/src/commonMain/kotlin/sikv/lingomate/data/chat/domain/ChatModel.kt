@@ -4,7 +4,8 @@ import kotlin.native.ObjCName
 
 @ObjCName("ChatModel", exact = true)
 enum class ChatModel(val id: String) {
+    ON_DEVICE("on-device"), // Gemini Nano on Android; TBD on iOS.
     GPT_5_NANO("gpt-5-nano"),
     GPT_5_MINI("gpt-5-mini"),
-    GPT_5_1("gpt-5.1")
+    GPT_5_1("gpt-5.1"),
 }

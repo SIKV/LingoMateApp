@@ -20,6 +20,8 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = "Shared"
             isStatic = true
+
+            export(project(":onDeviceLLM"))
         }
     }
     
@@ -31,6 +33,8 @@ kotlin {
             api(project(":data:chat"))
             api(project(":feature:startChat"))
             api(project(":feature:chat"))
+
+            api(project(":onDeviceLLM"))
 
             implementation(libs.kotlinx.coroutines.core)
             implementation(project(":api"))
