@@ -5,6 +5,7 @@ import Shared
 struct iOSApp: App {
     
     init() {
+        OnDeviceLLM_iosKt.setIOSOnDeviceLLMProvider(protocol: IOSOnDeviceLLMProvider())
         HelperKt.doInitKoinIOS()
     }
     
@@ -14,3 +15,4 @@ struct iOSApp: App {
         }
     }
 }
+
