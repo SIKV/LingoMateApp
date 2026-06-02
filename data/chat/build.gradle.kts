@@ -44,6 +44,7 @@ kotlin {
                 implementation(libs.kotlin.stdlib)
                 implementation(libs.koin.core)
                 implementation(project(":api"))
+                implementation(project(":onDeviceLLM"))
             }
         }
         commonTest {

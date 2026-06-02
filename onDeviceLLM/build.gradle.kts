@@ -57,6 +57,7 @@ kotlin {
 
         androidMain {
             dependencies {
+                implementation(libs.mlkit.genai.prompt)
             }
         }
 

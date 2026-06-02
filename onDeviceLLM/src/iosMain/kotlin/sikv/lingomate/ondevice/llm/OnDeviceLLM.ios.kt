@@ -5,6 +5,10 @@ import kotlinx.coroutines.flow.flow
 
 class IOSOnDeviceLLM : OnDeviceLLM {
 
+    override suspend fun checkAvailability(): Boolean {
+        return iOSOnDeviceLLMProvider?.checkAvailability() ?: false
+    }
+
     override fun streamResponse(
         input: String,
         instructions: String
@@ -17,7 +21,8 @@ class IOSOnDeviceLLM : OnDeviceLLM {
 
 @ObjCName("IOSOnDeviceLLMProtocol", exact = true)
 interface IOSOnDeviceLLMProtocol {
-    fun streamResponse(input: String, instructions: String): String
+    suspend fun checkAvailability(): Boolean
+    suspend fun streamResponse(input: String, instructions: String): String?
 }
 
 private var iOSOnDeviceLLMProvider: IOSOnDeviceLLMProtocol? = null
