@@ -8,9 +8,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import sikv.lingomate.api.OpenAIApi
-import sikv.lingomate.data.chat.domain.ChatLanguage
+import sikv.lingomate.data.chat.domain.ChatConfig
 import sikv.lingomate.data.chat.domain.ChatMessage
-import sikv.lingomate.data.chat.domain.ChatModel
 import sikv.lingomate.data.chat.domain.ChatResponseChunk
 import sikv.lingomate.data.chat.mapping.toDomain
 import sikv.lingomate.data.chat.mapping.toInputDTO
@@ -18,13 +17,12 @@ import kotlin.time.ExperimentalTime
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
-// TODO: Move to separate module.
 class OpenAIChatService(
+    private val chatConfig: ChatConfig,
     private val openAIApi: OpenAIApi,
-    private val chatLanguage: ChatLanguage,
-    private val chatModel: ChatModel,
     private val promptBuilder: PromptBuilder
 ) : ChatService {
+
     private val _chatHistory = MutableStateFlow<List<ChatMessage>>(emptyList())
     override val chatHistory: StateFlow<List<ChatMessage>> = _chatHistory.asStateFlow()
 
@@ -32,7 +30,7 @@ class OpenAIChatService(
     override fun startChat(scope: CoroutineScope) {
         // Do not add the initial system message to the chat history,
         // as it's not part of the conversation and is only used to get the first response from the server.
-        val startChatMessage = generateStartChatMessage(promptBuilder, chatLanguage)
+        val startChatMessage = generateStartChatMessage(promptBuilder, chatConfig)
 
         scope.launch {
             val responseId = Uuid.random().toHexString()
@@ -49,9 +47,9 @@ class OpenAIChatService(
 
             openAIApi
                 .streamResponse(
-                    model = chatModel.id,
+                    model = chatConfig.chatModel.model,
                     input = listOf(startChatMessage.toInputDTO()),
-                    instructions = promptBuilder.buildSystemPrompt(chatLanguage)
+                    instructions = promptBuilder.buildSystemPrompt(chatConfig)
                 )
                 .map { result ->
                     result.fold(
@@ -111,9 +109,9 @@ class OpenAIChatService(
 
             openAIApi
                 .streamResponse(
-                    model = chatModel.id,
+                    model = chatConfig.chatModel.model,
                     input = _chatHistory.value.map { it.toInputDTO() },
-                    instructions = promptBuilder.buildSystemPrompt(chatLanguage)
+                    instructions = promptBuilder.buildSystemPrompt(chatConfig)
                 )
                 .map { result ->
                     result.fold(
