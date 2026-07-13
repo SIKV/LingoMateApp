@@ -1,12 +1,27 @@
 <resources>
     <string name="app_name">LingoMate</string>
 
+    <!-- Common -->
     <string name="chat_language_english">English</string>
     <string name="chat_language_spanish">Spanish</string>
 
-    <string name="start_chat_language_label">Chat Language</string>
+    <string name="translation_language_english">English</string>
+
+    <string name="chat_model_provider_on_device">On-device</string>
+    <string name="practice_type_conversation">Conversation</string>
+    <string name="practice_type_translation">Translation</string>
+
+    <!-- Start Chat screen -->
+    <string name="start_chat_greeting">Ready to practice?</string>
+    <string name="start_chat_info">Set up your chat and start learning.</string>
+    <string name="start_chat_chat_model_label">Chat Model</string>
+    <string name="start_chat_practice_language_label">Practice Language</string>
+    <string name="start_chat_translation_language_label">Translation Language</string>
+    <string name="start_chat_practice_type_label">Practice Type</string>
+    <string name="start_chat_not_selected">Not selected</string>
     <string name="start_chat_start_button">Start Chat</string>
 
+    <!-- Chat screen -->
     <string name="chat_message_status_typing">Typing…</string>
     <string name="chat_message_status_delivered">Delivered.</string>
     <string name="chat_message_status_user_failed">Failed to send. Tap to retry.</string>

@@ -19,11 +19,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -41,13 +48,18 @@ import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.compose.viewmodel.koinViewModel
 import sikv.lingomate.R
-import sikv.lingomate.data.chat.domain.ChatLanguage
+import sikv.lingomate.data.chat.domain.ChatModel
+import sikv.lingomate.data.chat.domain.PracticeLanguage
+import sikv.lingomate.data.chat.domain.PracticeType
+import sikv.lingomate.data.chat.domain.TranslationLanguage
 import sikv.lingomate.feature.toLocalizedString
 import sikv.lingomate.ui.isLandscape
+import sikv.lingomate.ui.theme.radius
 import sikv.lingomate.ui.theme.spacing
 
 @Composable
@@ -63,94 +75,243 @@ fun StartChatScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            if (isLandscape()) {
-                Column (
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center,
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    Row(
-                        horizontalArrangement = Arrangement.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = MaterialTheme.spacing.small)
-                    ) {
-                        Section(
-                            title = stringResource(R.string.start_chat_language_label)
-                        ) {
-                            ChatLanguageDropdown(
-                                onSelect = {
-                                    viewModel.selectLanguage(it)
-                                },
-                                languages = state.chatLanguages,
-                                selectedLanguage = state.selectedLanguage,
-                                modifier = Modifier.fillMaxWidth(fraction = 0.3f)
-                            )
-                        }
-                    }
+            val isLandscape = isLandscape()
 
-                    StartChatButton(
-                        onClick = onNavigateToChat,
-                        modifier = Modifier
-                            .fillMaxWidth(fraction = 0.5f)
-                            .padding(MaterialTheme.spacing.extraMedium)
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+                    .padding(
+                        horizontal = MaterialTheme.spacing.medium,
+                        vertical = MaterialTheme.spacing.extraMedium
                     )
+            ) {
+                val contentModifier = if (isLandscape) {
+                    Modifier.fillMaxWidth(fraction = 0.6f)
+                } else {
+                    Modifier.fillMaxWidth()
                 }
-            } else {
-                Column(
-                    verticalArrangement = Arrangement.Center,
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    Section(
-                        title = stringResource(R.string.start_chat_language_label),
-                        modifier = Modifier
-                            .padding(
-                                start = MaterialTheme.spacing.medium,
-                                end = MaterialTheme.spacing.medium,
-                                bottom = MaterialTheme.spacing.medium
-                            )
-                    ) {
-                        ChatLanguageDropdown(
-                            onSelect = {
-                                viewModel.selectLanguage(it)
-                            },
-                            languages = state.chatLanguages,
-                            selectedLanguage = state.selectedLanguage,
-                            modifier = Modifier.fillMaxWidth()
+
+                Header(showIcon = !isLandscape)
+
+                Spacer(modifier = Modifier.height(MaterialTheme.spacing.extraMedium))
+
+                ChatConfigCard(
+                    state = state,
+                    onSelectChatModel = viewModel::selectChatModel,
+                    onSelectPracticeLanguage = viewModel::selectPracticeLanguage,
+                    onSelectTranslationLanguage = viewModel::selectTranslationLanguage,
+                    onSelectPracticeType = viewModel::selectPracticeType,
+                    modifier = contentModifier
+                )
+
+                StartChatButton(
+                    onClick = onNavigateToChat,
+                    modifier = contentModifier
+                        .padding(
+                            horizontal = MaterialTheme.spacing.medium,
+                            vertical = MaterialTheme.spacing.extraMedium
                         )
-                    }
-
-                    StartChatButton(
-                        onClick = onNavigateToChat,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(MaterialTheme.spacing.large)
-                    )
-                }
+                )
             }
         }
     }
 }
 
 @Composable
-private fun Section(
-    modifier: Modifier = Modifier,
-    title: String,
-    content: @Composable () -> Unit
+private fun Header(
+    showIcon: Boolean,
+    modifier: Modifier = Modifier
 ) {
     Column(
-        horizontalAlignment = Alignment.Start,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+    ) {
+        if (showIcon) {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .size(72.dp)
+                    .background(
+                        color = MaterialTheme.colorScheme.primaryContainer,
+                        shape = CircleShape
+                    )
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_auto_awesome_24),
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+            }
+
+            Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+        }
+
+        Text(
+            text = stringResource(R.string.start_chat_greeting),
+            style = MaterialTheme.typography.headlineMedium,
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center
+        )
+
+        Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
+
+        Text(
+            text = stringResource(R.string.start_chat_info),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center
+        )
+    }
+}
+
+@Composable
+private fun ChatConfigCard(
+    state: StartChatState,
+    onSelectChatModel: (ChatModel) -> Unit,
+    onSelectPracticeLanguage: (PracticeLanguage) -> Unit,
+    onSelectTranslationLanguage: (TranslationLanguage) -> Unit,
+    onSelectPracticeType: (PracticeType) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
         modifier = modifier
             .border(
                 width = 1.dp,
                 color = MaterialTheme.colorScheme.surfaceDim,
-                shape = RoundedCornerShape(16.dp)
+                shape = RoundedCornerShape(MaterialTheme.radius.medium)
             )
-            .padding(MaterialTheme.spacing.extraMedium)
+            .background(
+                color = MaterialTheme.colorScheme.surfaceContainerLow,
+                shape = RoundedCornerShape(MaterialTheme.radius.medium)
+            )
     ) {
-        Text(text = title)
-        Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
-        content()
+        SelectorRow(
+            label = stringResource(R.string.start_chat_chat_model_label),
+            options = state.chatModels,
+            selected = state.selectedChatModel,
+            onSelect = onSelectChatModel,
+            optionLabel = { it.toLocalizedString() }
+        )
+
+        SelectorDivider()
+
+        SelectorRow(
+            label = stringResource(R.string.start_chat_practice_language_label),
+            options = state.practiceLanguages,
+            selected = state.selectedPracticeLanguage,
+            onSelect = onSelectPracticeLanguage,
+            optionLabel = { it.toLocalizedString() }
+        )
+
+        SelectorDivider()
+
+        SelectorRow(
+            label = stringResource(R.string.start_chat_translation_language_label),
+            options = state.translationLanguages,
+            selected = state.selectedTranslationLanguage,
+            onSelect = onSelectTranslationLanguage,
+            optionLabel = { it.toLocalizedString() }
+        )
+
+        SelectorDivider()
+
+        SelectorRow(
+            label = stringResource(R.string.start_chat_practice_type_label),
+            options = state.practiceTypes,
+            selected = state.selectedPracticeType,
+            onSelect = onSelectPracticeType,
+            optionLabel = { it.toLocalizedString() }
+        )
+    }
+}
+
+@Composable
+private fun SelectorDivider() {
+    HorizontalDivider(
+        color = MaterialTheme.colorScheme.surfaceDim,
+        modifier = Modifier.padding(horizontal = MaterialTheme.spacing.extraMedium)
+    )
+}
+
+@Composable
+private fun <T : Any> SelectorRow(
+    label: String,
+    options: List<T>,
+    selected: T?,
+    onSelect: (T) -> Unit,
+    optionLabel: @Composable (T) -> String,
+    modifier: Modifier = Modifier
+) {
+    var expanded by remember { mutableStateOf(false) }
+
+    Box(modifier = modifier) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable(enabled = options.isNotEmpty()) { expanded = true }
+                .padding(
+                    horizontal = MaterialTheme.spacing.extraMedium,
+                    vertical = MaterialTheme.spacing.medium
+                )
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = label,
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+
+                Spacer(modifier = Modifier.height(MaterialTheme.spacing.extraSmall))
+
+                Text(
+                    text = selected?.let { optionLabel(it) }
+                        ?: stringResource(R.string.start_chat_not_selected),
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.Medium,
+                    color = if (selected != null) {
+                        MaterialTheme.colorScheme.onSurface
+                    } else {
+                        MaterialTheme.colorScheme.onSurfaceVariant
+                    }
+                )
+            }
+
+            Icon(
+                imageVector = Icons.Rounded.KeyboardArrowDown,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            options.forEach { option ->
+                DropdownMenuItem(
+                    text = { Text(optionLabel(option)) },
+                    trailingIcon = if (option == selected) {
+                        {
+                            Icon(
+                                imageVector = Icons.Rounded.Check,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                    } else {
+                        null
+                    },
+                    onClick = {
+                        onSelect(option)
+                        expanded = false
+                    }
+                )
+            }
+        }
     }
 }
 
@@ -185,7 +346,7 @@ fun StartChatButton(
     Box(
         modifier = modifier
             .height(64.dp)
-            .background(brush, shape = RoundedCornerShape(32.dp))
+            .background(brush, shape = RoundedCornerShape(MaterialTheme.radius.extraMedium))
             .clickable(onClick = onClick),
         contentAlignment = Alignment.Center
     ) {
@@ -207,43 +368,5 @@ fun StartChatButton(
                 .align(Alignment.CenterEnd)
                 .padding(horizontal = MaterialTheme.spacing.extraMedium)
         )
-    }
-}
-
-@Composable
-fun ChatLanguageDropdown(
-    onSelect: (ChatLanguage) -> Unit,
-    languages: List<ChatLanguage>,
-    selectedLanguage: ChatLanguage?,
-    modifier: Modifier = Modifier
-) {
-    var expanded by remember { mutableStateOf(false) }
-
-    Column(
-        modifier = modifier
-    ) {
-        if (selectedLanguage != null) {
-            FilledTonalButton(
-                onClick = { expanded = true },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(selectedLanguage.toLocalizedString())
-            }
-        }
-
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
-        ) {
-            languages.forEach { language ->
-                DropdownMenuItem(
-                    text = { Text(language.toLocalizedString()) },
-                    onClick = {
-                        onSelect(language)
-                        expanded = false
-                    }
-                )
-            }
-        }
     }
 }
