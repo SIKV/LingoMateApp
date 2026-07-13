@@ -47,19 +47,17 @@ import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 import org.koin.core.parameter.parametersOf
 import sikv.lingomate.R
-import sikv.lingomate.data.chat.domain.ChatLanguage
+import sikv.lingomate.data.chat.domain.ChatConfig
 import sikv.lingomate.data.chat.domain.ChatMessage
-import sikv.lingomate.data.chat.domain.ChatModel
 import sikv.lingomate.ui.theme.spacing
 
 @OptIn(ExperimentalMaterial3Api::class, KoinExperimentalAPI::class)
 @Composable
 fun ChatScreen(
     onBackPressed: () -> Unit,
-    chatLanguage: ChatLanguage,
-    chatModel: ChatModel,
+    chatConfig: ChatConfig,
     viewModel: ChatViewModel = koinViewModel(
-        parameters = { parametersOf(chatLanguage, chatModel) }
+        parameters = { parametersOf(chatConfig) }
     )
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()

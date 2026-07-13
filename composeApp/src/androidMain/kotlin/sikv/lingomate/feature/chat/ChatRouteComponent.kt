@@ -6,8 +6,6 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
-import sikv.lingomate.data.chat.domain.ChatLanguage
-import sikv.lingomate.data.chat.domain.ChatModel
 import sikv.lingomate.feature.startchat.StartChatScreen
 
 @Composable
@@ -32,16 +30,14 @@ fun ChatRouteComponent(
 
             entry<ChatRoute.StartChat> {
                 StartChatScreen(
-                    onNavigateToChat = {
-                        backStack.add(ChatRoute.Chat)
+                    onNavigateToChat = { chatConfig ->
+                        backStack.add(ChatRoute.Chat(chatConfig))
                     }
                 )
             }
-            entry<ChatRoute.Chat> {
+            entry<ChatRoute.Chat> { route ->
                 ChatScreen(
-                    // TODO: Only for testing.
-                    chatLanguage = ChatLanguage.SPANISH,
-                    chatModel = ChatModel.GPT_5_MINI,
+                    chatConfig = route.chatConfig,
                     onBackPressed = {
                         backStack.removeLastOrNull()
                     }

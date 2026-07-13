@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidKotlinMultiplatformLibrary)
     alias(libs.plugins.nativeCoroutines)
+    alias(libs.plugins.kotlinSerialization)
 }
 
 kotlin {
@@ -43,6 +44,7 @@ kotlin {
             dependencies {
                 implementation(libs.kotlin.stdlib)
                 implementation(libs.koin.core)
+                implementation(libs.kotlinx.serialization.core)
                 implementation(project(":api"))
                 implementation(project(":onDeviceLLM"))
             }

@@ -42,6 +42,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.TileMode
@@ -53,6 +54,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.compose.viewmodel.koinViewModel
 import sikv.lingomate.R
+import sikv.lingomate.data.chat.domain.ChatConfig
 import sikv.lingomate.data.chat.domain.ChatModel
 import sikv.lingomate.data.chat.domain.PracticeLanguage
 import sikv.lingomate.data.chat.domain.PracticeType
@@ -64,10 +66,11 @@ import sikv.lingomate.ui.theme.spacing
 
 @Composable
 fun StartChatScreen(
-    onNavigateToChat: () -> Unit,
+    onNavigateToChat: (ChatConfig) -> Unit,
     viewModel: StartChatViewModel = koinViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val chatConfig = state.toChatConfig()
 
     Scaffold { innerPadding ->
         BoxWithConstraints(
@@ -108,7 +111,8 @@ fun StartChatScreen(
                 )
 
                 StartChatButton(
-                    onClick = onNavigateToChat,
+                    enabled = chatConfig != null,
+                    onClick = { chatConfig?.let(onNavigateToChat) },
                     modifier = contentModifier
                         .padding(
                             horizontal = MaterialTheme.spacing.medium,
@@ -315,9 +319,19 @@ private fun <T : Any> SelectorRow(
     }
 }
 
+private fun StartChatState.toChatConfig(): ChatConfig? {
+    return ChatConfig(
+        chatModel = selectedChatModel ?: return null,
+        practiceLanguage = selectedPracticeLanguage ?: return null,
+        translationLanguage = selectedTranslationLanguage ?: return null,
+        practiceType = selectedPracticeType ?: return null
+    )
+}
+
 @Composable
 fun StartChatButton(
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
     onClick: () -> Unit
 ) {
     val colors = listOf(
@@ -346,8 +360,9 @@ fun StartChatButton(
     Box(
         modifier = modifier
             .height(64.dp)
+            .alpha(if (enabled) 1f else 0.5f)
             .background(brush, shape = RoundedCornerShape(MaterialTheme.radius.extraMedium))
-            .clickable(onClick = onClick),
+            .clickable(enabled = enabled, onClick = onClick),
         contentAlignment = Alignment.Center
     ) {
         Text(
