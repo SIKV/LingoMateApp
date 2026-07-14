@@ -22,8 +22,8 @@ struct ContentView: View {
             }
             .navigationDestination(for: Route.self) { route in
                 switch route {
-                case .chat(let chatLanguage):
-                    ChatScreen(chatLanguage: chatLanguage)
+                case .chat(let chatConfig):
+                    ChatScreen(chatConfig: chatConfig)
                 case .chatDetails:
                     ChatDetailsView()
                 }

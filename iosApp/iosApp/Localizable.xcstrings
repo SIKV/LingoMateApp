@@ -1,9 +1,6 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "" : {
-
-    },
     "Chat Details" : {
 
     },
@@ -62,6 +59,17 @@
         }
       }
     },
+    "chat_model_provider_on_device" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "On-device"
+          }
+        }
+      }
+    },
     "chat_type_message_hint" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -82,13 +90,46 @@
     "More" : {
 
     },
+    "practice_type_conversation" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conversation"
+          }
+        }
+      }
+    },
+    "practice_type_translation" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Translation"
+          }
+        }
+      }
+    },
+    "start_chat_chat_model_label" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chat Model"
+          }
+        }
+      }
+    },
     "start_chat_greeting" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hi there 👋"
+            "value" : "Ready to practice?"
           }
         }
       }
@@ -99,7 +140,40 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Choose a language you’d like to practice\nand press Start Chat."
+            "value" : "Set up your chat and start learning."
+          }
+        }
+      }
+    },
+    "start_chat_not_selected" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not selected"
+          }
+        }
+      }
+    },
+    "start_chat_practice_language_label" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Practice Language"
+          }
+        }
+      }
+    },
+    "start_chat_practice_type_label" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Practice Type"
           }
         }
       }
@@ -111,6 +185,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Start Chat"
+          }
+        }
+      }
+    },
+    "start_chat_translation_language_label" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Translation Language"
           }
         }
       }
@@ -144,6 +229,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "More"
+          }
+        }
+      }
+    },
+    "translation_language_english" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "English"
           }
         }
       }

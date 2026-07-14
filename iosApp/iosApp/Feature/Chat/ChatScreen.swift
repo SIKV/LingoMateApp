@@ -2,8 +2,8 @@ import SwiftUI
 import Shared
 
 struct ChatScreen: View {
-    let chatLanguage: ChatLanguage
-    
+    let chatConfig: ChatConfig
+
     @EnvironmentObject private var appRouter: AppRouter
     @StateObject private var chatVM: ChatVM
     
@@ -14,11 +14,11 @@ struct ChatScreen: View {
         chatVM.state.messages.contains { $0.status == ChatMessage.Status.inProgress }
     }
     
-    init(chatLanguage: ChatLanguage) {
-        self.chatLanguage = chatLanguage
-        
+    init(chatConfig: ChatConfig) {
+        self.chatConfig = chatConfig
+
         _chatVM = StateObject(wrappedValue: ChatVM(
-            chatLanguage: chatLanguage
+            chatConfig: chatConfig
         ))
     }
     

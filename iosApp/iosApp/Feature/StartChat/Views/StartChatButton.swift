@@ -1,10 +1,11 @@
 import SwiftUI
 
 struct StartChatButton: View {
+    var enabled: Bool = true
     var action: () -> Void
-    
+
     @State private var animateGradient = false
-    
+
     var body: some View {
         Button(action: action) {
             HStack {
@@ -34,5 +35,7 @@ struct StartChatButton: View {
             )
             .cornerRadius(35)
         }
+        .disabled(!enabled)
+        .opacity(enabled ? 1 : 0.5)
     }
 }
