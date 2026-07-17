@@ -31,6 +31,7 @@ kotlin {
             api(libs.koin.compose)
             api(libs.koin.compose.viewmodel)
             api(project(":data:chat"))
+            api(project(":data:apiKeyStorage"))
             api(project(":feature:startChat"))
             api(project(":feature:chat"))
 
