@@ -1,0 +1,54 @@
+name: PR Checks
+
+on:
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+# Cancel superseded runs when new commits are pushed to the same PR
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  android:
+    name: Android build & test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Compile
+        run: ./gradlew assembleDebug --stacktrace
+
+      - name: Unit tests (common + Android)
+        run: ./gradlew testDebugUnitTest --stacktrace
+
+  ios:
+    name: iOS build & test
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Unit tests (common + iOS)
+        run: ./gradlew iosSimulatorArm64Test --stacktrace
+
+      - name: Link framework
+        run: ./gradlew linkDebugFrameworkIosSimulatorArm64 --stacktrace
