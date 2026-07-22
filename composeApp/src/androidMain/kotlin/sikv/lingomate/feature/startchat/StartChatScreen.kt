@@ -58,7 +58,7 @@ import sikv.lingomate.data.chat.domain.ChatConfig
 import sikv.lingomate.data.chat.domain.ChatModel
 import sikv.lingomate.data.chat.domain.PracticeLanguage
 import sikv.lingomate.data.chat.domain.PracticeType
-import sikv.lingomate.data.chat.domain.TranslationLanguage
+import sikv.lingomate.data.chat.domain.AssistantLanguage
 import sikv.lingomate.feature.toLocalizedString
 import sikv.lingomate.ui.isLandscape
 import sikv.lingomate.ui.theme.radius
@@ -105,7 +105,7 @@ fun StartChatScreen(
                     state = state,
                     onSelectChatModel = viewModel::selectChatModel,
                     onSelectPracticeLanguage = viewModel::selectPracticeLanguage,
-                    onSelectTranslationLanguage = viewModel::selectTranslationLanguage,
+                    onSelectAssistantLanguage = viewModel::selectAssistantLanguage,
                     onSelectPracticeType = viewModel::selectPracticeType,
                     modifier = contentModifier
                 )
@@ -176,7 +176,7 @@ private fun ChatConfigCard(
     state: StartChatState,
     onSelectChatModel: (ChatModel) -> Unit,
     onSelectPracticeLanguage: (PracticeLanguage) -> Unit,
-    onSelectTranslationLanguage: (TranslationLanguage) -> Unit,
+    onSelectAssistantLanguage: (AssistantLanguage) -> Unit,
     onSelectPracticeType: (PracticeType) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -213,10 +213,10 @@ private fun ChatConfigCard(
         SelectorDivider()
 
         SelectorRow(
-            label = stringResource(R.string.start_chat_translation_language_label),
-            options = state.translationLanguages,
-            selected = state.selectedTranslationLanguage,
-            onSelect = onSelectTranslationLanguage,
+            label = stringResource(R.string.start_chat_assistant_language_label),
+            options = state.assistantLanguages,
+            selected = state.selectedAssistantLanguage,
+            onSelect = onSelectAssistantLanguage,
             optionLabel = { it.toLocalizedString() }
         )
 
@@ -323,7 +323,7 @@ private fun StartChatState.toChatConfig(): ChatConfig? {
     return ChatConfig(
         chatModel = selectedChatModel ?: return null,
         practiceLanguage = selectedPracticeLanguage ?: return null,
-        translationLanguage = selectedTranslationLanguage ?: return null,
+        assistantLanguage = selectedAssistantLanguage ?: return null,
         practiceType = selectedPracticeType ?: return null
     )
 }

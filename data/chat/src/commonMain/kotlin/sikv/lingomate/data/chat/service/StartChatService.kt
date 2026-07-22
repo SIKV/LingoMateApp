@@ -4,7 +4,7 @@ import sikv.lingomate.data.chat.domain.ChatModel
 import sikv.lingomate.data.chat.domain.ChatModelProvider
 import sikv.lingomate.data.chat.domain.PracticeLanguage
 import sikv.lingomate.data.chat.domain.PracticeType
-import sikv.lingomate.data.chat.domain.TranslationLanguage
+import sikv.lingomate.data.chat.domain.AssistantLanguage
 import sikv.lingomate.ondevice.llm.OnDeviceLLM
 
 class StartChatService(
@@ -15,7 +15,7 @@ class StartChatService(
 
     private var selectedChatModel: ChatModel? = null
     private var selectedPracticeLanguage: PracticeLanguage? = null
-    private var selectedTranslationLanguage: TranslationLanguage? = null
+    private var selectedAssistantLanguage: AssistantLanguage? = null
     private var selectedPracticeType: PracticeType? = null
 
     suspend fun getChatModels(): List<ChatModel> {
@@ -65,16 +65,16 @@ class StartChatService(
         this.selectedPracticeLanguage = practiceLanguage
     }
 
-    suspend fun getTranslationLanguages(): List<TranslationLanguage> {
-        return TranslationLanguage.entries
+    suspend fun getAssistantLanguages(): List<AssistantLanguage> {
+        return AssistantLanguage.entries
     }
 
-    suspend fun getSelectedTranslationLanguage(): TranslationLanguage? {
-        return selectedTranslationLanguage
+    suspend fun getSelectedAssistantLanguage(): AssistantLanguage? {
+        return selectedAssistantLanguage
     }
 
-    fun selectTranslationLanguage(translationLanguage: TranslationLanguage) {
-        this.selectedTranslationLanguage = translationLanguage
+    fun selectAssistantLanguage(assistantLanguage: AssistantLanguage) {
+        this.selectedAssistantLanguage = assistantLanguage
     }
 
     suspend fun getPracticeTypes(): List<PracticeType> {

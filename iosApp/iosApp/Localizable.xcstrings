@@ -189,13 +189,13 @@
         }
       }
     },
-    "start_chat_translation_language_label" : {
+    "start_chat_assistant_language_label" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Translation Language"
+            "value" : "Assistant Language"
           }
         }
       }
@@ -233,7 +233,7 @@
         }
       }
     },
-    "translation_language_english" : {
+    "assistant_language_english" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {

@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 import sikv.lingomate.data.chat.domain.ChatModel
 import sikv.lingomate.data.chat.domain.PracticeLanguage
 import sikv.lingomate.data.chat.domain.PracticeType
-import sikv.lingomate.data.chat.domain.TranslationLanguage
+import sikv.lingomate.data.chat.domain.AssistantLanguage
 import sikv.lingomate.data.chat.service.StartChatService
 import kotlin.native.ObjCName
 
@@ -36,8 +36,8 @@ class StartChatViewModel(
                     selectedChatModel = startChatService.getSelectedChatModel(),
                     practiceLanguages = startChatService.getPracticeLanguages(),
                     selectedPracticeLanguage = startChatService.getSelectedPracticeLanguage(),
-                    translationLanguages = startChatService.getTranslationLanguages(),
-                    selectedTranslationLanguage = startChatService.getSelectedTranslationLanguage(),
+                    assistantLanguages = startChatService.getAssistantLanguages(),
+                    selectedAssistantLanguage = startChatService.getSelectedAssistantLanguage(),
                     practiceTypes = startChatService.getPracticeTypes(),
                     selectedPracticeType = startChatService.getSelectedPracticeType()
                 )
@@ -61,11 +61,11 @@ class StartChatViewModel(
         }
     }
 
-    fun selectTranslationLanguage(translationLanguage: TranslationLanguage) {
-        startChatService.selectTranslationLanguage(translationLanguage)
+    fun selectAssistantLanguage(assistantLanguage: AssistantLanguage) {
+        startChatService.selectAssistantLanguage(assistantLanguage)
 
         _uiState.update {
-            it.copy(selectedTranslationLanguage = translationLanguage)
+            it.copy(selectedAssistantLanguage = assistantLanguage)
         }
     }
 

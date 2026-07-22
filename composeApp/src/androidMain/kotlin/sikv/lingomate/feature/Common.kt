@@ -7,7 +7,7 @@ import sikv.lingomate.data.chat.domain.ChatModel
 import sikv.lingomate.data.chat.domain.ChatModelProvider
 import sikv.lingomate.data.chat.domain.PracticeLanguage
 import sikv.lingomate.data.chat.domain.PracticeType
-import sikv.lingomate.data.chat.domain.TranslationLanguage
+import sikv.lingomate.data.chat.domain.AssistantLanguage
 
 @Composable
 fun PracticeLanguage.toLocalizedString(): String {
@@ -18,9 +18,9 @@ fun PracticeLanguage.toLocalizedString(): String {
 }
 
 @Composable
-fun TranslationLanguage.toLocalizedString(): String {
+fun AssistantLanguage.toLocalizedString(): String {
     return when (this) {
-        TranslationLanguage.ENGLISH -> stringResource(R.string.translation_language_english)
+        AssistantLanguage.ENGLISH -> stringResource(R.string.assistant_language_english)
     }
 }
 
