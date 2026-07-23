@@ -46,3 +46,8 @@ class ExampleViewModel : ViewModel() {
     val uiState: StateFlow<ExampleState> = _uiState.asStateFlow()
 }
 ```
+
+5. Modify the `/shared/src/commonMain/kotlin/sikv.lingomate/di/ViewModelsModule.kt` to contain the new ViewModel.
+6. Modify the `/shared/src/commonMain/kotlin/sikv.lingomate/di/Helper.kt` to contain the new ViewModel.
+7. Add the new module to the `commonMain.dependencies` in the `/shared/build.gradle.kts`.
+8. Add the new module in the `/settings.gradle.kts`.
