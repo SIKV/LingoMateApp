@@ -34,6 +34,7 @@ kotlin {
             api(project(":data:apiKeyStorage"))
             api(project(":feature:startChat"))
             api(project(":feature:chat"))
+            api(project(":feature:manageApiKeys"))
 
             api(project(":onDeviceLLM"))
 
