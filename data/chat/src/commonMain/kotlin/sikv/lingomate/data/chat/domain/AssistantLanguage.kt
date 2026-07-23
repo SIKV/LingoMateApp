@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 import kotlin.native.ObjCName
 
 @Serializable
-@ObjCName("TranslationLanguage", exact = true)
-enum class TranslationLanguage {
+@ObjCName("AssistantLanguage", exact = true)
+enum class AssistantLanguage {
     ENGLISH,
 }

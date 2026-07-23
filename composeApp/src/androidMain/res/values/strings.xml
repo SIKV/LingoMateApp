@@ -5,7 +5,7 @@
     <string name="chat_language_english">English</string>
     <string name="chat_language_spanish">Spanish</string>
 
-    <string name="translation_language_english">English</string>
+    <string name="assistant_language_english">English</string>
 
     <string name="chat_model_provider_on_device">On-device</string>
     <string name="practice_type_conversation">Conversation</string>
@@ -16,7 +16,7 @@
     <string name="start_chat_info">Set up your chat and start learning.</string>
     <string name="start_chat_chat_model_label">Chat Model</string>
     <string name="start_chat_practice_language_label">Practice Language</string>
-    <string name="start_chat_translation_language_label">Translation Language</string>
+    <string name="start_chat_assistant_language_label">Assistant Language</string>
     <string name="start_chat_practice_type_label">Practice Type</string>
     <string name="start_chat_not_selected">Not selected</string>
     <string name="start_chat_start_button">Start Chat</string>

@@ -25,12 +25,12 @@ extension PracticeLanguage {
     }
 }
 
-extension TranslationLanguage {
+extension AssistantLanguage {
     var localizedName: LocalizedStringKey {
         switch self {
-        case .english: return L10n.translationLanguageEnglish
+        case .english: return L10n.assistantLanguageEnglish
         default:
-            fatalError("Unknown TranslationLanguage value: \(self)")
+            fatalError("Unknown AssistantLanguage value: \(self)")
         }
     }
 }

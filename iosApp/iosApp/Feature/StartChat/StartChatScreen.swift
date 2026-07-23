@@ -95,11 +95,11 @@ struct StartChatScreen: View {
             divider
 
             SelectorRow(
-                label: L10n.startChatTranslationLanguageLabel,
-                options: startChatVM.state.translationLanguages,
-                selectedLabel: startChatVM.state.selectedTranslationLanguage?.localizedName,
+                label: L10n.startChatAssistantLanguageLabel,
+                options: startChatVM.state.assistantLanguages,
+                selectedLabel: startChatVM.state.selectedAssistantLanguage?.localizedName,
                 optionLabel: { $0.localizedName },
-                onSelect: startChatVM.selectTranslationLanguage
+                onSelect: startChatVM.selectAssistantLanguage
             )
 
             divider

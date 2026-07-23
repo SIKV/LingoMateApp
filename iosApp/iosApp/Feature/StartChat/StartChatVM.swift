@@ -16,7 +16,7 @@ class StartChatVM: ObservableObject {
         guard
             let chatModel = state.selectedChatModel,
             let practiceLanguage = state.selectedPracticeLanguage,
-            let translationLanguage = state.selectedTranslationLanguage,
+            let assistantLanguage = state.selectedAssistantLanguage,
             let practiceType = state.selectedPracticeType
         else {
             return nil
@@ -25,7 +25,7 @@ class StartChatVM: ObservableObject {
         return ChatConfig(
             chatModel: chatModel,
             practiceLanguage: practiceLanguage,
-            translationLanguage: translationLanguage,
+            assistantLanguage: assistantLanguage,
             practiceType: practiceType
         )
     }
@@ -55,8 +55,8 @@ class StartChatVM: ObservableObject {
         viewModel.selectPracticeLanguage(practiceLanguage: practiceLanguage)
     }
 
-    func selectTranslationLanguage(_ translationLanguage: TranslationLanguage) {
-        viewModel.selectTranslationLanguage(translationLanguage: translationLanguage)
+    func selectAssistantLanguage(_ assistantLanguage: AssistantLanguage) {
+        viewModel.selectAssistantLanguage(assistantLanguage: assistantLanguage)
     }
 
     func selectPracticeType(_ practiceType: PracticeType) {

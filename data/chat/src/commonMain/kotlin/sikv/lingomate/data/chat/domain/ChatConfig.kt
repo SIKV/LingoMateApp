@@ -8,6 +8,6 @@ import kotlin.native.ObjCName
 data class ChatConfig(
     val chatModel: ChatModel,
     val practiceLanguage: PracticeLanguage,
-    val translationLanguage: TranslationLanguage,
+    val assistantLanguage: AssistantLanguage,
     val practiceType: PracticeType,
 )
