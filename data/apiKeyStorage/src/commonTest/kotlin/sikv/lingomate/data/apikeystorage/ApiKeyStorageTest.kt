@@ -17,71 +17,57 @@ class ApiKeyStorageTest {
     }
 
     @Test
-    fun store_persistsValueInSecureStorage() {
-        apiKeyStorage.store(ApiKeyProvider.OpenAI.storageKey, "sk-123")
+    fun store_persistsValueUnderProviderStorageKey() {
+        apiKeyStorage.store(ApiKeyProvider.OpenAI, "sk-123")
 
         assertEquals("sk-123", secureStorage.entries[ApiKeyProvider.OpenAI.storageKey])
     }
 
     @Test
     fun getApiKey_returnsStoredValue() {
-        apiKeyStorage.store(ApiKeyProvider.OpenAI.storageKey, "sk-123")
+        apiKeyStorage.store(ApiKeyProvider.OpenAI, "sk-123")
 
-        assertEquals("sk-123", apiKeyStorage.getApiKey(ApiKeyProvider.OpenAI.storageKey))
+        assertEquals("sk-123", apiKeyStorage.getApiKey(ApiKeyProvider.OpenAI))
     }
 
     @Test
     fun getApiKey_returnsNullWhenMissing() {
-        assertNull(apiKeyStorage.getApiKey(ApiKeyProvider.OpenAI.storageKey))
+        assertNull(apiKeyStorage.getApiKey(ApiKeyProvider.OpenAI))
     }
 
     @Test
     fun store_overwritesExistingValue() {
-        apiKeyStorage.store(ApiKeyProvider.OpenAI.storageKey, "sk-old")
-        apiKeyStorage.store(ApiKeyProvider.OpenAI.storageKey, "sk-new")
+        apiKeyStorage.store(ApiKeyProvider.OpenAI, "sk-old")
+        apiKeyStorage.store(ApiKeyProvider.OpenAI, "sk-new")
 
-        assertEquals("sk-new", apiKeyStorage.getApiKey(ApiKeyProvider.OpenAI.storageKey))
+        assertEquals("sk-new", apiKeyStorage.getApiKey(ApiKeyProvider.OpenAI))
         assertEquals(1, secureStorage.entries.size)
     }
 
     @Test
-    fun differentKeys_areStoredIndependently() {
-        apiKeyStorage.store("provider_a", "key-a")
-        apiKeyStorage.store("provider_b", "key-b")
+    fun remove_deletesStoredKey() {
+        apiKeyStorage.store(ApiKeyProvider.OpenAI, "sk-123")
 
-        assertEquals("key-a", apiKeyStorage.getApiKey("provider_a"))
-        assertEquals("key-b", apiKeyStorage.getApiKey("provider_b"))
-    }
+        apiKeyStorage.remove(ApiKeyProvider.OpenAI)
 
-    @Test
-    fun remove_deletesOnlyTargetedKey() {
-        apiKeyStorage.store("provider_a", "key-a")
-        apiKeyStorage.store("provider_b", "key-b")
-
-        apiKeyStorage.remove("provider_a")
-
-        assertNull(apiKeyStorage.getApiKey("provider_a"))
-        assertEquals("key-b", apiKeyStorage.getApiKey("provider_b"))
+        assertNull(apiKeyStorage.getApiKey(ApiKeyProvider.OpenAI))
     }
 
     @Test
     fun remove_missingKeyDoesNothing() {
-        apiKeyStorage.store("provider_a", "key-a")
+        apiKeyStorage.remove(ApiKeyProvider.OpenAI)
 
-        apiKeyStorage.remove("provider_b")
-
-        assertEquals("key-a", apiKeyStorage.getApiKey("provider_a"))
+        assertNull(apiKeyStorage.getApiKey(ApiKeyProvider.OpenAI))
+        assertEquals(0, secureStorage.entries.size)
     }
 
     @Test
     fun clear_removesAllStoredKeys() {
-        apiKeyStorage.store("provider_a", "key-a")
-        apiKeyStorage.store("provider_b", "key-b")
+        apiKeyStorage.store(ApiKeyProvider.OpenAI, "sk-123")
 
         apiKeyStorage.clear()
 
-        assertNull(apiKeyStorage.getApiKey("provider_a"))
-        assertNull(apiKeyStorage.getApiKey("provider_b"))
+        assertNull(apiKeyStorage.getApiKey(ApiKeyProvider.OpenAI))
         assertEquals(0, secureStorage.entries.size)
     }
 }

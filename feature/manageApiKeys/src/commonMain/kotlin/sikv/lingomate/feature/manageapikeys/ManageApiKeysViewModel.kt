@@ -33,19 +33,19 @@ class ManageApiKeysViewModel(
 
     /** Stores (or overwrites) the [apiKey] for [provider]. */
     fun addApiKey(provider: ApiKeyProvider, apiKey: String) {
-        apiKeyStorage.store(provider.storageKey, apiKey)
+        apiKeyStorage.store(provider, apiKey)
         refreshStoredProviders()
     }
 
     /** Removes the stored key for [provider], if present. */
     fun removeApiKey(provider: ApiKeyProvider) {
-        apiKeyStorage.remove(provider.storageKey)
+        apiKeyStorage.remove(provider)
         refreshStoredProviders()
     }
 
     private fun refreshStoredProviders() {
         val storedProviders = ApiKeyProvider.entries.filter { provider ->
-            apiKeyStorage.getApiKey(provider.storageKey) != null
+            apiKeyStorage.getApiKey(provider) != null
         }
         _uiState.update { it.copy(storedProviders = storedProviders) }
     }
