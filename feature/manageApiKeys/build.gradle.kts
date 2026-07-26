@@ -1,11 +1,12 @@
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidKotlinMultiplatformLibrary)
+    alias(libs.plugins.nativeCoroutines)
 }
 
 kotlin {
     androidLibrary {
-        namespace = "sikv.lingomate.data.apikeystorage"
+        namespace = "sikv.lingomate.feature.manageapikeys"
         compileSdk = Configs.ANDROID_COMPILE_SDK
         minSdk = Configs.ANDROID_MIN_SDK
 
@@ -19,7 +20,7 @@ kotlin {
         }
     }
 
-    val xcfName = "data:apiKeyStorageKit"
+    val xcfName = "feature:manageApiKeysKit"
 
     iosX64 {
         binaries.framework {
@@ -43,19 +44,21 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(libs.kotlin.stdlib)
-                implementation(libs.koin.core)
+                implementation(libs.androidx.lifecycle.viewmodelCompose)
+                implementation(project(":data:apiKeyStorage"))
             }
         }
+
         commonTest {
             dependencies {
                 implementation(libs.kotlin.test)
             }
         }
+
         androidMain {
-            dependencies {
-                implementation(libs.androidx.security.crypto)
-            }
+            dependencies { }
         }
+
         getByName("androidDeviceTest") {
             dependencies {
                 implementation(libs.androidx.runner)
@@ -63,6 +66,7 @@ kotlin {
                 implementation(libs.androidx.testExt.junit)
             }
         }
+
         iosMain {
             dependencies { }
         }
