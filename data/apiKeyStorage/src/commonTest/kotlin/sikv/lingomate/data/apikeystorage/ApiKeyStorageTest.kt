@@ -18,29 +18,29 @@ class ApiKeyStorageTest {
 
     @Test
     fun store_persistsValueInSecureStorage() {
-        apiKeyStorage.store(ApiKeyStorage.Keys.OPEN_AI, "sk-123")
+        apiKeyStorage.store(ApiKeyProvider.OpenAI.storageKey, "sk-123")
 
-        assertEquals("sk-123", secureStorage.entries[ApiKeyStorage.Keys.OPEN_AI])
+        assertEquals("sk-123", secureStorage.entries[ApiKeyProvider.OpenAI.storageKey])
     }
 
     @Test
     fun getApiKey_returnsStoredValue() {
-        apiKeyStorage.store(ApiKeyStorage.Keys.OPEN_AI, "sk-123")
+        apiKeyStorage.store(ApiKeyProvider.OpenAI.storageKey, "sk-123")
 
-        assertEquals("sk-123", apiKeyStorage.getApiKey(ApiKeyStorage.Keys.OPEN_AI))
+        assertEquals("sk-123", apiKeyStorage.getApiKey(ApiKeyProvider.OpenAI.storageKey))
     }
 
     @Test
     fun getApiKey_returnsNullWhenMissing() {
-        assertNull(apiKeyStorage.getApiKey(ApiKeyStorage.Keys.OPEN_AI))
+        assertNull(apiKeyStorage.getApiKey(ApiKeyProvider.OpenAI.storageKey))
     }
 
     @Test
     fun store_overwritesExistingValue() {
-        apiKeyStorage.store(ApiKeyStorage.Keys.OPEN_AI, "sk-old")
-        apiKeyStorage.store(ApiKeyStorage.Keys.OPEN_AI, "sk-new")
+        apiKeyStorage.store(ApiKeyProvider.OpenAI.storageKey, "sk-old")
+        apiKeyStorage.store(ApiKeyProvider.OpenAI.storageKey, "sk-new")
 
-        assertEquals("sk-new", apiKeyStorage.getApiKey(ApiKeyStorage.Keys.OPEN_AI))
+        assertEquals("sk-new", apiKeyStorage.getApiKey(ApiKeyProvider.OpenAI.storageKey))
         assertEquals(1, secureStorage.entries.size)
     }
 

@@ -1,5 +1,6 @@
 package sikv.lingomate.feature.manageapikeys
 
+import sikv.lingomate.data.apikeystorage.ApiKeyProvider
 import sikv.lingomate.data.apikeystorage.ApiKeyStorage
 import kotlin.test.Test
 import kotlin.test.assertEquals

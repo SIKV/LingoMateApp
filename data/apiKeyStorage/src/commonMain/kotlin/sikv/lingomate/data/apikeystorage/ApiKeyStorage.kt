@@ -8,7 +8,7 @@ package sikv.lingomate.data.apikeystorage
  * unencrypted storage.
  *
  * A [key] identifies which API key is being stored, allowing multiple
- * providers to be kept side by side (e.g. [Keys.OPEN_AI]).
+ * providers to be kept side by side (see [ApiKeyProvider.storageKey]).
  */
 class ApiKeyStorage(
     private val secureStorage: SecureStorage,
@@ -32,10 +32,5 @@ class ApiKeyStorage(
     /** Removes all stored API keys. */
     fun clear() {
         secureStorage.clear()
-    }
-
-    /** Well-known keys for the providers the app supports. */
-    object Keys {
-        const val OPEN_AI = "open_ai"
     }
 }

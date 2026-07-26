@@ -67,4 +67,8 @@ kotlin {
             dependencies { }
         }
     }
+
+    sourceSets.all {
+        languageSettings.optIn("kotlin.experimental.ExperimentalObjCName")
+    }
 }
