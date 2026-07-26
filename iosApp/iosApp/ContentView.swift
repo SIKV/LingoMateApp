@@ -11,13 +11,9 @@ struct ContentView: View {
                     .tabItem {
                         Label(L10n.tabChat, systemImage: "bubble.left.and.bubble.right.fill")
                     }
-                HistoryView()
-                    .tabItem {
-                        Label(L10n.tabHistory, systemImage: "book.pages.fill")
-                    }
                 MoreView()
                     .tabItem {
-                        Label(L10n.tabHistory, systemImage: "ellipsis.circle")
+                        Label(L10n.tabMore, systemImage: "ellipsis.circle")
                     }
             }
             .navigationDestination(for: Route.self) { route in

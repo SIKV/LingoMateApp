@@ -9,14 +9,10 @@ sealed interface AppRoute : NavKey {
     data object Chat : AppRoute
 
     @Serializable
-    data object History : AppRoute
-
-    @Serializable
     data object More : AppRoute
 }
 
 val bottomNavItems = listOf(
     AppRoute.Chat,
-    AppRoute.History,
     AppRoute.More
 )

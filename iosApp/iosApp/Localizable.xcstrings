@@ -81,12 +81,6 @@
         }
       }
     },
-    "Go to Chat Details" : {
-
-    },
-    "History" : {
-
-    },
     "More" : {
 
     },
@@ -207,17 +201,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Chat"
-          }
-        }
-      }
-    },
-    "tab_history" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "History"
           }
         }
       }

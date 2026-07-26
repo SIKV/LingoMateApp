@@ -2,7 +2,6 @@ import SwiftUI
 
 enum L10n {
     static let tabChat = LocalizedStringKey("tab_chat")
-    static let tabHistory = LocalizedStringKey("tab_history")
     static let tabMore = LocalizedStringKey("tab_more")
     
     static let chatLanguageEnglish = LocalizedStringKey("chat_language_english")
