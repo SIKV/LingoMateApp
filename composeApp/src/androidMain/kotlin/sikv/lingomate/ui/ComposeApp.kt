@@ -14,7 +14,6 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import sikv.lingomate.feature.chat.ChatRouteComponent
-import sikv.lingomate.feature.history.HistoryRouteComponent
 import sikv.lingomate.feature.more.MoreRouteComponent
 import sikv.lingomate.navigation.AppRoute
 import sikv.lingomate.navigation.NavBar
@@ -61,9 +60,6 @@ fun ComposeApp() {
                     entryProvider = entryProvider {
                         entry<AppRoute.Chat> {
                             ChatRouteComponent(onShowNavigationBar = onShowNavigationBar)
-                        }
-                        entry<AppRoute.History> {
-                            HistoryRouteComponent(onShowNavigationBar = onShowNavigationBar)
                         }
                         entry<AppRoute.More> {
                             MoreRouteComponent(onShowNavigationBar = onShowNavigationBar)
