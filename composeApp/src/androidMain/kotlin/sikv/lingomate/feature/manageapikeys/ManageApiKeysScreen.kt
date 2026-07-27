@@ -1,8 +1,6 @@
 package sikv.lingomate.feature.manageapikeys
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -10,6 +8,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,42 +17,46 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Key
-import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.material.icons.rounded.Visibility
 import androidx.compose.material.icons.rounded.VisibilityOff
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuAnchorType
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 import sikv.lingomate.R
 import sikv.lingomate.data.apikeystorage.ApiKeyProvider
@@ -69,7 +73,7 @@ fun ManageApiKeysScreen(
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
-    var showAddDialog by remember { mutableStateOf(false) }
+    var showAddSheet by remember { mutableStateOf(false) }
     var providerPendingDeletion by remember { mutableStateOf<ApiKeyProvider?>(null) }
 
     Scaffold(
@@ -97,7 +101,7 @@ fun ManageApiKeysScreen(
                         contentDescription = null
                     )
                 },
-                onClick = { showAddDialog = true }
+                onClick = { showAddSheet = true }
             )
         }
     ) { innerPadding ->
@@ -125,14 +129,14 @@ fun ManageApiKeysScreen(
         }
     }
 
-    if (showAddDialog) {
-        AddApiKeyDialog(
+    if (showAddSheet) {
+        AddApiKeySheet(
             storedProviders = state.storedProviders,
             onAdd = { provider, apiKey ->
                 viewModel.addApiKey(provider, apiKey)
-                showAddDialog = false
+                showAddSheet = false
             },
-            onDismiss = { showAddDialog = false }
+            onDismiss = { showAddSheet = false }
         )
     }
 
@@ -215,12 +219,16 @@ private fun EmptyState(modifier: Modifier = Modifier) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun AddApiKeyDialog(
+private fun AddApiKeySheet(
     storedProviders: List<ApiKeyProvider>,
     onAdd: (ApiKeyProvider, String) -> Unit,
     onDismiss: () -> Unit
 ) {
+    val sheetState = rememberModalBottomSheetState()
+    val scope = rememberCoroutineScope()
+
     var selectedProvider by remember {
         mutableStateOf(
             ApiKeyProvider.entries.firstOrNull { it !in storedProviders }
@@ -229,90 +237,151 @@ private fun AddApiKeyDialog(
     }
     var apiKey by remember { mutableStateOf("") }
     var keyVisible by remember { mutableStateOf(false) }
+    var providerMenuExpanded by remember { mutableStateOf(false) }
     var showReplaceConfirmation by remember { mutableStateOf(false) }
 
     val replacesExistingKey = selectedProvider in storedProviders
 
-    AlertDialog(
+    // Lets the sheet animate out before the caller drops it from composition.
+    val hideThen: (() -> Unit) -> Unit = { action ->
+        scope.launch { sheetState.hide() }.invokeOnCompletion {
+            if (!sheetState.isVisible) {
+                action()
+            }
+        }
+    }
+
+    ModalBottomSheet(
         onDismissRequest = onDismiss,
-        title = {
+        sheetState = sheetState
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    horizontal = MaterialTheme.spacing.extraMedium,
+                    vertical = MaterialTheme.spacing.small
+                )
+                .navigationBarsPadding()
+                .imePadding()
+        ) {
             Text(
-                if (replacesExistingKey) {
+                text = if (replacesExistingKey) {
                     stringResource(R.string.manage_api_keys_replace_dialog_title)
                 } else {
                     stringResource(R.string.manage_api_keys_add_dialog_title)
-                }
+                },
+                style = MaterialTheme.typography.headlineSmall
             )
-        },
-        text = {
-            Column {
-                ProviderSelector(
-                    selected = selectedProvider,
-                    onSelect = { selectedProvider = it }
-                )
 
-                Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+            Spacer(modifier = Modifier.height(MaterialTheme.spacing.extraMedium))
 
+            ExposedDropdownMenuBox(
+                expanded = providerMenuExpanded,
+                onExpandedChange = { providerMenuExpanded = it }
+            ) {
                 OutlinedTextField(
-                    value = apiKey,
-                    onValueChange = { apiKey = it },
-                    label = { Text(stringResource(R.string.manage_api_keys_key_label)) },
-                    singleLine = true,
-                    visualTransformation = if (keyVisible) {
-                        VisualTransformation.None
-                    } else {
-                        PasswordVisualTransformation()
-                    },
+                    value = selectedProvider.toLocalizedString(),
+                    onValueChange = { },
+                    readOnly = true,
+                    label = { Text(stringResource(R.string.manage_api_keys_provider_label)) },
                     trailingIcon = {
-                        IconButton(onClick = { keyVisible = !keyVisible }) {
-                            Icon(
-                                imageVector = if (keyVisible) {
-                                    Icons.Rounded.VisibilityOff
-                                } else {
-                                    Icons.Rounded.Visibility
-                                },
-                                contentDescription = if (keyVisible) {
-                                    stringResource(
-                                        R.string.manage_api_keys_hide_key_content_description
-                                    )
-                                } else {
-                                    stringResource(
-                                        R.string.manage_api_keys_show_key_content_description
-                                    )
-                                }
-                            )
-                        }
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = providerMenuExpanded)
                     },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .menuAnchor(MenuAnchorType.PrimaryNotEditable)
+                        .fillMaxWidth()
                 )
+
+                ExposedDropdownMenu(
+                    expanded = providerMenuExpanded,
+                    onDismissRequest = { providerMenuExpanded = false }
+                ) {
+                    ApiKeyProvider.entries.forEach { provider ->
+                        DropdownMenuItem(
+                            text = { Text(provider.toLocalizedString()) },
+                            onClick = {
+                                selectedProvider = provider
+                                providerMenuExpanded = false
+                            },
+                            contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
+                        )
+                    }
+                }
             }
-        },
-        confirmButton = {
-            TextButton(
-                onClick = {
-                    // Overwriting a stored key destroys it, so confirm first.
-                    if (replacesExistingKey) {
-                        showReplaceConfirmation = true
-                    } else {
-                        onAdd(selectedProvider, apiKey.trim())
+
+            Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+
+            OutlinedTextField(
+                value = apiKey,
+                onValueChange = { apiKey = it },
+                label = { Text(stringResource(R.string.manage_api_keys_key_label)) },
+                singleLine = true,
+                visualTransformation = if (keyVisible) {
+                    VisualTransformation.None
+                } else {
+                    PasswordVisualTransformation()
+                },
+                trailingIcon = {
+                    IconButton(onClick = { keyVisible = !keyVisible }) {
+                        Icon(
+                            imageVector = if (keyVisible) {
+                                Icons.Rounded.VisibilityOff
+                            } else {
+                                Icons.Rounded.Visibility
+                            },
+                            contentDescription = if (keyVisible) {
+                                stringResource(
+                                    R.string.manage_api_keys_hide_key_content_description
+                                )
+                            } else {
+                                stringResource(
+                                    R.string.manage_api_keys_show_key_content_description
+                                )
+                            }
+                        )
                     }
                 },
-                enabled = apiKey.isNotBlank()
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(MaterialTheme.spacing.extraMedium))
+
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(
+                    space = MaterialTheme.spacing.small,
+                    alignment = Alignment.End
+                ),
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Text(stringResource(R.string.manage_api_keys_save_button))
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text(stringResource(R.string.manage_api_keys_cancel_button))
+                TextButton(onClick = { hideThen(onDismiss) }) {
+                    Text(stringResource(R.string.manage_api_keys_cancel_button))
+                }
+
+                Button(
+                    onClick = {
+                        // Overwriting a stored key destroys it, so confirm first.
+                        if (replacesExistingKey) {
+                            showReplaceConfirmation = true
+                        } else {
+                            hideThen { onAdd(selectedProvider, apiKey.trim()) }
+                        }
+                    },
+                    enabled = apiKey.isNotBlank()
+                ) {
+                    Text(stringResource(R.string.manage_api_keys_save_button))
+                }
             }
         }
-    )
+    }
 
     if (showReplaceConfirmation) {
         ReplaceApiKeyDialog(
             provider = selectedProvider,
-            onConfirm = { onAdd(selectedProvider, apiKey.trim()) },
+            onConfirm = {
+                showReplaceConfirmation = false
+                hideThen { onAdd(selectedProvider, apiKey.trim()) }
+            },
             // Leaves the entered key intact so it can be saved after all.
             onDismiss = { showReplaceConfirmation = false }
         )
@@ -347,73 +416,6 @@ private fun ReplaceApiKeyDialog(
             }
         }
     )
-}
-
-@Composable
-private fun ProviderSelector(
-    selected: ApiKeyProvider,
-    onSelect: (ApiKeyProvider) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    var expanded by remember { mutableStateOf(false) }
-
-    Box(modifier = modifier) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable { expanded = true }
-                .padding(vertical = MaterialTheme.spacing.small)
-        ) {
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = stringResource(R.string.manage_api_keys_provider_label),
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-
-                Spacer(modifier = Modifier.height(MaterialTheme.spacing.extraSmall))
-
-                Text(
-                    text = selected.toLocalizedString(),
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.Medium
-                )
-            }
-
-            Icon(
-                imageVector = Icons.Rounded.KeyboardArrowDown,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
-        ) {
-            ApiKeyProvider.entries.forEach { provider ->
-                DropdownMenuItem(
-                    text = { Text(provider.toLocalizedString()) },
-                    trailingIcon = if (provider == selected) {
-                        {
-                            Icon(
-                                imageVector = Icons.Rounded.Check,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.primary
-                            )
-                        }
-                    } else {
-                        null
-                    },
-                    onClick = {
-                        onSelect(provider)
-                        expanded = false
-                    }
-                )
-            }
-        }
-    }
 }
 
 @Composable
