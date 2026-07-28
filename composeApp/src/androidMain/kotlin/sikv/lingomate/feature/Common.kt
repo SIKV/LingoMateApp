@@ -3,6 +3,7 @@ package sikv.lingomate.feature
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import sikv.lingomate.R
+import sikv.lingomate.data.apikeystorage.ApiKeyProvider
 import sikv.lingomate.data.chat.domain.ChatModel
 import sikv.lingomate.data.chat.domain.ChatModelProvider
 import sikv.lingomate.data.chat.domain.PracticeLanguage
@@ -37,5 +38,12 @@ fun ChatModel.toLocalizedString(): String {
     return when (provider) {
         ChatModelProvider.ON_DEVICE -> stringResource(R.string.chat_model_provider_on_device)
         ChatModelProvider.OPEN_AI -> model
+    }
+}
+
+@Composable
+fun ApiKeyProvider.toLocalizedString(): String {
+    return when (this) {
+        ApiKeyProvider.OpenAI -> stringResource(R.string.api_key_provider_open_ai)
     }
 }

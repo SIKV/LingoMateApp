@@ -11,6 +11,8 @@
     <string name="practice_type_conversation">Conversation</string>
     <string name="practice_type_translation">Translation</string>
 
+    <string name="api_key_provider_open_ai">OpenAI</string>
+
     <!-- Start Chat screen -->
     <string name="start_chat_greeting">Ready to practice?</string>
     <string name="start_chat_info">Set up your chat and start learning.</string>
@@ -28,4 +30,32 @@
     <string name="chat_message_status_assistant_failed">Something went wrong. Please start a new chat.</string>
     <string name="chat_user_text_input_placeholder">Type a message…</string>
     <string name="chat_send_message_button_content_description">Send message</string>
+
+    <!-- More screen -->
+    <string name="more_title">More</string>
+    <string name="more_manage_api_keys_title">Manage API keys</string>
+    <string name="more_manage_api_keys_subtitle">Add or remove provider keys</string>
+
+    <!-- Manage API Keys screen -->
+    <string name="manage_api_keys_title">API keys</string>
+    <string name="manage_api_keys_back_button_content_description">Back</string>
+    <string name="manage_api_keys_key_saved">Key saved</string>
+    <string name="manage_api_keys_empty_title">No API keys yet</string>
+    <string name="manage_api_keys_empty_info">Add a key to chat with cloud models.</string>
+    <string name="manage_api_keys_add_button">Add API key</string>
+    <string name="manage_api_keys_add_dialog_title">Add API key</string>
+    <string name="manage_api_keys_replace_dialog_title">Replace API key</string>
+    <string name="manage_api_keys_provider_label">Provider</string>
+    <string name="manage_api_keys_key_label">API key</string>
+    <string name="manage_api_keys_show_key_content_description">Show key</string>
+    <string name="manage_api_keys_hide_key_content_description">Hide key</string>
+    <string name="manage_api_keys_save_button">Save</string>
+    <string name="manage_api_keys_cancel_button">Cancel</string>
+    <string name="manage_api_keys_delete_button_content_description">Delete key</string>
+    <string name="manage_api_keys_replace_confirm_dialog_title">Replace API key?</string>
+    <string name="manage_api_keys_replace_confirm_dialog_message">The current key for %1$s will be removed from this device.</string>
+    <string name="manage_api_keys_replace_confirm_dialog_confirm">Replace</string>
+    <string name="manage_api_keys_delete_dialog_title">Delete API key?</string>
+    <string name="manage_api_keys_delete_dialog_message">The key for %1$s will be removed from this device.</string>
+    <string name="manage_api_keys_delete_dialog_confirm">Delete</string>
 </resources>
