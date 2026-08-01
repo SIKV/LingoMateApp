@@ -22,6 +22,8 @@ struct ContentView: View {
                     ChatScreen(chatConfig: chatConfig)
                 case .chatDetails:
                     ChatDetailsView()
+                case .manageApiKeys:
+                    ManageApiKeysScreen()
                 }
             }
         }
