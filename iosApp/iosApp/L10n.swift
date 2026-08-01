@@ -24,4 +24,44 @@ enum L10n {
     static let chatMessageStatusUserFailed = LocalizedStringKey("chat_message_status_user_failed")
     static let chatMessageStatusAssistantFailed = LocalizedStringKey("chat_message_status_assistant_failed")
     static let chatTypeMessageHint = LocalizedStringKey("chat_type_message_hint")
+
+    static let moreTitle = LocalizedStringKey("more_title")
+    static let moreManageApiKeysTitle = LocalizedStringKey("more_manage_api_keys_title")
+    static let moreManageApiKeysSubtitle = LocalizedStringKey("more_manage_api_keys_subtitle")
+
+    static let manageApiKeysTitle = LocalizedStringKey("manage_api_keys_title")
+    static let manageApiKeysKeySaved = LocalizedStringKey("manage_api_keys_key_saved")
+    static let manageApiKeysListFooter = LocalizedStringKey("manage_api_keys_list_footer")
+    static let manageApiKeysEmptyTitle = LocalizedStringKey("manage_api_keys_empty_title")
+    static let manageApiKeysEmptyInfo = LocalizedStringKey("manage_api_keys_empty_info")
+    static let manageApiKeysAddButton = LocalizedStringKey("manage_api_keys_add_button")
+    static let manageApiKeysAddTitle = LocalizedStringKey("manage_api_keys_add_title")
+    static let manageApiKeysReplaceTitle = LocalizedStringKey("manage_api_keys_replace_title")
+    static let manageApiKeysProviderLabel = LocalizedStringKey("manage_api_keys_provider_label")
+    static let manageApiKeysKeyLabel = LocalizedStringKey("manage_api_keys_key_label")
+    static let manageApiKeysKeyFooter = LocalizedStringKey("manage_api_keys_key_footer")
+    static let manageApiKeysShowKey = LocalizedStringKey("manage_api_keys_show_key")
+    static let manageApiKeysHideKey = LocalizedStringKey("manage_api_keys_hide_key")
+    static let manageApiKeysSaveButton = LocalizedStringKey("manage_api_keys_save_button")
+    static let manageApiKeysCancelButton = LocalizedStringKey("manage_api_keys_cancel_button")
+    static let manageApiKeysDeleteButton = LocalizedStringKey("manage_api_keys_delete_button")
+    static let manageApiKeysReplaceConfirmTitle = LocalizedStringKey("manage_api_keys_replace_confirm_title")
+    static let manageApiKeysReplaceConfirmButton = LocalizedStringKey("manage_api_keys_replace_confirm_button")
+    static let manageApiKeysDeleteConfirmTitle = LocalizedStringKey("manage_api_keys_delete_confirm_title")
+
+    /// Confirmation body naming the provider whose key is about to be overwritten.
+    static func manageApiKeysReplaceConfirmMessage(_ provider: String) -> String {
+        String(
+            format: String(localized: "manage_api_keys_replace_confirm_message"),
+            provider
+        )
+    }
+
+    /// Confirmation body naming the provider whose key is about to be deleted.
+    static func manageApiKeysDeleteConfirmMessage(_ provider: String) -> String {
+        String(
+            format: String(localized: "manage_api_keys_delete_confirm_message"),
+            provider
+        )
+    }
 }
