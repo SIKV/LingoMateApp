@@ -1,9 +1,9 @@
 package sikv.lingomate.feature.startchat
 
-import sikv.lingomate.data.chat.domain.ChatModel
-import sikv.lingomate.data.chat.domain.PracticeLanguage
-import sikv.lingomate.data.chat.domain.PracticeType
-import sikv.lingomate.data.chat.domain.AssistantLanguage
+import sikv.lingomate.domain.chat.ChatModel
+import sikv.lingomate.domain.chat.PracticeLanguage
+import sikv.lingomate.domain.chat.PracticeType
+import sikv.lingomate.domain.chat.AssistantLanguage
 import kotlin.native.ObjCName
 
 @ObjCName("StartChatState", exact = true)

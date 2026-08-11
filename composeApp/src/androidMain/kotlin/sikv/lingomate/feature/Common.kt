@@ -4,11 +4,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import sikv.lingomate.R
 import sikv.lingomate.data.apikeystorage.ApiKeyProvider
-import sikv.lingomate.data.chat.domain.ChatModel
-import sikv.lingomate.data.chat.domain.ChatModelProvider
-import sikv.lingomate.data.chat.domain.PracticeLanguage
-import sikv.lingomate.data.chat.domain.PracticeType
-import sikv.lingomate.data.chat.domain.AssistantLanguage
+import sikv.lingomate.domain.chat.ChatModel
+import sikv.lingomate.domain.chat.ChatModelProvider
+import sikv.lingomate.domain.chat.PracticeLanguage
+import sikv.lingomate.domain.chat.PracticeType
+import sikv.lingomate.domain.chat.AssistantLanguage
 
 @Composable
 fun PracticeLanguage.toLocalizedString(): String {

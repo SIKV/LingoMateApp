@@ -1,7 +1,7 @@
 package sikv.lingomate.data.chat.mapping
 
 import sikv.lingomate.api.model.OpenAIInputDTO
-import sikv.lingomate.data.chat.domain.ChatMessage
+import sikv.lingomate.domain.chat.ChatMessage
 
 internal fun ChatMessage.toInputDTO(): OpenAIInputDTO {
     return OpenAIInputDTO(
