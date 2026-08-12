@@ -30,7 +30,6 @@ dependencyResolutionManagement {
 
 include(":composeApp")
 include(":shared")
-include(":domain:chat")
 include(":data:chat")
 include(":data:apiKeyStorage")
 include(":feature:startChat")

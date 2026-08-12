@@ -1,4 +1,4 @@
-package sikv.lingomate.domain.chat
+package sikv.lingomate.data.chat.domain
 
 import kotlin.native.ObjCName
 

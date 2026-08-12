@@ -4,8 +4,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
-import sikv.lingomate.domain.chat.ChatConfig
-import sikv.lingomate.domain.chat.ChatMessage
+import sikv.lingomate.data.chat.domain.ChatConfig
+import sikv.lingomate.data.chat.domain.ChatMessage
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 

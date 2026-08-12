@@ -8,10 +8,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import sikv.lingomate.domain.chat.ChatModel
-import sikv.lingomate.domain.chat.PracticeLanguage
-import sikv.lingomate.domain.chat.PracticeType
-import sikv.lingomate.domain.chat.AssistantLanguage
+import sikv.lingomate.data.chat.domain.ChatModel
+import sikv.lingomate.data.chat.domain.PracticeLanguage
+import sikv.lingomate.data.chat.domain.PracticeType
+import sikv.lingomate.data.chat.domain.AssistantLanguage
 import sikv.lingomate.data.chat.service.StartChatService
 import kotlin.native.ObjCName
 

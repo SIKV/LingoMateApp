@@ -7,8 +7,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import sikv.lingomate.domain.chat.ChatConfig
-import sikv.lingomate.domain.chat.ChatMessage
+import sikv.lingomate.data.chat.domain.ChatConfig
+import sikv.lingomate.data.chat.domain.ChatMessage
 import sikv.lingomate.ondevice.llm.OnDeviceLLM
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
