@@ -54,11 +54,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.compose.viewmodel.koinViewModel
 import sikv.lingomate.R
-import sikv.lingomate.domain.chat.ChatConfig
-import sikv.lingomate.domain.chat.ChatModel
-import sikv.lingomate.domain.chat.PracticeLanguage
-import sikv.lingomate.domain.chat.PracticeType
-import sikv.lingomate.domain.chat.AssistantLanguage
+import sikv.lingomate.data.chat.domain.ChatConfig
+import sikv.lingomate.data.chat.domain.ChatModel
+import sikv.lingomate.data.chat.domain.PracticeLanguage
+import sikv.lingomate.data.chat.domain.PracticeType
+import sikv.lingomate.data.chat.domain.AssistantLanguage
 import sikv.lingomate.feature.toLocalizedString
 import sikv.lingomate.ui.isLandscape
 import sikv.lingomate.ui.theme.radius

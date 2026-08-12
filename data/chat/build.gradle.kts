@@ -47,7 +47,6 @@ kotlin {
                 implementation(libs.kotlinx.serialization.core)
                 implementation(project(":api"))
                 implementation(project(":onDeviceLLM"))
-                api(project(":domain:chat"))
             }
         }
         commonTest {

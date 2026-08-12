@@ -47,8 +47,8 @@ import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 import org.koin.core.parameter.parametersOf
 import sikv.lingomate.R
-import sikv.lingomate.domain.chat.ChatConfig
-import sikv.lingomate.domain.chat.ChatMessage
+import sikv.lingomate.data.chat.domain.ChatConfig
+import sikv.lingomate.data.chat.domain.ChatMessage
 import sikv.lingomate.ui.theme.spacing
 
 @OptIn(ExperimentalMaterial3Api::class, KoinExperimentalAPI::class)

@@ -1,6 +1,6 @@
 package sikv.lingomate.feature.chat
 
-import sikv.lingomate.domain.chat.ChatMessage
+import sikv.lingomate.data.chat.domain.ChatMessage
 import kotlin.native.ObjCName
 
 @ObjCName("ChatState", exact = true)

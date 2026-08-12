@@ -1,6 +1,6 @@
 package sikv.lingomate.data.chat.service
 
-import sikv.lingomate.domain.chat.ChatConfig
+import sikv.lingomate.data.chat.domain.ChatConfig
 
 class PromptBuilder {
 
