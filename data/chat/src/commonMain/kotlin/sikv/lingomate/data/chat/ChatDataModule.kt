@@ -1,8 +1,8 @@
 package sikv.lingomate.data.chat
 
 import org.koin.dsl.module
-import sikv.lingomate.data.chat.domain.ChatConfig
-import sikv.lingomate.data.chat.domain.ChatModelProvider
+import sikv.lingomate.domain.chat.ChatConfig
+import sikv.lingomate.domain.chat.ChatModelProvider
 import sikv.lingomate.data.chat.service.ChatService
 import sikv.lingomate.data.chat.service.OnDeviceChatService
 import sikv.lingomate.data.chat.service.OpenAIChatService

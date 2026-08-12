@@ -1,10 +1,10 @@
 package sikv.lingomate.data.chat.service
 
-import sikv.lingomate.data.chat.domain.ChatModel
-import sikv.lingomate.data.chat.domain.ChatModelProvider
-import sikv.lingomate.data.chat.domain.PracticeLanguage
-import sikv.lingomate.data.chat.domain.PracticeType
-import sikv.lingomate.data.chat.domain.AssistantLanguage
+import sikv.lingomate.domain.chat.ChatModel
+import sikv.lingomate.domain.chat.ChatModelProvider
+import sikv.lingomate.domain.chat.PracticeLanguage
+import sikv.lingomate.domain.chat.PracticeType
+import sikv.lingomate.domain.chat.AssistantLanguage
 import sikv.lingomate.ondevice.llm.OnDeviceLLM
 
 class StartChatService(

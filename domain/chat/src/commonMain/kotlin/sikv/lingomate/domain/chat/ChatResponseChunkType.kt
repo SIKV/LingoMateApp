@@ -1,6 +1,6 @@
-package sikv.lingomate.data.chat.domain
+package sikv.lingomate.domain.chat
 
-internal enum class ChatResponseChunkType {
+enum class ChatResponseChunkType {
     Error,
     Created,
     InProgress,
