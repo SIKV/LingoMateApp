@@ -11,7 +11,8 @@ import sikv.lingomate.feature.startchat.StartChatViewModel
 val viewModelsModule = module {
     viewModel {
         StartChatViewModel(
-            startChatService = get()
+            startChatService = get(),
+            apiKeyStorage = get()
         )
     }
 

@@ -1,5 +1,7 @@
 package sikv.lingomate.data.apikeystorage
 
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.test.runTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -69,5 +71,50 @@ class ApiKeyStorageTest {
 
         assertNull(apiKeyStorage.getApiKey(ApiKeyProvider.OpenAI))
         assertEquals(0, secureStorage.entries.size)
+    }
+
+    @Test
+    fun flowStoredProviders_emitsEmptyListWhenNothingStored() = runTest {
+        assertEquals(emptyList(), apiKeyStorage.flowStoredProviders().first())
+    }
+
+    @Test
+    fun flowStoredProviders_emitsKeysPersistedBeforeConstruction() = runTest {
+        secureStorage.put(ApiKeyProvider.OpenAI.storageKey, "sk-123")
+
+        val storage = ApiKeyStorage(secureStorage)
+
+        assertEquals(
+            listOf(ApiKeyProvider.OpenAI),
+            storage.flowStoredProviders().first()
+        )
+    }
+
+    @Test
+    fun flowStoredProviders_emitsAfterStore() = runTest {
+        apiKeyStorage.store(ApiKeyProvider.OpenAI, "sk-123")
+
+        assertEquals(
+            listOf(ApiKeyProvider.OpenAI),
+            apiKeyStorage.flowStoredProviders().first()
+        )
+    }
+
+    @Test
+    fun flowStoredProviders_emitsAfterRemove() = runTest {
+        apiKeyStorage.store(ApiKeyProvider.OpenAI, "sk-123")
+
+        apiKeyStorage.remove(ApiKeyProvider.OpenAI)
+
+        assertEquals(emptyList(), apiKeyStorage.flowStoredProviders().first())
+    }
+
+    @Test
+    fun flowStoredProviders_emitsAfterClear() = runTest {
+        apiKeyStorage.store(ApiKeyProvider.OpenAI, "sk-123")
+
+        apiKeyStorage.clear()
+
+        assertEquals(emptyList(), apiKeyStorage.flowStoredProviders().first())
     }
 }

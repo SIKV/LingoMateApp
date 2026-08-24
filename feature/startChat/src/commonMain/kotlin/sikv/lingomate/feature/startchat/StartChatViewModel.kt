@@ -8,16 +8,17 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import sikv.lingomate.data.chat.domain.ChatModel
+import sikv.lingomate.data.apikeystorage.ApiKeyStorage
+import sikv.lingomate.data.chat.domain.AssistantLanguage
 import sikv.lingomate.data.chat.domain.PracticeLanguage
 import sikv.lingomate.data.chat.domain.PracticeType
-import sikv.lingomate.data.chat.domain.AssistantLanguage
 import sikv.lingomate.data.chat.service.StartChatService
 import kotlin.native.ObjCName
 
 @ObjCName("StartChatViewModel", exact = true)
 class StartChatViewModel(
-    private val startChatService: StartChatService
+    private val startChatService: StartChatService,
+    private val apiKeyStorage: ApiKeyStorage
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(StartChatState.empty())
@@ -28,28 +29,11 @@ class StartChatViewModel(
         initState()
     }
 
-    private fun initState() {
-        viewModelScope.launch {
-            _uiState.update {
-                StartChatState(
-                    chatModels = startChatService.getChatModels(),
-                    selectedChatModel = startChatService.getSelectedChatModel(),
-                    practiceLanguages = startChatService.getPracticeLanguages(),
-                    selectedPracticeLanguage = startChatService.getSelectedPracticeLanguage(),
-                    assistantLanguages = startChatService.getAssistantLanguages(),
-                    selectedAssistantLanguage = startChatService.getSelectedAssistantLanguage(),
-                    practiceTypes = startChatService.getPracticeTypes(),
-                    selectedPracticeType = startChatService.getSelectedPracticeType()
-                )
-            }
-        }
-    }
-
-    fun selectChatModel(chatModel: ChatModel) {
-        startChatService.selectChatModel(chatModel)
+    fun selectChatModel(chatModelOption: ChatModelOption) {
+        startChatService.selectChatModel(chatModelOption.chatModel)
 
         _uiState.update {
-            it.copy(selectedChatModel = chatModel)
+            it.copy(selectedChatModelOption = chatModelOption)
         }
     }
 
@@ -75,5 +59,57 @@ class StartChatViewModel(
         _uiState.update {
             it.copy(selectedPracticeType = practiceType)
         }
+    }
+
+    private fun initState() {
+        viewModelScope.launch {
+            _uiState.update {
+                StartChatState(
+                    chatModelOptions = emptyList(),
+                    selectedChatModelOption = null,
+                    practiceLanguages = startChatService.getPracticeLanguages(),
+                    selectedPracticeLanguage = startChatService.getSelectedPracticeLanguage(),
+                    assistantLanguages = startChatService.getAssistantLanguages(),
+                    selectedAssistantLanguage = startChatService.getSelectedAssistantLanguage(),
+                    practiceTypes = startChatService.getPracticeTypes(),
+                    selectedPracticeType = startChatService.getSelectedPracticeType()
+                )
+            }
+
+            flowStoredProviders()
+        }
+    }
+
+    private suspend fun flowStoredProviders() {
+        apiKeyStorage.flowStoredProviders()
+            .collect { storedProviders ->
+                val chatModels = startChatService.getChatModels()
+                val selectedChatModel = startChatService.getSelectedChatModel()
+
+                val chatModelOptions = chatModels.map { chatModel ->
+                    val apiKeyNeeded = if (chatModel.provider.apiKeyRequired) {
+                        !storedProviders.contains(chatModel.provider.toApiKeyProvider())
+                    } else {
+                        false
+                    }
+
+                    ChatModelOption(
+                        chatModel = chatModel,
+                        apiKeyNeeded = apiKeyNeeded
+                    )
+                }
+
+                _uiState.update { state ->
+                    val selectedChatModelOption = chatModelOptions
+                        .find { it.chatModel == selectedChatModel }
+                        // Reset the selected chat model if it needs an api key.
+                        ?.takeIf { !it.apiKeyNeeded  }
+
+                    state.copy(
+                        chatModelOptions = chatModelOptions,
+                        selectedChatModelOption = selectedChatModelOption
+                    )
+                }
+            }
     }
 }
