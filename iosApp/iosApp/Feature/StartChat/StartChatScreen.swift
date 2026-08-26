@@ -72,14 +72,28 @@ struct StartChatScreen: View {
 
     // MARK: - Config card
 
+    private var anyApiKeyNeeded: Bool {
+        startChatVM.state.chatModelOptions.contains { $0.apiKeyNeeded }
+    }
+
     private var configCard: some View {
         VStack(spacing: 0) {
             SelectorRow(
                 label: L10n.startChatChatModelLabel,
-                options: startChatVM.state.chatModels,
-                selectedLabel: startChatVM.state.selectedChatModel?.localizedName,
+                options: startChatVM.state.chatModelOptions,
+                selectedLabel: startChatVM.state.selectedChatModelOption?.localizedName,
                 optionLabel: { $0.localizedName },
-                onSelect: startChatVM.selectChatModel
+                onSelect: startChatVM.selectChatModel,
+                optionNote: { $0.apiKeyNeeded ? L10n.startChatNoApiKey : nil },
+                isOptionEnabled: { !$0.apiKeyNeeded },
+                // Offer a way out only when a key is what's missing.
+                menuAction: anyApiKeyNeeded
+                    ? SelectorMenuAction(
+                        title: L10n.startChatApiKeyHint,
+                        systemImage: "key.fill",
+                        action: { appRouter.navigate(to: Route.manageApiKeys) }
+                    )
+                    : nil
             )
 
             divider
@@ -137,13 +151,36 @@ private struct SelectorRow<Option>: View {
     let optionLabel: (Option) -> LocalizedStringKey
     let onSelect: (Option) -> Void
 
+    /// Secondary line under an option, explaining why it reads the way it does.
+    var optionNote: (Option) -> LocalizedStringKey? = { _ in nil }
+    var isOptionEnabled: (Option) -> Bool = { _ in true }
+    var menuAction: SelectorMenuAction?
+
     var body: some View {
         Menu {
-            ForEach(Array(options.enumerated()), id: \.offset) { _, option in
-                Button {
-                    onSelect(option)
-                } label: {
-                    Text(optionLabel(option))
+            Section {
+                ForEach(Array(options.enumerated()), id: \.offset) { _, option in
+                    Button {
+                        onSelect(option)
+                    } label: {
+                        Text(optionLabel(option))
+
+                        // A second label becomes the menu item's subtitle.
+                        if let note = optionNote(option) {
+                            Text(note)
+                        }
+                    }
+                    .disabled(!isOptionEnabled(option))
+                }
+            }
+
+            if let menuAction {
+                Section {
+                    Button(
+                        menuAction.title,
+                        systemImage: menuAction.systemImage,
+                        action: menuAction.action
+                    )
                 }
             }
         } label: {
@@ -170,4 +207,13 @@ private struct SelectorRow<Option>: View {
         }
         .disabled(options.isEmpty)
     }
+}
+
+// MARK: - Selector menu action
+
+/// Trailing action shown as its own section at the bottom of a selector menu.
+private struct SelectorMenuAction {
+    let title: LocalizedStringKey
+    let systemImage: String
+    let action: () -> Void
 }

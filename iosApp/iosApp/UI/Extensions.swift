@@ -5,11 +5,11 @@ extension GeometryProxy {
     var isLandscape: Bool { size.width > size.height }
 }
 
-extension ChatModel {
+extension ChatModelOption {
     var localizedName: LocalizedStringKey {
-        switch provider {
+        switch chatModel.provider {
         case .onDevice: return L10n.chatModelProviderOnDevice
-        default: return LocalizedStringKey(model)
+        default: return LocalizedStringKey(chatModel.model)
         }
     }
 }

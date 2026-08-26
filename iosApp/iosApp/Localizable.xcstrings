@@ -378,6 +378,17 @@
         }
       }
     },
+    "start_chat_api_key_hint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manage API keys…"
+          }
+        }
+      }
+    },
     "start_chat_chat_model_label" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -407,6 +418,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Set up your chat and start learning."
+          }
+        }
+      }
+    },
+    "start_chat_no_api_key" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No API key"
           }
         }
       }

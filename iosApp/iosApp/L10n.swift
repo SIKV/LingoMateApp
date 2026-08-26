@@ -19,6 +19,8 @@ enum L10n {
     static let startChatAssistantLanguageLabel = LocalizedStringKey("start_chat_assistant_language_label")
     static let startChatPracticeTypeLabel = LocalizedStringKey("start_chat_practice_type_label")
     static let startChatNotSelected = LocalizedStringKey("start_chat_not_selected")
+    static let startChatNoApiKey = LocalizedStringKey("start_chat_no_api_key")
+    static let startChatApiKeyHint = LocalizedStringKey("start_chat_api_key_hint")
     
     static let chatMessageStatusDelivered = LocalizedStringKey("chat_message_status_delivered")
     static let chatMessageStatusUserFailed = LocalizedStringKey("chat_message_status_user_failed")
