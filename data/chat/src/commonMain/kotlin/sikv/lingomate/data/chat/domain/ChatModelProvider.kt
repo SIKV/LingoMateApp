@@ -5,7 +5,9 @@ import kotlin.native.ObjCName
 
 @Serializable
 @ObjCName("ChatModelProvider", exact = true)
-enum class ChatModelProvider {
-    ON_DEVICE,
-    OPEN_AI,
+enum class ChatModelProvider(
+    val apiKeyRequired: Boolean
+) {
+    ON_DEVICE(apiKeyRequired = false),
+    OPEN_AI(apiKeyRequired = true),
 }
