@@ -6,6 +6,7 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
+import sikv.lingomate.feature.manageapikeys.ManageApiKeysScreen
 import sikv.lingomate.feature.startchat.StartChatScreen
 
 @Composable
@@ -32,12 +33,22 @@ fun ChatRouteComponent(
                 StartChatScreen(
                     onNavigateToChat = { chatConfig ->
                         backStack.add(ChatRoute.Chat(chatConfig))
+                    },
+                    onNavigateToManageApiKeys = {
+                        backStack.add(ChatRoute.ManageApiKeys)
                     }
                 )
             }
             entry<ChatRoute.Chat> { route ->
                 ChatScreen(
                     chatConfig = route.chatConfig,
+                    onBackPressed = {
+                        backStack.removeLastOrNull()
+                    }
+                )
+            }
+            entry<ChatRoute.ManageApiKeys> {
+                ManageApiKeysScreen(
                     onBackPressed = {
                         backStack.removeLastOrNull()
                     }

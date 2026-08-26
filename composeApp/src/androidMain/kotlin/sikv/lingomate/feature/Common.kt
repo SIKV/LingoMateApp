@@ -4,11 +4,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import sikv.lingomate.R
 import sikv.lingomate.data.apikeystorage.ApiKeyProvider
-import sikv.lingomate.data.chat.domain.ChatModel
+import sikv.lingomate.data.chat.domain.AssistantLanguage
 import sikv.lingomate.data.chat.domain.ChatModelProvider
 import sikv.lingomate.data.chat.domain.PracticeLanguage
 import sikv.lingomate.data.chat.domain.PracticeType
-import sikv.lingomate.data.chat.domain.AssistantLanguage
+import sikv.lingomate.feature.startchat.ChatModelOption
 
 @Composable
 fun PracticeLanguage.toLocalizedString(): String {
@@ -34,10 +34,10 @@ fun PracticeType.toLocalizedString(): String {
 }
 
 @Composable
-fun ChatModel.toLocalizedString(): String {
-    return when (provider) {
+fun ChatModelOption.toLocalizedString(): String {
+    return when (chatModel.provider) {
         ChatModelProvider.ON_DEVICE -> stringResource(R.string.chat_model_provider_on_device)
-        ChatModelProvider.OPEN_AI -> model
+        ChatModelProvider.OPEN_AI -> chatModel.model
     }
 }
 

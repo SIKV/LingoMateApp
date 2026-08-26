@@ -54,11 +54,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.compose.viewmodel.koinViewModel
 import sikv.lingomate.R
+import sikv.lingomate.data.chat.domain.AssistantLanguage
 import sikv.lingomate.data.chat.domain.ChatConfig
-import sikv.lingomate.data.chat.domain.ChatModel
 import sikv.lingomate.data.chat.domain.PracticeLanguage
 import sikv.lingomate.data.chat.domain.PracticeType
-import sikv.lingomate.data.chat.domain.AssistantLanguage
 import sikv.lingomate.feature.toLocalizedString
 import sikv.lingomate.ui.isLandscape
 import sikv.lingomate.ui.theme.radius
@@ -67,6 +66,7 @@ import sikv.lingomate.ui.theme.spacing
 @Composable
 fun StartChatScreen(
     onNavigateToChat: (ChatConfig) -> Unit,
+    onNavigateToManageApiKeys: () -> Unit,
     viewModel: StartChatViewModel = koinViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -103,7 +103,8 @@ fun StartChatScreen(
 
                 ChatConfigCard(
                     state = state,
-                    onSelectChatModel = viewModel::selectChatModel,
+                    onNavigateToManageApiKeys = onNavigateToManageApiKeys,
+                    onSelectChatModelOption = viewModel::selectChatModel,
                     onSelectPracticeLanguage = viewModel::selectPracticeLanguage,
                     onSelectAssistantLanguage = viewModel::selectAssistantLanguage,
                     onSelectPracticeType = viewModel::selectPracticeType,
@@ -174,7 +175,8 @@ private fun Header(
 @Composable
 private fun ChatConfigCard(
     state: StartChatState,
-    onSelectChatModel: (ChatModel) -> Unit,
+    onNavigateToManageApiKeys: () -> Unit,
+    onSelectChatModelOption: (ChatModelOption) -> Unit,
     onSelectPracticeLanguage: (PracticeLanguage) -> Unit,
     onSelectAssistantLanguage: (AssistantLanguage) -> Unit,
     onSelectPracticeType: (PracticeType) -> Unit,
@@ -194,10 +196,28 @@ private fun ChatConfigCard(
     ) {
         SelectorRow(
             label = stringResource(R.string.start_chat_chat_model_label),
-            options = state.chatModels,
-            selected = state.selectedChatModel,
-            onSelect = onSelectChatModel,
-            optionLabel = { it.toLocalizedString() }
+            options = state.chatModelOptions,
+            selected = state.selectedChatModelOption,
+            onSelect = onSelectChatModelOption,
+            optionLabel = { it.toLocalizedString() },
+            optionNote = { option ->
+                if (option.apiKeyNeeded) {
+                    stringResource(R.string.start_chat_no_api_key)
+                } else {
+                   null
+                }
+            },
+            optionEnabled = { !it.apiKeyNeeded },
+            menuFooter = if (state.chatModelOptions.any { it.apiKeyNeeded }) {
+                {
+                    MenuHint(
+                        text = stringResource(R.string.start_chat_api_key_hint),
+                        onClick = onNavigateToManageApiKeys
+                    )
+                }
+            } else {
+                null
+            }
         )
 
         SelectorDivider()
@@ -247,7 +267,10 @@ private fun <T : Any> SelectorRow(
     selected: T?,
     onSelect: (T) -> Unit,
     optionLabel: @Composable (T) -> String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    optionNote: @Composable (T) -> String? = { null },
+    optionEnabled: (T) -> Boolean = { true },
+    menuFooter: @Composable (() -> Unit)? = null
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -296,9 +319,14 @@ private fun <T : Any> SelectorRow(
             onDismissRequest = { expanded = false }
         ) {
             options.forEach { option ->
+                val note = optionNote(option)
+
                 DropdownMenuItem(
                     text = { Text(optionLabel(option)) },
-                    trailingIcon = if (option == selected) {
+                    enabled = optionEnabled(option),
+                    trailingIcon = if (note != null) {
+                        { OptionNoteBadge(note) }
+                    } else if (option == selected) {
                         {
                             Icon(
                                 imageVector = Icons.Rounded.Check,
@@ -315,13 +343,60 @@ private fun <T : Any> SelectorRow(
                     }
                 )
             }
+
+            if (menuFooter != null) {
+                HorizontalDivider(color = MaterialTheme.colorScheme.surfaceDim)
+                menuFooter()
+            }
         }
     }
 }
 
+@Composable
+private fun MenuHint(
+    text: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Text(
+        text = text,
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.primary,
+        textAlign = TextAlign.Center,
+        modifier = modifier
+            .clickable(onClick = onClick)
+            .fillMaxSize()
+            .padding(
+                horizontal = MaterialTheme.spacing.small,
+                vertical = MaterialTheme.spacing.small
+            )
+    )
+}
+
+@Composable
+private fun OptionNoteBadge(
+    text: String,
+    modifier: Modifier = Modifier
+) {
+    Text(
+        text = text,
+        style = MaterialTheme.typography.labelSmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        modifier = modifier
+            .background(
+                color = MaterialTheme.colorScheme.surfaceContainerHighest,
+                shape = CircleShape
+            )
+            .padding(
+                horizontal = MaterialTheme.spacing.small,
+                vertical = MaterialTheme.spacing.extraSmall
+            )
+    )
+}
+
 private fun StartChatState.toChatConfig(): ChatConfig? {
     return ChatConfig(
-        chatModel = selectedChatModel ?: return null,
+        chatModel = selectedChatModelOption?.chatModel ?: return null,
         practiceLanguage = selectedPracticeLanguage ?: return null,
         assistantLanguage = selectedAssistantLanguage ?: return null,
         practiceType = selectedPracticeType ?: return null

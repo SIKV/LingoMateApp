@@ -11,4 +11,7 @@ sealed interface ChatRoute : NavKey {
 
     @Serializable
     data class Chat(val chatConfig: ChatConfig) : ChatRoute
+
+    @Serializable
+    data object ManageApiKeys : ChatRoute
 }
