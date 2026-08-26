@@ -14,7 +14,7 @@ class StartChatVM: ObservableObject {
     /// Complete configuration once every field has been selected.
     var chatConfig: ChatConfig? {
         guard
-            let chatModel = state.selectedChatModel,
+            let chatModel = state.selectedChatModelOption?.chatModel,
             let practiceLanguage = state.selectedPracticeLanguage,
             let assistantLanguage = state.selectedAssistantLanguage,
             let practiceType = state.selectedPracticeType
@@ -47,8 +47,8 @@ class StartChatVM: ObservableObject {
         }
     }
 
-    func selectChatModel(_ chatModel: ChatModel) {
-        viewModel.selectChatModel(chatModel: chatModel)
+    func selectChatModel(_ chatModelOption: ChatModelOption) {
+        viewModel.selectChatModel(chatModelOption: chatModelOption)
     }
 
     func selectPracticeLanguage(_ practiceLanguage: PracticeLanguage) {
