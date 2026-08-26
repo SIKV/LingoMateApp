@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import sikv.lingomate.data.chat.domain.ChatConfig
 import sikv.lingomate.data.chat.domain.ChatMessage
+import sikv.lingomate.logger.Log
 import sikv.lingomate.ondevice.llm.OnDeviceLLM
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
@@ -47,6 +48,8 @@ class OnDeviceChatService(
                         )
                     )
                 } else {
+                    Log.e { "Failed to start chat: the on-device model returned no response." }
+
                     _chatHistory.updateChatHistory(
                         assistantMessage.copy(
                             status = ChatMessage.Status.FAILED

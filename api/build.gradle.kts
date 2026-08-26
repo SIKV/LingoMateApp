@@ -50,6 +50,7 @@ kotlin {
                 implementation(libs.kotlinx.coroutines.core)
                 implementation(libs.kotlinx.serialization.core)
                 implementation(libs.koin.core)
+                implementation(project(":logger"))
             }
         }
         commonTest {
