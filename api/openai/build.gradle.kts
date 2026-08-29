@@ -20,7 +20,7 @@ kotlin {
         }
     }
 
-    val xcfName = "apiKit"
+    val xcfName = "api:openaiKit"
 
     iosX64 {
         binaries.framework {
