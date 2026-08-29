@@ -1,6 +1,6 @@
 package sikv.lingomate.data.chat.mapping
 
-import sikv.lingomate.api.model.OpenAIResponsesResponseDTO
+import sikv.lingomate.api.openai.model.OpenAIResponsesResponseDTO
 import sikv.lingomate.data.chat.domain.ChatMessage
 import sikv.lingomate.data.chat.domain.ChatResponseChunk
 import sikv.lingomate.data.chat.domain.ChatResponseChunkType

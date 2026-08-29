@@ -1,4 +1,4 @@
-package sikv.lingomate.api
+package sikv.lingomate.api.openai
 
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
