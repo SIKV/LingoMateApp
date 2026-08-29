@@ -33,7 +33,8 @@ val openaiApiModule = module {
     single {
         OpenAIApi(
             client = get(),
-            json = get()
+            json = get(),
+            apiKeyProvider = get()
         )
     }
 }

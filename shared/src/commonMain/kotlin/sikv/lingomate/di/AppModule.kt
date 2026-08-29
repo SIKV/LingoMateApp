@@ -9,6 +9,7 @@ fun appModule() = listOf(
     openaiApiModule,
     chatDataModule,
     apiKeyStorageModule(),
+    apiKeyProviderModule,
     viewModelsModule,
     onDeviceLLMModule(),
 )

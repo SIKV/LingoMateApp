@@ -23,7 +23,8 @@ import sikv.lingomate.logger.Log
 
 class OpenAIApi(
     private val client: HttpClient,
-    private val json: Json
+    private val json: Json,
+    private val apiKeyProvider: OpenAIApiKeyProvider
 ) {
     fun streamResponse(
         model: String,
@@ -32,13 +33,21 @@ class OpenAIApi(
     ): Flow<Result<OpenAIResponsesResponseDTO>> = flow {
         Log.d { "Requesting a streamed response. Model: $model, input messages: ${input.size}." }
 
+        val apiKey = apiKeyProvider.getApiKey()
+
+        if (apiKey.isNullOrBlank()) {
+            Log.e { "No API key available." }
+            emit(Result.failure(MissingApiKeyException()))
+            return@flow
+        }
+
         client.sse(
             request = {
                 // TODO: Refactor.
                 url("https://api.openai.com/v1/responses")
                 method = HttpMethod.Post
                 contentType(ContentType.Application.Json)
-                bearerAuth("API_KEY")
+                bearerAuth(apiKey)
                 setBody(
                     OpenAIResponsesRequestDTO(
                         model = model,
