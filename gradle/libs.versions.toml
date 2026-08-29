@@ -20,6 +20,7 @@ runner = "1.5.2"
 core = "1.5.0"
 koin = "4.2.0-beta2"
 ktor = "3.3.2"
+kermit = "2.0.6"
 androidx-security-crypto = "1.1.0-alpha06"
 
 [libraries]
@@ -57,6 +58,8 @@ ktor-client-contentNegotiation = { module = "io.ktor:ktor-client-content-negotia
 ktor-serialization-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
+
+kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
 
 mlkit-genai-prompt = { module = "com.google.mlkit:genai-prompt", version = "1.0.0-beta2" }
 

@@ -9,6 +9,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
 import io.ktor.http.contentType
 import io.ktor.sse.ServerSentEvent
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -18,6 +19,7 @@ import kotlinx.serialization.json.Json
 import sikv.lingomate.api.model.OpenAIInputDTO
 import sikv.lingomate.api.model.OpenAIResponsesRequestDTO
 import sikv.lingomate.api.model.OpenAIResponsesResponseDTO
+import sikv.lingomate.logger.Log
 
 class OpenAIApi(
     private val client: HttpClient,
@@ -28,6 +30,8 @@ class OpenAIApi(
         input: List<OpenAIInputDTO>,
         instructions: String
     ): Flow<Result<OpenAIResponsesResponseDTO>> = flow {
+        Log.d { "Requesting a streamed response. Model: $model, input messages: ${input.size}." }
+
         client.sse(
             request = {
                 // TODO: Refactor.
@@ -55,9 +59,11 @@ class OpenAIApi(
                         try {
                             Result.success(json.decodeFromString<OpenAIResponsesResponseDTO>(rawJson))
                         } catch (e: Exception) {
+                            Log.e(e) { "Failed to parse the \"${event.event}\" event." }
                             Result.failure(e)
                         }
                     } ?: run {
+                        Log.w { "Received the \"${event.event}\" event with no data." }
                         Result.failure(Exception("Empty event data."))
                     }
                 }
@@ -66,6 +72,11 @@ class OpenAIApi(
                 }
         }
     }.catch { e ->
+        // The session is cancelled on purpose once a terminal event arrives, so that is not a failure.
+        if (e !is CancellationException) {
+            Log.e(e) { "Response stream failed." }
+        }
+
         emit(Result.failure(e))
     }
 }

@@ -4,9 +4,15 @@ import sikv.lingomate.api.model.OpenAIResponsesResponseDTO
 import sikv.lingomate.data.chat.domain.ChatMessage
 import sikv.lingomate.data.chat.domain.ChatResponseChunk
 import sikv.lingomate.data.chat.domain.ChatResponseChunkType
+import sikv.lingomate.logger.Log
 
 fun OpenAIResponsesResponseDTO.toDomain(id: String): ChatResponseChunk {
-    val type = this.toChatResponseChunkType() ?: return ChatResponseChunk.Error
+    val type = this.toChatResponseChunkType()
+
+    if (type == null) {
+        Log.w { "Unknown response chunk type: ${this.type}." }
+        return ChatResponseChunk.Error
+    }
 
     return when (type) {
         ChatResponseChunkType.Created -> ChatResponseChunk.Created

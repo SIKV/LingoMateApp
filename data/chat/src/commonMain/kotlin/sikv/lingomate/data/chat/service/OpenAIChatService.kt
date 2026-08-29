@@ -13,6 +13,7 @@ import sikv.lingomate.data.chat.domain.ChatMessage
 import sikv.lingomate.data.chat.domain.ChatResponseChunk
 import sikv.lingomate.data.chat.mapping.toDomain
 import sikv.lingomate.data.chat.mapping.toInputDTO
+import sikv.lingomate.logger.Log
 import kotlin.time.ExperimentalTime
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
@@ -31,6 +32,8 @@ class OpenAIChatService(
         // Do not add the initial system message to the chat history,
         // as it's not part of the conversation and is only used to get the first response from the server.
         val startChatMessage = generateStartChatMessage(promptBuilder, chatConfig)
+
+        Log.d { "Starting chat with model ${chatConfig.chatModel.model}." }
 
         scope.launch {
             val responseId = Uuid.random().toHexString()
@@ -73,15 +76,21 @@ class OpenAIChatService(
                                     _chatHistory.updateChatHistory(chunk.content)
                                 }
                                 is ChatResponseChunk.Failed -> {
+                                    Log.e { "Failed to start chat: ${chunk.content.error}" }
+
                                     // Update assistant message as failed/not delivered.
                                     _chatHistory.updateChatHistory(chunk.content)
                                 }
                                 ChatResponseChunk.Error -> {
+                                    Log.e { "Failed to start chat: response stream returned an error." }
+
                                     _chatHistory.markLastMessageAsFailed()
                                 }
                             }
                         },
-                        onFailure = {
+                        onFailure = { error ->
+                            Log.e(error) { "Failed to start chat." }
+
                             _chatHistory.markLastMessageAsFailed()
                         }
                     )
@@ -140,16 +149,22 @@ class OpenAIChatService(
                                 }
 
                                 is ChatResponseChunk.Failed -> {
+                                    Log.e { "Failed to send message: ${chunk.content.error}" }
+
                                     // Update assistant message as failed/not delivered.
                                     _chatHistory.updateChatHistory(chunk.content)
                                 }
 
                                 ChatResponseChunk.Error -> {
+                                    Log.e { "Failed to send message: response stream returned an error." }
+
                                     _chatHistory.markLastMessageAsFailed()
                                 }
                             }
                         },
-                        onFailure = {
+                        onFailure = { error ->
+                            Log.e(error) { "Failed to send message." }
+
                             _chatHistory.markLastMessageAsFailed()
                         }
                     )
@@ -158,7 +173,12 @@ class OpenAIChatService(
     }
 
     override fun retryMessage(messageId: String, scope: CoroutineScope) {
-        val messageToRetry = _chatHistory.value.find { it.id == messageId } ?: return
+        val messageToRetry = _chatHistory.value.find { it.id == messageId }
+
+        if (messageToRetry == null) {
+            Log.w { "Cannot retry message $messageId: not found in the chat history." }
+            return
+        }
 
         // Remove the failed message from the chat history.
         _chatHistory.update { chatHistory ->
