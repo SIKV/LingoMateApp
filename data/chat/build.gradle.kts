@@ -45,7 +45,7 @@ kotlin {
                 implementation(libs.kotlin.stdlib)
                 implementation(libs.koin.core)
                 implementation(libs.kotlinx.serialization.core)
-                implementation(project(":api"))
+                implementation(project(":api:openai"))
                 implementation(project(":logger"))
                 implementation(project(":onDeviceLLM"))
             }

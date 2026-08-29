@@ -1,4 +1,4 @@
-package sikv.lingomate.api
+package sikv.lingomate.api.openai
 
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.sse.sse
@@ -16,9 +16,9 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.json.Json
-import sikv.lingomate.api.model.OpenAIInputDTO
-import sikv.lingomate.api.model.OpenAIResponsesRequestDTO
-import sikv.lingomate.api.model.OpenAIResponsesResponseDTO
+import sikv.lingomate.api.openai.model.OpenAIInputDTO
+import sikv.lingomate.api.openai.model.OpenAIResponsesRequestDTO
+import sikv.lingomate.api.openai.model.OpenAIResponsesResponseDTO
 import sikv.lingomate.logger.Log
 
 class OpenAIApi(

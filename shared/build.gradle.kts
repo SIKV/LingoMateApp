@@ -39,7 +39,7 @@ kotlin {
             api(project(":onDeviceLLM"))
 
             implementation(libs.kotlinx.coroutines.core)
-            implementation(project(":api"))
+            implementation(project(":api:openai"))
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

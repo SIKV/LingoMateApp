@@ -1,4 +1,4 @@
-package sikv.lingomate.api.model
+package sikv.lingomate.api.openai.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

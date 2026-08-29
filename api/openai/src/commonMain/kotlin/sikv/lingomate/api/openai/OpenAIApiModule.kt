@@ -1,4 +1,4 @@
-package sikv.lingomate.api
+package sikv.lingomate.api.openai
 
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -8,7 +8,7 @@ import kotlinx.serialization.json.Json
 import org.koin.dsl.module
 import kotlin.time.Duration.Companion.seconds
 
-val apiModule = module {
+val openaiApiModule = module {
 
     single {
         HttpClient {
