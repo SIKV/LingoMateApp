@@ -54,9 +54,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.compose.viewmodel.koinViewModel
 import sikv.lingomate.R
-import sikv.lingomate.data.chat.domain.AssistantLanguage
 import sikv.lingomate.data.chat.domain.ChatConfig
-import sikv.lingomate.data.chat.domain.PracticeLanguage
+import sikv.lingomate.data.chat.domain.Language
 import sikv.lingomate.data.chat.domain.PracticeType
 import sikv.lingomate.feature.toLocalizedString
 import sikv.lingomate.ui.isLandscape
@@ -177,8 +176,8 @@ private fun ChatConfigCard(
     state: StartChatState,
     onNavigateToManageApiKeys: () -> Unit,
     onSelectChatModelOption: (ChatModelOption) -> Unit,
-    onSelectPracticeLanguage: (PracticeLanguage) -> Unit,
-    onSelectAssistantLanguage: (AssistantLanguage) -> Unit,
+    onSelectPracticeLanguage: (Language) -> Unit,
+    onSelectAssistantLanguage: (Language) -> Unit,
     onSelectPracticeType: (PracticeType) -> Unit,
     modifier: Modifier = Modifier
 ) {

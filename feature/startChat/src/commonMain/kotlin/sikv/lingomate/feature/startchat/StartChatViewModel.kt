@@ -9,8 +9,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import sikv.lingomate.data.apikeystorage.ApiKeyStorage
-import sikv.lingomate.data.chat.domain.AssistantLanguage
-import sikv.lingomate.data.chat.domain.PracticeLanguage
+import sikv.lingomate.data.chat.domain.Language
 import sikv.lingomate.data.chat.domain.PracticeType
 import sikv.lingomate.data.chat.service.StartChatService
 import kotlin.native.ObjCName
@@ -37,7 +36,7 @@ class StartChatViewModel(
         }
     }
 
-    fun selectPracticeLanguage(practiceLanguage: PracticeLanguage) {
+    fun selectPracticeLanguage(practiceLanguage: Language) {
         startChatService.selectPracticeLanguage(practiceLanguage)
 
         _uiState.update {
@@ -45,7 +44,7 @@ class StartChatViewModel(
         }
     }
 
-    fun selectAssistantLanguage(assistantLanguage: AssistantLanguage) {
+    fun selectAssistantLanguage(assistantLanguage: Language) {
         startChatService.selectAssistantLanguage(assistantLanguage)
 
         _uiState.update {

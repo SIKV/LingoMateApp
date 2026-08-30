@@ -2,9 +2,8 @@ package sikv.lingomate.data.chat.service
 
 import sikv.lingomate.data.chat.domain.ChatModel
 import sikv.lingomate.data.chat.domain.ChatModelProvider
-import sikv.lingomate.data.chat.domain.PracticeLanguage
+import sikv.lingomate.data.chat.domain.Language
 import sikv.lingomate.data.chat.domain.PracticeType
-import sikv.lingomate.data.chat.domain.AssistantLanguage
 import sikv.lingomate.ondevice.llm.OnDeviceLLM
 
 class StartChatService(
@@ -14,8 +13,8 @@ class StartChatService(
     // TODO: Implement persistent storage.
 
     private var selectedChatModel: ChatModel? = null
-    private var selectedPracticeLanguage: PracticeLanguage? = null
-    private var selectedAssistantLanguage: AssistantLanguage? = null
+    private var selectedPracticeLanguage: Language? = null
+    private var selectedAssistantLanguage: Language? = null
     private var selectedPracticeType: PracticeType? = null
 
     suspend fun getChatModels(): List<ChatModel> {
@@ -53,27 +52,27 @@ class StartChatService(
         this.selectedChatModel = chatModel
     }
 
-    suspend fun getPracticeLanguages(): List<PracticeLanguage> {
-        return PracticeLanguage.entries
+    suspend fun getPracticeLanguages(): List<Language> {
+        return Language.entries
     }
 
-    suspend fun getSelectedPracticeLanguage(): PracticeLanguage? {
+    suspend fun getSelectedPracticeLanguage(): Language? {
         return selectedPracticeLanguage
     }
 
-    fun selectPracticeLanguage(practiceLanguage: PracticeLanguage) {
+    fun selectPracticeLanguage(practiceLanguage: Language) {
         this.selectedPracticeLanguage = practiceLanguage
     }
 
-    suspend fun getAssistantLanguages(): List<AssistantLanguage> {
-        return AssistantLanguage.entries
+    suspend fun getAssistantLanguages(): List<Language> {
+        return Language.entries
     }
 
-    suspend fun getSelectedAssistantLanguage(): AssistantLanguage? {
+    suspend fun getSelectedAssistantLanguage(): Language? {
         return selectedAssistantLanguage
     }
 
-    fun selectAssistantLanguage(assistantLanguage: AssistantLanguage) {
+    fun selectAssistantLanguage(assistantLanguage: Language) {
         this.selectedAssistantLanguage = assistantLanguage
     }
 

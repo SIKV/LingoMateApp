@@ -2,10 +2,27 @@
     <string name="app_name">LingoMate</string>
 
     <!-- Common -->
-    <string name="chat_language_english">English</string>
-    <string name="chat_language_spanish">Spanish</string>
-
-    <string name="assistant_language_english">English</string>
+    <string name="language_arabic">Arabic</string>
+    <string name="language_czech">Czech</string>
+    <string name="language_danish">Danish</string>
+    <string name="language_dutch">Dutch</string>
+    <string name="language_english">English</string>
+    <string name="language_finnish">Finnish</string>
+    <string name="language_french">French</string>
+    <string name="language_german">German</string>
+    <string name="language_greek">Greek</string>
+    <string name="language_hungarian">Hungarian</string>
+    <string name="language_italian">Italian</string>
+    <string name="language_japanese">Japanese</string>
+    <string name="language_korean">Korean</string>
+    <string name="language_norwegian">Norwegian</string>
+    <string name="language_polish">Polish</string>
+    <string name="language_portuguese">Portuguese</string>
+    <string name="language_romanian">Romanian</string>
+    <string name="language_spanish">Spanish</string>
+    <string name="language_swedish">Swedish</string>
+    <string name="language_turkish">Turkish</string>
+    <string name="language_ukrainian">Ukrainian</string>
 
     <string name="chat_model_provider_on_device">On-device</string>
     <string name="practice_type_conversation">Conversation</string>
