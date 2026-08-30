@@ -1,8 +1,7 @@
 package sikv.lingomate.data.chat.service
 
-import sikv.lingomate.data.chat.domain.AssistantLanguage
 import sikv.lingomate.data.chat.domain.ChatConfig
-import sikv.lingomate.data.chat.domain.PracticeLanguage
+import sikv.lingomate.data.chat.domain.Language
 import sikv.lingomate.data.chat.domain.PracticeType
 import kotlin.random.Random
 
@@ -19,22 +18,40 @@ class PromptBuilder(
      */
     fun buildSystemPrompt(chatConfig: ChatConfig): String {
         val practiceLanguage = chatConfig.practiceLanguage.promptName
-        val assistantLanguage = chatConfig.assistantLanguage.promptName
+
+        // Both sides can name the same language. There is then no second language to fall back on: the session runs
+        // entirely in the practice language, and translation practice turns into rephrasing.
+        val monolingual = chatConfig.practiceLanguage == chatConfig.assistantLanguage
+        val explanationLanguage = if (monolingual) {
+            "simple $practiceLanguage"
+        } else {
+            chatConfig.assistantLanguage.promptName
+        }
 
         val sections = listOf(
-            buildRoleSection(practiceLanguage, assistantLanguage),
-            buildPracticeTypeSection(chatConfig.practiceType, practiceLanguage, assistantLanguage),
-            buildFeedbackSection(assistantLanguage),
+            buildRoleSection(practiceLanguage, explanationLanguage, monolingual),
+            buildPracticeTypeSection(chatConfig.practiceType, practiceLanguage, explanationLanguage, monolingual),
+            buildFeedbackSection(explanationLanguage),
             buildStyleSection(practiceLanguage)
         )
         return sections.joinToString(separator = "\n\n")
     }
 
-    private fun buildRoleSection(practiceLanguage: String, assistantLanguage: String): String {
+    private fun buildRoleSection(
+        practiceLanguage: String,
+        explanationLanguage: String,
+        monolingual: Boolean
+    ): String {
+        val explanationLine = if (monolingual) {
+            "The user wants to stay in $practiceLanguage for the whole session: give explanations, corrections and " +
+                "hints in $explanationLanguage, always easier than the language you are practising."
+        } else {
+            "$explanationLanguage is the language the user already knows: use it for explanations, corrections and hints."
+        }
         return """
             You are LingoMate, a patient and encouraging language tutor.
             The user is learning $practiceLanguage, so $practiceLanguage is the language they practice in.
-            $assistantLanguage is the language the user already knows: use it for explanations, corrections and hints.
+            $explanationLine
             Adapt to the user's level: mirror the vocabulary and sentence length they use, simplify when they struggle,
             and add complexity once they answer confidently.
         """.trimIndent()
@@ -43,39 +60,85 @@ class PromptBuilder(
     private fun buildPracticeTypeSection(
         practiceType: PracticeType,
         practiceLanguage: String,
-        assistantLanguage: String
+        explanationLanguage: String,
+        monolingual: Boolean
     ): String {
         return when (practiceType) {
-            PracticeType.CONVERSATION -> """
-                Session type: conversation practice.
-                - Have a natural, everyday conversation with the user in $practiceLanguage.
-                - The situation for this session is: ${buildSituation()}
-                  Play your side of it from the first message and stay in it until the user changes the subject.
-                  Invent the small details yourself (names, times, prices) and keep them consistent.
-                  Do not replace this situation with another one, and do not ask the user to choose one.
-                - Keep every turn to one to three sentences and end it with a single question, so the user always has
-                  something to reply to.
-                - If the user writes in $assistantLanguage or asks for help, answer briefly in $assistantLanguage and then
-                  continue the conversation in $practiceLanguage.
-                - If there are no user messages yet, start the session yourself: greet the user in $practiceLanguage,
-                  make it clear where you both are and who you are, and ask the first question.
-            """.trimIndent()
+            PracticeType.CONVERSATION ->
+                buildConversationSection(practiceLanguage, explanationLanguage, monolingual)
 
-            PracticeType.TRANSLATION -> """
-                Session type: translation practice.
-                - Give the user one sentence in $assistantLanguage at a time and ask them to translate it into $practiceLanguage.
-                - Never translate the sentence yourself before the user has tried it, and never give more than one sentence per turn.
-                - After each attempt: say whether it is correct, give a natural $practiceLanguage translation, and explain the
-                  differences briefly in $assistantLanguage. Then give the next sentence.
-                - ${buildTranslationBrief()}
-                  Keep to this theme, focus and style for the whole session. If the style and the focus pull in different
-                  directions, follow the focus. Never announce the theme or the focus to the user.
-                - Start with short, simple sentences and make them longer and harder after correct answers, easier after wrong ones.
-                - Never repeat a sentence you already gave in this session, and vary how the sentences open.
-                - If there are no user messages yet, start the session yourself: explain the exercise in one line in
-                  $assistantLanguage and give the first sentence to translate.
-            """.trimIndent()
+            PracticeType.TRANSLATION -> if (monolingual) {
+                buildRephrasingSection(practiceLanguage, explanationLanguage)
+            } else {
+                buildTranslationSection(practiceLanguage, explanationLanguage)
+            }
         }
+    }
+
+    private fun buildConversationSection(
+        practiceLanguage: String,
+        explanationLanguage: String,
+        monolingual: Boolean
+    ): String {
+        val helpLine = if (monolingual) {
+            "If the user asks for help or gets stuck, answer briefly in $explanationLanguage and then pick the " +
+                "conversation up where you left it."
+        } else {
+            "If the user writes in $explanationLanguage or asks for help, answer briefly in $explanationLanguage and " +
+                "then continue the conversation in $practiceLanguage."
+        }
+        return """
+            Session type: conversation practice.
+            - Have a natural, everyday conversation with the user in $practiceLanguage.
+            - The situation for this session is: ${buildSituation()}
+              Play your side of it from the first message and stay in it until the user changes the subject.
+              Invent the small details yourself (names, times, prices) and keep them consistent.
+              Do not replace this situation with another one, and do not ask the user to choose one.
+            - Keep every turn to one to three sentences and end it with a single question, so the user always has
+              something to reply to.
+            - $helpLine
+            - If there are no user messages yet, start the session yourself: greet the user in $practiceLanguage,
+              make it clear where you both are and who you are, and ask the first question.
+        """.trimIndent()
+    }
+
+    private fun buildTranslationSection(practiceLanguage: String, explanationLanguage: String): String {
+        return """
+            Session type: translation practice.
+            - Give the user one sentence in $explanationLanguage at a time and ask them to translate it into $practiceLanguage.
+            - Never translate the sentence yourself before the user has tried it, and never give more than one sentence per turn.
+            - After each attempt: say whether it is correct, give a natural $practiceLanguage translation, and explain the
+              differences briefly in $explanationLanguage. Then give the next sentence.
+            - ${buildTranslationBrief()}
+              Keep to this theme, focus and style for the whole session. If the style and the focus pull in different
+              directions, follow the focus. Never announce the theme or the focus to the user.
+            - Start with short, simple sentences and make them longer and harder after correct answers, easier after wrong ones.
+            - Never repeat a sentence you already gave in this session, and vary how the sentences open.
+            - If there are no user messages yet, start the session yourself: explain the exercise in one line in
+              $explanationLanguage and give the first sentence to translate.
+        """.trimIndent()
+    }
+
+    /**
+     * Stands in for translation practice when both sides name the same language: there is nothing to translate, so the
+     * user says the same thing again in their own words instead. The exercise keeps the shape of the translation one,
+     * so the brief, the difficulty ramp and the no-repeat rule all still apply.
+     */
+    private fun buildRephrasingSection(practiceLanguage: String, explanationLanguage: String): String {
+        return """
+            Session type: rephrasing practice.
+            - Give the user one sentence in $practiceLanguage at a time and ask them to say the same thing in their own words.
+            - Never give your own version before the user has tried it, and never give more than one sentence per turn.
+            - After each attempt: say whether it still means the same thing, give one natural rephrasing of your own, and
+              explain the differences briefly in $explanationLanguage. Then give the next sentence.
+            - ${buildTranslationBrief()}
+              Keep to this theme, focus and style for the whole session. If the style and the focus pull in different
+              directions, follow the focus. Never announce the theme or the focus to the user.
+            - Start with short, simple sentences and make them longer and harder after correct answers, easier after wrong ones.
+            - Never repeat a sentence you already gave in this session, and vary how the sentences open.
+            - If there are no user messages yet, start the session yourself: explain the exercise in one line in
+              $explanationLanguage and give the first sentence to rephrase.
+        """.trimIndent()
     }
 
     /**
@@ -91,7 +154,8 @@ class PromptBuilder(
     }
 
     /**
-     * Draws the brief for a translation session: what the sentences are about, what they make the user practise, and
+     * Draws the brief for a translation or rephrasing session: what the sentences are about, what they make the
+     * user practise, and
      * how they are phrased. Without it every session starts from an identical prompt with no history, so the model
      * keeps reaching for the same opening sentences.
      */
@@ -102,11 +166,11 @@ class PromptBuilder(
         return "Draw this session's sentences from $theme, and make them practise $focus. Write them as $style."
     }
 
-    private fun buildFeedbackSection(assistantLanguage: String): String {
+    private fun buildFeedbackSection(explanationLanguage: String): String {
         return """
             Correcting the user:
             - Point out mistakes in grammar, vocabulary, word order and spelling. Keep a correction to three parts:
-              what was wrong, the corrected version, and a one-line reason in $assistantLanguage.
+              what was wrong, the corrected version, and a one-line reason in $explanationLanguage.
             - Ignore typos, missing accents and punctuation unless they change the meaning.
             - Acknowledge what the user got right before correcting, and never correct the same mistake twice in a row.
         """.trimIndent()
@@ -233,13 +297,27 @@ class PromptBuilder(
     }
 }
 
-private val PracticeLanguage.promptName: String
+private val Language.promptName: String
     get() = when (this) {
-        PracticeLanguage.ENGLISH -> "English"
-        PracticeLanguage.SPANISH -> "Spanish"
-    }
-
-private val AssistantLanguage.promptName: String
-    get() = when (this) {
-        AssistantLanguage.ENGLISH -> "English"
+        Language.ARABIC -> "Arabic"
+        Language.CZECH -> "Czech"
+        Language.DANISH -> "Danish"
+        Language.DUTCH -> "Dutch"
+        Language.ENGLISH -> "English"
+        Language.FINNISH -> "Finnish"
+        Language.FRENCH -> "French"
+        Language.GERMAN -> "German"
+        Language.GREEK -> "Greek"
+        Language.HUNGARIAN -> "Hungarian"
+        Language.ITALIAN -> "Italian"
+        Language.JAPANESE -> "Japanese"
+        Language.KOREAN -> "Korean"
+        Language.NORWEGIAN -> "Norwegian"
+        Language.POLISH -> "Polish"
+        Language.PORTUGUESE -> "Portuguese"
+        Language.ROMANIAN -> "Romanian"
+        Language.SPANISH -> "Spanish"
+        Language.SWEDISH -> "Swedish"
+        Language.TURKISH -> "Turkish"
+        Language.UKRAINIAN -> "Ukrainian"
     }

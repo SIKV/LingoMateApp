@@ -51,11 +51,11 @@ class StartChatVM: ObservableObject {
         viewModel.selectChatModel(chatModelOption: chatModelOption)
     }
 
-    func selectPracticeLanguage(_ practiceLanguage: PracticeLanguage) {
+    func selectPracticeLanguage(_ practiceLanguage: Language) {
         viewModel.selectPracticeLanguage(practiceLanguage: practiceLanguage)
     }
 
-    func selectAssistantLanguage(_ assistantLanguage: AssistantLanguage) {
+    func selectAssistantLanguage(_ assistantLanguage: Language) {
         viewModel.selectAssistantLanguage(assistantLanguage: assistantLanguage)
     }
 

@@ -1,7 +1,6 @@
 package sikv.lingomate.feature.startchat
 
-import sikv.lingomate.data.chat.domain.AssistantLanguage
-import sikv.lingomate.data.chat.domain.PracticeLanguage
+import sikv.lingomate.data.chat.domain.Language
 import sikv.lingomate.data.chat.domain.PracticeType
 import kotlin.native.ObjCName
 
@@ -10,11 +9,11 @@ data class StartChatState(
     val chatModelOptions: List<ChatModelOption> = emptyList(),
     val selectedChatModelOption: ChatModelOption? = null,
 
-    val practiceLanguages: List<PracticeLanguage> = emptyList(),
-    val selectedPracticeLanguage: PracticeLanguage? = null,
+    val practiceLanguages: List<Language> = emptyList(),
+    val selectedPracticeLanguage: Language? = null,
 
-    val assistantLanguages: List<AssistantLanguage> = emptyList(),
-    val selectedAssistantLanguage: AssistantLanguage? = null,
+    val assistantLanguages: List<Language> = emptyList(),
+    val selectedAssistantLanguage: Language? = null,
 
     val practiceTypes: List<PracticeType> = emptyList(),
     val selectedPracticeType: PracticeType? = null
