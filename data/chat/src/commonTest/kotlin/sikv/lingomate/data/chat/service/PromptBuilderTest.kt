@@ -17,7 +17,7 @@ class PromptBuilderTest {
     private val promptBuilder = PromptBuilder()
 
     @Test
-    fun `prompt names both the practice and the assistant language`() {
+    fun promptNamesPracticeAndAssistantLanguage() {
         val prompt = promptBuilder.buildSystemPrompt(
             chatConfig(PracticeLanguage.SPANISH, PracticeType.CONVERSATION)
         )
@@ -27,7 +27,7 @@ class PromptBuilderTest {
     }
 
     @Test
-    fun `conversation prompt asks for a conversation and not for translations`() {
+    fun conversationPromptAsksForConversationNotTranslations() {
         val prompt = promptBuilder.buildSystemPrompt(
             chatConfig(PracticeLanguage.SPANISH, PracticeType.CONVERSATION)
         )
@@ -37,7 +37,7 @@ class PromptBuilderTest {
     }
 
     @Test
-    fun `translation prompt asks for one sentence at a time`() {
+    fun translationPromptAsksForOneSentenceAtATime() {
         val prompt = promptBuilder.buildSystemPrompt(
             chatConfig(PracticeLanguage.SPANISH, PracticeType.TRANSLATION)
         )
@@ -48,7 +48,7 @@ class PromptBuilderTest {
     }
 
     @Test
-    fun `prompt tells the model to open the session when there are no user messages`() {
+    fun promptTellsModelToOpenSessionWhenThereAreNoUserMessages() {
         PracticeType.entries.forEach { practiceType ->
             val prompt = promptBuilder.buildSystemPrompt(
                 chatConfig(PracticeLanguage.ENGLISH, practiceType)
@@ -59,7 +59,7 @@ class PromptBuilderTest {
     }
 
     @Test
-    fun `conversation prompt pins one situation for the whole session`() {
+    fun conversationPromptPinsOneSituationForWholeSession() {
         val prompt = PromptBuilder(Random(42)).buildSystemPrompt(
             chatConfig(PracticeLanguage.SPANISH, PracticeType.CONVERSATION)
         )
@@ -70,7 +70,7 @@ class PromptBuilderTest {
     }
 
     @Test
-    fun `conversation situations are combined from independent axes`() {
+    fun conversationSituationsAreCombinedFromIndependentAxes() {
         val situations = (1..40).map { seed ->
             PromptBuilder(Random(seed)).buildSystemPrompt(
                 chatConfig(PracticeLanguage.SPANISH, PracticeType.CONVERSATION)
@@ -85,7 +85,7 @@ class PromptBuilderTest {
     }
 
     @Test
-    fun `translation prompt pins a theme and a focus and a style`() {
+    fun translationPromptPinsThemeFocusAndStyle() {
         val prompt = PromptBuilder(Random(42)).buildSystemPrompt(
             chatConfig(PracticeLanguage.SPANISH, PracticeType.TRANSLATION)
         )
@@ -98,7 +98,7 @@ class PromptBuilderTest {
     }
 
     @Test
-    fun `translation sessions do not all get the same brief`() {
+    fun translationSessionsDoNotAllGetTheSameBrief() {
         val briefs = (1..40).map { seed ->
             PromptBuilder(Random(seed)).buildSystemPrompt(
                 chatConfig(PracticeLanguage.SPANISH, PracticeType.TRANSLATION)
@@ -112,7 +112,7 @@ class PromptBuilderTest {
     }
 
     @Test
-    fun `conversation prompt does not pick a translation brief`() {
+    fun conversationPromptDoesNotPickTranslationBrief() {
         val prompt = PromptBuilder(Random(42)).buildSystemPrompt(
             chatConfig(PracticeLanguage.SPANISH, PracticeType.CONVERSATION)
         )
@@ -121,7 +121,7 @@ class PromptBuilderTest {
     }
 
     @Test
-    fun `every configuration produces a non blank prompt`() {
+    fun everyConfigurationProducesNonBlankPrompt() {
         PracticeLanguage.entries.forEach { practiceLanguage ->
             PracticeType.entries.forEach { practiceType ->
                 val prompt = promptBuilder.buildSystemPrompt(chatConfig(practiceLanguage, practiceType))
