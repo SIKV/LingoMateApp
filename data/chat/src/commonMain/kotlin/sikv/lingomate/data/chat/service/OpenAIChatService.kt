@@ -27,11 +27,15 @@ class OpenAIChatService(
     private val _chatHistory = MutableStateFlow<List<ChatMessage>>(emptyList())
     override val chatHistory: StateFlow<List<ChatMessage>> = _chatHistory.asStateFlow()
 
+    // Built once per session: the prompt picks a situation to talk about, and it has to stay the same for the
+    // whole conversation.
+    private val systemPrompt: String by lazy { promptBuilder.buildSystemPrompt(chatConfig) }
+
     @OptIn(ExperimentalUuidApi::class)
     override fun startChat(scope: CoroutineScope) {
         // Do not add the initial system message to the chat history,
         // as it's not part of the conversation and is only used to get the first response from the server.
-        val startChatMessage = generateStartChatMessage(promptBuilder, chatConfig)
+        val startChatMessage = generateStartChatMessage(systemPrompt)
 
         Log.d { "Starting chat with model ${chatConfig.chatModel.model}." }
 
@@ -52,7 +56,7 @@ class OpenAIChatService(
                 .streamResponse(
                     model = chatConfig.chatModel.model,
                     input = listOf(startChatMessage.toInputDTO()),
-                    instructions = promptBuilder.buildSystemPrompt(chatConfig)
+                    instructions = systemPrompt
                 )
                 .map { result ->
                     result.fold(
@@ -120,7 +124,7 @@ class OpenAIChatService(
                 .streamResponse(
                     model = chatConfig.chatModel.model,
                     input = _chatHistory.value.map { it.toInputDTO() },
-                    instructions = promptBuilder.buildSystemPrompt(chatConfig)
+                    instructions = systemPrompt
                 )
                 .map { result ->
                     result.fold(
