@@ -22,6 +22,10 @@ class OnDeviceChatService(
     private val _chatHistory = MutableStateFlow<List<ChatMessage>>(emptyList())
     override val chatHistory: StateFlow<List<ChatMessage>> = _chatHistory.asStateFlow()
 
+    // Built once per session: the prompt picks a situation to talk about, and it has to stay the same for the
+    // whole conversation.
+    private val systemPrompt: String by lazy { promptBuilder.buildSystemPrompt(chatConfig) }
+
     override fun startChat(scope: CoroutineScope) {
         scope.launch {
             val responseId = Uuid.random().toHexString()
@@ -38,7 +42,7 @@ class OnDeviceChatService(
 
             onDeviceLLM.streamResponse(
                 input = "", // TODO: Provide input.
-                instructions = promptBuilder.buildSystemPrompt(chatConfig)
+                instructions = systemPrompt
             ).collect { message ->
                 if (message != null) {
                     _chatHistory.updateChatHistory(

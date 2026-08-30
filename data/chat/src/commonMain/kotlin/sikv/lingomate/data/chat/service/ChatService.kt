@@ -4,7 +4,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
-import sikv.lingomate.data.chat.domain.ChatConfig
 import sikv.lingomate.data.chat.domain.ChatMessage
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
@@ -18,15 +17,12 @@ interface ChatService {
 }
 
 @OptIn(ExperimentalUuidApi::class)
-internal fun ChatService.generateStartChatMessage(
-    promptBuilder: PromptBuilder,
-    chatConfig: ChatConfig
-): ChatMessage {
+internal fun ChatService.generateStartChatMessage(systemPrompt: String): ChatMessage {
     return ChatMessage(
         id = Uuid.random().toHexString(),
         status = ChatMessage.Status.IN_PROGRESS,
         role = ChatMessage.Role.SYSTEM,
-        text = promptBuilder.buildSystemPrompt(chatConfig)
+        text = systemPrompt
     )
 }
 
