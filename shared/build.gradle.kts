@@ -40,7 +40,7 @@ kotlin {
             api(project(":onDeviceLLM"))
 
             implementation(libs.kotlinx.coroutines.core)
-            implementation(project(":api:config"))
+            implementation(project(":api:remoteConfig"))
             implementation(project(":api:openai"))
         }
         commonTest.dependencies {

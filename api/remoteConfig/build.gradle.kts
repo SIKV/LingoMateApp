@@ -6,7 +6,7 @@ plugins {
 
 kotlin {
     androidLibrary {
-        namespace = "sikv.lingomate.api.config"
+        namespace = "sikv.lingomate.api.remoteconfig"
         compileSdk = Configs.ANDROID_COMPILE_SDK
         minSdk = Configs.ANDROID_MIN_SDK
 
@@ -20,7 +20,7 @@ kotlin {
         }
     }
 
-    val xcfName = "api:configKit"
+    val xcfName = "api:remoteConfigKit"
 
     iosX64 {
         binaries.framework {

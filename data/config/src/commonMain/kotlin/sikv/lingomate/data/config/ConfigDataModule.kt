@@ -15,7 +15,7 @@ val configDataModule = module {
 
     single {
         RemoteConfigDataSource(
-            configApi = get()
+            remoteConfigApi = get()
         )
     }
 

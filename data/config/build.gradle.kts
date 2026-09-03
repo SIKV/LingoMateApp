@@ -43,7 +43,7 @@ kotlin {
                 implementation(libs.kotlin.stdlib)
                 implementation(libs.koin.core)
                 implementation(libs.kotlinx.coroutines.core)
-                implementation(project(":api:config"))
+                implementation(project(":api:remoteConfig"))
                 implementation(project(":logger"))
             }
         }

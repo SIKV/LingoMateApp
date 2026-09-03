@@ -1,4 +1,4 @@
-package sikv.lingomate.api.config
+package sikv.lingomate.api.remoteconfig
 
 import io.ktor.client.HttpClient
 import kotlinx.serialization.json.Json
@@ -7,10 +7,10 @@ import org.koin.dsl.module
 // TODO: Add URL.
 private const val CONFIG_URL = ""
 
-val configApiModule = module {
+val remoteConfigApiModule = module {
 
     single {
-        ConfigApi(
+        RemoteConfigApi(
             client = HttpClient(),
             json = Json {
                 ignoreUnknownKeys = true

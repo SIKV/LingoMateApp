@@ -1,4 +1,4 @@
-package sikv.lingomate.api.config.model
+package sikv.lingomate.api.remoteconfig.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

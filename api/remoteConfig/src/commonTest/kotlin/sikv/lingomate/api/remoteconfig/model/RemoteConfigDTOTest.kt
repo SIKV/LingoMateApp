@@ -1,10 +1,10 @@
-package sikv.lingomate.api.config.model
+package sikv.lingomate.api.remoteconfig.model
 
 import kotlinx.serialization.json.Json
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class ConfigDTOTest {
+class RemoteConfigDTOTest {
 
     private val json = Json {
         ignoreUnknownKeys = true
@@ -14,7 +14,7 @@ class ConfigDTOTest {
 
     @Test
     fun `Reads the chat models of a published config`() {
-        val config = json.decodeFromString<ConfigDTO>(
+        val config = json.decodeFromString<RemoteConfigDTO>(
             """
             {
               "app_version": "2.0",
@@ -45,7 +45,7 @@ class ConfigDTOTest {
 
     @Test
     fun `Reads a config that carries no chat models yet`() {
-        val config = json.decodeFromString<ConfigDTO>("""{ "app_version": "2.0" }""")
+        val config = json.decodeFromString<RemoteConfigDTO>("""{ "app_version": "2.0" }""")
 
         assertEquals(emptyList(), config.chatModels)
         assertEquals(emptyList(), config.languages)
