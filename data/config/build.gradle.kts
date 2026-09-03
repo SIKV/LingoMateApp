@@ -1,13 +1,11 @@
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidKotlinMultiplatformLibrary)
-    alias(libs.plugins.nativeCoroutines)
-    alias(libs.plugins.kotlinSerialization)
 }
 
 kotlin {
     androidLibrary {
-        namespace = "sikv.lingomate.data.chat"
+        namespace = "sikv.lingomate.data.config"
         compileSdk = Configs.ANDROID_COMPILE_SDK
         minSdk = Configs.ANDROID_MIN_SDK
 
@@ -21,7 +19,7 @@ kotlin {
         }
     }
 
-    val xcfName = "data:chatKit"
+    val xcfName = "data:configKit"
 
     iosX64 {
         binaries.framework {
@@ -44,11 +42,9 @@ kotlin {
             dependencies {
                 implementation(libs.kotlin.stdlib)
                 implementation(libs.koin.core)
-                implementation(libs.kotlinx.serialization.core)
-                implementation(project(":api:openai"))
-                implementation(project(":data:config"))
+                implementation(libs.kotlinx.coroutines.core)
+                implementation(project(":api:config"))
                 implementation(project(":logger"))
-                implementation(project(":onDeviceLLM"))
             }
         }
         commonTest {
@@ -69,9 +65,5 @@ kotlin {
         iosMain {
             dependencies { }
         }
-    }
-
-    sourceSets.all {
-        languageSettings.optIn("kotlin.experimental.ExperimentalObjCName")
     }
 }

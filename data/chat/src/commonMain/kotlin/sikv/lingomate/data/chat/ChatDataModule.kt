@@ -12,6 +12,7 @@ import sikv.lingomate.data.chat.service.StartChatService
 val chatDataModule = module {
     single {
         StartChatService(
+            configRepository = get(),
             onDeviceLLM = get()
         )
     }
