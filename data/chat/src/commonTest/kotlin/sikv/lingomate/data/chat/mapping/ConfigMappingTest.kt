@@ -1,10 +1,8 @@
-package sikv.lingomate.data.chat.service
+package sikv.lingomate.data.chat.mapping
 
 import sikv.lingomate.data.chat.domain.ChatModel
 import sikv.lingomate.data.chat.domain.ChatModelProvider
 import sikv.lingomate.data.chat.domain.Language
-import sikv.lingomate.data.chat.mapping.toChatModels
-import sikv.lingomate.data.chat.mapping.toLanguages
 import sikv.lingomate.data.config.datasource.FallbackConfigDataSource
 import sikv.lingomate.data.config.domain.Config
 import sikv.lingomate.data.config.domain.ConfigChatModel
