@@ -31,6 +31,7 @@ kotlin {
             api(libs.koin.compose)
             api(libs.koin.compose.viewmodel)
             api(project(":data:chat"))
+            api(project(":data:config"))
             api(project(":data:apiKeyStorage"))
             api(project(":feature:startChat"))
             api(project(":feature:chat"))
@@ -39,6 +40,7 @@ kotlin {
             api(project(":onDeviceLLM"))
 
             implementation(libs.kotlinx.coroutines.core)
+            implementation(project(":api:remoteConfig"))
             implementation(project(":api:openai"))
         }
         commonTest.dependencies {

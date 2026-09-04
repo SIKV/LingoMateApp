@@ -1,12 +1,16 @@
 package sikv.lingomate.data.chat.service
 
 import sikv.lingomate.data.chat.domain.ChatModel
-import sikv.lingomate.data.chat.domain.ChatModelProvider
 import sikv.lingomate.data.chat.domain.Language
 import sikv.lingomate.data.chat.domain.PracticeType
+import sikv.lingomate.data.chat.mapping.toChatModels
+import sikv.lingomate.data.chat.mapping.toLanguages
+import sikv.lingomate.data.config.ConfigRepository
+import sikv.lingomate.logger.Log
 import sikv.lingomate.ondevice.llm.OnDeviceLLM
 
 class StartChatService(
+    private val configRepository: ConfigRepository,
     private val onDeviceLLM: OnDeviceLLM
 ) {
 
@@ -18,30 +22,16 @@ class StartChatService(
     private var selectedPracticeType: PracticeType? = null
 
     suspend fun getChatModels(): List<ChatModel> {
-        // TODO: Refactor. Current implementation is for testing only.
-        val openAIModels = listOf(
-            ChatModel(
-                ChatModelProvider.OPEN_AI,
-                "gpt-5-nano"
-            ),
-            ChatModel(
-                ChatModelProvider.OPEN_AI,
-                "gpt-5-mini"
-            ),
-            ChatModel(
-                ChatModelProvider.OPEN_AI,
-                "gpt-5.1"
-            )
-        )
-        if (onDeviceLLM.checkAvailability()) {
-            val onDeviceModel = ChatModel(
-                ChatModelProvider.ON_DEVICE,
-                "on-device"
-            )
-            return openAIModels + onDeviceModel
-        } else {
-            return openAIModels
+        // TODO: Offer the on-device model once OnDeviceLLM is implemented. It cannot come from
+        //  the config: whether it can run depends on the device.
+
+        val chatModels = configRepository.getConfig().toChatModels()
+
+        if (chatModels.isEmpty()) {
+            Log.w { "The config lists no chat model this build can use." }
         }
+
+        return chatModels
     }
 
     suspend fun getSelectedChatModel(): ChatModel? {
@@ -53,7 +43,8 @@ class StartChatService(
     }
 
     suspend fun getPracticeLanguages(): List<Language> {
-        return Language.entries
+        return configRepository.getConfig()
+            .toLanguages()
     }
 
     suspend fun getSelectedPracticeLanguage(): Language? {
@@ -65,7 +56,8 @@ class StartChatService(
     }
 
     suspend fun getAssistantLanguages(): List<Language> {
-        return Language.entries
+        return configRepository.getConfig()
+            .toLanguages()
     }
 
     suspend fun getSelectedAssistantLanguage(): Language? {

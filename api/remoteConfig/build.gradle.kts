@@ -1,13 +1,12 @@
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidKotlinMultiplatformLibrary)
-    alias(libs.plugins.nativeCoroutines)
     alias(libs.plugins.kotlinSerialization)
 }
 
 kotlin {
     androidLibrary {
-        namespace = "sikv.lingomate.data.chat"
+        namespace = "sikv.lingomate.api.remoteconfig"
         compileSdk = Configs.ANDROID_COMPILE_SDK
         minSdk = Configs.ANDROID_MIN_SDK
 
@@ -21,18 +20,20 @@ kotlin {
         }
     }
 
-    val xcfName = "data:chatKit"
+    val xcfName = "api:remoteConfigKit"
 
     iosX64 {
         binaries.framework {
             baseName = xcfName
         }
     }
+
     iosArm64 {
         binaries.framework {
             baseName = xcfName
         }
     }
+
     iosSimulatorArm64 {
         binaries.framework {
             baseName = xcfName
@@ -43,12 +44,11 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(libs.kotlin.stdlib)
+                implementation(libs.ktor.client.core)
+                implementation(libs.kotlinx.coroutines.core)
+                implementation(libs.kotlinx.serialization.json)
                 implementation(libs.koin.core)
-                implementation(libs.kotlinx.serialization.core)
-                implementation(project(":api:openai"))
-                implementation(project(":data:config"))
                 implementation(project(":logger"))
-                implementation(project(":onDeviceLLM"))
             }
         }
         commonTest {
@@ -57,7 +57,9 @@ kotlin {
             }
         }
         androidMain {
-            dependencies { }
+            dependencies {
+                implementation(libs.ktor.client.okhttp)
+            }
         }
         getByName("androidDeviceTest") {
             dependencies {
@@ -67,11 +69,9 @@ kotlin {
             }
         }
         iosMain {
-            dependencies { }
+            dependencies {
+                implementation(libs.ktor.client.darwin)
+            }
         }
-    }
-
-    sourceSets.all {
-        languageSettings.optIn("kotlin.experimental.ExperimentalObjCName")
     }
 }
