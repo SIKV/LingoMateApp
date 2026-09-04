@@ -4,8 +4,7 @@ import io.ktor.client.HttpClient
 import kotlinx.serialization.json.Json
 import org.koin.dsl.module
 
-// TODO: Add URL.
-private const val CONFIG_URL = ""
+private const val CONFIG_URL = "https://sikv.github.io/LingoMateApp/v1/remote_config.json"
 
 val remoteConfigApiModule = module {
 
