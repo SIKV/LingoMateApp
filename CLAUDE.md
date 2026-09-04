@@ -36,6 +36,9 @@ Shared view models expose state as StateFlow/Flow from commonMain.
 - Android: consume StateFlow directly in Compose.
 - iOS: Kotlin Flow isn't natively supported. Use: KMP-NativeCoroutines to generate Swift-async-friendly APIs.
 
+## Testing
+- Always use camelCase for unit tests.
+
 ## Build & Run Commands
 - Build the shared module: ./gradlew :shared:build
 - Build Android app: ./gradlew :composeApp:assembleDebug
