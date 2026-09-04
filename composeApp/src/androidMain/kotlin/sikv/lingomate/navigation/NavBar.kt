@@ -1,14 +1,16 @@
 package sikv.lingomate.navigation
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.res.painterResource
+import sikv.lingomate.R
 
 @Composable
 fun NavBar(
@@ -29,17 +31,19 @@ fun NavBar(
     }
 }
 
-private fun AppRoute.icon(): ImageVector {
+@Composable
+private fun AppRoute.icon(): Painter {
     return when (this) {
-        AppRoute.Chat -> Icons.AutoMirrored.Default.Send
-        AppRoute.More -> Icons.Default.Menu
+        // Mirrors the icon in the start chat screen header.
+        AppRoute.Chat -> painterResource(R.drawable.ic_auto_awesome_24)
+        AppRoute.More -> rememberVectorPainter(Icons.Default.Menu)
     }
 }
 
 // TODO: Use string resources.
 private fun AppRoute.text(): String {
     return when (this) {
-        AppRoute.Chat -> "Chat"
+        AppRoute.Chat -> "Practice"
         AppRoute.More -> "More"
     }
 }

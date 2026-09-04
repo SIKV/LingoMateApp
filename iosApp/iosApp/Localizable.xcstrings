@@ -697,17 +697,6 @@
         }
       }
     },
-    "tab_chat" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Chat"
-          }
-        }
-      }
-    },
     "tab_more" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -715,6 +704,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "More"
+          }
+        }
+      }
+    },
+    "tab_practice" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Practice"
           }
         }
       }

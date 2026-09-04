@@ -9,7 +9,7 @@ struct ContentView: View {
             TabView {
                 StartChatScreen()
                     .tabItem {
-                        Label(L10n.tabChat, systemImage: "bubble.left.and.bubble.right.fill")
+                        Label(L10n.tabPractice, systemImage: "sparkles")
                     }
                 MoreView()
                     .tabItem {
