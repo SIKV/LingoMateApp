@@ -1,7 +1,7 @@
 import SwiftUI
 
 enum L10n {
-    static let tabChat = LocalizedStringKey("tab_chat")
+    static let tabPractice = LocalizedStringKey("tab_practice")
     static let tabMore = LocalizedStringKey("tab_more")
     
     static let languageArabic = LocalizedStringKey("language_arabic")
