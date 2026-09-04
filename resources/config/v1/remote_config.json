@@ -1,0 +1,25 @@
+{
+  "chat_models": [
+    {
+      "provider": "OPEN_AI",
+      "model": "gpt-5-nano"
+    },
+    {
+      "provider": "OPEN_AI",
+      "model": "gpt-5-mini"
+    },
+    {
+      "provider": "OPEN_AI",
+      "model": "gpt-4.1"
+    },
+    {
+      "provider": "OPEN_AI",
+      "model": "gpt-5.1"
+    }
+  ],
+  "languages": [
+    "en",
+    "es",
+    "uk"
+  ]
+}
