@@ -8,5 +8,5 @@ data class RemoteConfigDTO(
     @SerialName("chat_models")
     val chatModels: List<ChatModelDTO> = emptyList(),
     @SerialName("languages")
-    val languages: List<String> = emptyList() // BCP 47 codes, e.g. "en".
+    val languages: List<String> = emptyList()
 )

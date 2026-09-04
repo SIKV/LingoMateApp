@@ -13,11 +13,10 @@ class RemoteConfigDTOTest {
     }
 
     @Test
-    fun `Reads the chat models of a published config`() {
+    fun readsTheChatModelsOfAPublishedConfig() {
         val config = json.decodeFromString<RemoteConfigDTO>(
             """
             {
-              "app_version": "2.0",
               "chat_models": [
                 {
                   "provider": "OPEN_AI",
@@ -44,7 +43,7 @@ class RemoteConfigDTOTest {
     }
 
     @Test
-    fun `Reads a config that carries no chat models yet`() {
+    fun readsAConfigThatCarriesNoChatModelsYet() {
         val config = json.decodeFromString<RemoteConfigDTO>("""{ "app_version": "2.0" }""")
 
         assertEquals(emptyList(), config.chatModels)

@@ -12,7 +12,7 @@ import kotlin.test.assertEquals
 class ConfigMappingTest {
 
     @Test
-    fun `Keeps the models and their order`() {
+    fun keepsTheModelsAndTheirOrder() {
         val config = Config(
             chatModels = listOf(
                 ConfigChatModel(provider = "OPEN_AI", model = "gpt-5-nano"),
@@ -30,7 +30,7 @@ class ConfigMappingTest {
     }
 
     @Test
-    fun `Drops a model of an unknown provider`() {
+    fun dropsAModelOfAnUnknownProvider() {
         val config = Config(
             chatModels = listOf(
                 ConfigChatModel(provider = "ANTHROPIC", model = "claude-opus-5"),
@@ -45,7 +45,7 @@ class ConfigMappingTest {
     }
 
     @Test
-    fun `Drops a model with a blank name`() {
+    fun dropsAModelWithABlankName() {
         val config = Config(
             chatModels = listOf(
                 ConfigChatModel(provider = "OPEN_AI", model = " ")
@@ -56,12 +56,12 @@ class ConfigMappingTest {
     }
 
     @Test
-    fun `Maps a config with no models to an empty list`() {
+    fun mapsAConfigWithNoModelsToAnEmptyList() {
         assertEquals(emptyList(), Config().toChatModels())
     }
 
     @Test
-    fun `Keeps the languages and their order`() {
+    fun keepsTheLanguagesAndTheirOrder() {
         val config = Config(languageCodes = listOf("uk", "en", "ja"))
 
         assertEquals(
@@ -71,33 +71,33 @@ class ConfigMappingTest {
     }
 
     @Test
-    fun `Reads a language code in any case`() {
+    fun readsALanguageCodeInAnyCase() {
         val config = Config(languageCodes = listOf("EN", "Es"))
 
         assertEquals(listOf(Language.ENGLISH, Language.SPANISH), config.toLanguages())
     }
 
     @Test
-    fun `Drops a language the app does not ship`() {
+    fun dropsALanguageTheAppDoesNotShip() {
         val config = Config(languageCodes = listOf("vi", "en"))
 
         assertEquals(listOf(Language.ENGLISH), config.toLanguages())
     }
 
     @Test
-    fun `Maps a config with no languages to an empty list`() {
+    fun mapsAConfigWithNoLanguagesToAnEmptyList() {
         assertEquals(emptyList(), Config().toLanguages())
     }
 
     @Test
-    fun `Reads the chat model the app falls back to`() {
+    fun readsTheChatModelTheAppFallsBackTo() {
         val config = FallbackConfigDataSource().getConfig()
 
         assertEquals(1, config.toChatModels().size)
     }
 
     @Test
-    fun `Falls back to every language the app ships with`() {
+    fun fallsBackToEveryLanguageTheAppShipsWith() {
         val config = FallbackConfigDataSource().getConfig()
 
         assertEquals(Language.entries, config.toLanguages())

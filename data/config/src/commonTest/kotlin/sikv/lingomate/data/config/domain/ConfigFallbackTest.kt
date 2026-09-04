@@ -11,7 +11,7 @@ class ConfigFallbackTest {
     )
 
     @Test
-    fun `Keeps the sections the config carries`() {
+    fun keepsTheSectionsTheConfigCarries() {
         val config = Config(
             chatModels = listOf(ConfigChatModel(provider = "OPEN_AI", model = "gpt-5.1")),
             languageCodes = listOf("uk", "de")
@@ -21,7 +21,7 @@ class ConfigFallbackTest {
     }
 
     @Test
-    fun `Fills in only the sections the config leaves out`() {
+    fun fillsInOnlyTheSectionsTheConfigLeavesOut() {
         val config = Config(languageCodes = listOf("uk"))
 
         assertEquals(
@@ -34,7 +34,7 @@ class ConfigFallbackTest {
     }
 
     @Test
-    fun `Falls back entirely for an empty config`() {
+    fun fallsBackEntirelyForAnEmptyConfig() {
         assertEquals(fallback, Config().withFallback(fallback))
     }
 }
