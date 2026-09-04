@@ -16,26 +16,29 @@ struct StartChatButton: View {
             }
             .frame(maxWidth: .infinity)
             .font(.headline)
-            .foregroundColor(.white)
+            .foregroundStyle(enabled ? AnyShapeStyle(.white) : AnyShapeStyle(.tertiary))
             .padding()
-            .background(
-                LinearGradient(
-                    gradient: Gradient(
-                        colors: [.blue, .purple]
-                    ),
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-                .hueRotation(.degrees(animateGradient ? 45 : 0))
-                .onAppear {
-                    withAnimation(.linear(duration: 5).repeatForever(autoreverses: true)) {
-                        animateGradient.toggle()
+            .background {
+                if enabled {
+                    LinearGradient(
+                        gradient: Gradient(
+                            colors: [.blue, .purple]
+                        ),
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                    .hueRotation(.degrees(animateGradient ? 45 : 0))
+                    .onAppear {
+                        withAnimation(.linear(duration: 5).repeatForever(autoreverses: true)) {
+                            animateGradient.toggle()
+                        }
                     }
+                } else {
+                    Color(.tertiarySystemFill)
                 }
-            )
+            }
             .cornerRadius(35)
         }
         .disabled(!enabled)
-        .opacity(enabled ? 1 : 0.5)
     }
 }

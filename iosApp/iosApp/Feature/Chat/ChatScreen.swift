@@ -9,9 +9,14 @@ struct ChatScreen: View {
     
     // Local input state.
     @State private var inputText: String = ""
+    @FocusState private var isInputFocused: Bool
     // Disable send logic while any message (user or assistant) is in progress.
     private var isSending: Bool {
         chatVM.state.messages.contains { $0.status == ChatMessage.Status.inProgress }
+    }
+    // Send is offered only for non-whitespace text, and never while a message is in flight.
+    private var canSend: Bool {
+        !inputText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && !isSending
     }
     
     init(chatConfig: ChatConfig) {
@@ -67,29 +72,65 @@ struct ChatScreen: View {
     }
     
     private var inputBar: some View {
-        HStack(spacing: Spacing.sm) {
+        HStack(alignment: .bottom, spacing: Spacing.sm) {
             TextField(L10n.chatTypeMessageHint, text: $inputText, axis: .vertical)
-                .textFieldStyle(.roundedBorder)
+                .textFieldStyle(.plain)
                 .lineLimit(1...5)
                 .submitLabel(.send)
+                .focused($isInputFocused)
                 .onSubmit {
                     send()
                 }
-            
-            Button {
-                send()
-            } label: {
-                Image(systemName: "paperplane.fill")
-                    .font(.system(size: 17, weight: .semibold))
-            }
-            // Enabled only when there is non-whitespace text and not currently sending.
-            .disabled(inputText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || isSending)
-            .buttonStyle(.borderedProminent)
+                .padding(.vertical, Spacing.sm)
+                .padding(.horizontal, Spacing.lg)
+                .background(
+                    fieldShape.fill(Color(.secondarySystemBackground))
+                )
+                .overlay(
+                    fieldShape.stroke(
+                        isInputFocused ? Color.accentColor.opacity(0.55) : Color.gray.opacity(0.2),
+                        lineWidth: 1
+                    )
+                )
+                .animation(.easeInOut(duration: 0.2), value: isInputFocused)
+
+            sendButton
         }
         .padding(.horizontal, Spacing.md)
         .padding(.vertical, Spacing.sm)
     }
-    
+
+    private var fieldShape: RoundedRectangle {
+        RoundedRectangle(cornerRadius: Radius.xl, style: .continuous)
+    }
+
+    private var sendButton: some View {
+        Button {
+            send()
+        } label: {
+            Image(systemName: "paperplane.fill")
+                .font(.system(size: 15, weight: .semibold))
+                .foregroundStyle(canSend ? AnyShapeStyle(.white) : AnyShapeStyle(.tertiary))
+                .frame(width: 38, height: 38)
+                .background {
+                    if canSend {
+                        LinearGradient(
+                            colors: [.blue, .purple],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    } else {
+                        Color(.tertiarySystemFill)
+                    }
+                }
+                .clipShape(Circle())
+        }
+        .buttonStyle(.plain)
+        .disabled(!canSend)
+        .scaleEffect(canSend ? 1 : 0.92)
+        .animation(.spring(response: 0.3, dampingFraction: 0.7), value: canSend)
+    }
+
     private func send() {
         let text = inputText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !text.isEmpty else { return }

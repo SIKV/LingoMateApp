@@ -205,6 +205,8 @@ private struct SelectorRow<Option>: View {
             .padding(.vertical, Spacing.md)
             .contentShape(Rectangle())
         }
+        // Without it the menu tints its whole label with the accent color.
+        .buttonStyle(.plain)
         .disabled(options.isEmpty)
     }
 }
