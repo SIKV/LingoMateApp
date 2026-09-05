@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.map
 import okio.IOException
 import sikv.lingomate.logger.Log
 
-/** [KeyValueStorage] backed by Preferences DataStore. */
 internal class DataStoreKeyValueStorage(
     private val dataStore: DataStore<Preferences>,
 ) : KeyValueStorage {

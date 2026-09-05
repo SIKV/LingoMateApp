@@ -5,15 +5,13 @@ import sikv.lingomate.data.chat.domain.ChatModelProvider
 import sikv.lingomate.data.chat.domain.Language
 import sikv.lingomate.data.chat.domain.PracticeType
 import sikv.lingomate.data.keyvaluestorage.KeyValueStorage
-import sikv.lingomate.logger.Log
+import sikv.lingomate.data.keyvaluestorage.getEnum
+import sikv.lingomate.data.keyvaluestorage.putEnum
+import sikv.lingomate.data.keyvaluestorage.putOrRemove
 
 /**
  * Persists what the user picked on the start chat screen, so the next launch opens on the
  * same selection.
- *
- * Values are stored by enum name rather than ordinal: reordering the enums keeps stored
- * selections readable, and a name that no longer exists reads back as null instead of
- * resolving to an unrelated entry.
  */
 internal class StartChatSelectionStorage(
     private val keyValueStorage: KeyValueStorage,
@@ -31,7 +29,7 @@ internal class StartChatSelectionStorage(
     }
 
     suspend fun setChatModel(chatModel: ChatModel?) {
-        keyValueStorage.putOrRemove(KEY_CHAT_MODEL_PROVIDER, chatModel?.provider?.name)
+        keyValueStorage.putEnum(KEY_CHAT_MODEL_PROVIDER, chatModel?.provider)
         keyValueStorage.putOrRemove(KEY_CHAT_MODEL, chatModel?.model)
     }
 
@@ -40,7 +38,7 @@ internal class StartChatSelectionStorage(
     }
 
     suspend fun setPracticeLanguage(practiceLanguage: Language?) {
-        keyValueStorage.putOrRemove(KEY_PRACTICE_LANGUAGE, practiceLanguage?.name)
+        keyValueStorage.putEnum(KEY_PRACTICE_LANGUAGE, practiceLanguage)
     }
 
     suspend fun getAssistantLanguage(): Language? {
@@ -48,7 +46,7 @@ internal class StartChatSelectionStorage(
     }
 
     suspend fun setAssistantLanguage(assistantLanguage: Language?) {
-        keyValueStorage.putOrRemove(KEY_ASSISTANT_LANGUAGE, assistantLanguage?.name)
+        keyValueStorage.putEnum(KEY_ASSISTANT_LANGUAGE, assistantLanguage)
     }
 
     suspend fun getPracticeType(): PracticeType? {
@@ -56,7 +54,7 @@ internal class StartChatSelectionStorage(
     }
 
     suspend fun setPracticeType(practiceType: PracticeType?) {
-        keyValueStorage.putOrRemove(KEY_PRACTICE_TYPE, practiceType?.name)
+        keyValueStorage.putEnum(KEY_PRACTICE_TYPE, practiceType)
     }
 
     private companion object {
@@ -66,24 +64,4 @@ internal class StartChatSelectionStorage(
         const val KEY_ASSISTANT_LANGUAGE = "start_chat.assistant_language"
         const val KEY_PRACTICE_TYPE = "start_chat.practice_type"
     }
-}
-
-/** Stores [value], or drops the entry when it is null. */
-private suspend fun KeyValueStorage.putOrRemove(key: String, value: String?) {
-    if (value == null) {
-        remove(key)
-    } else {
-        put(key, value)
-    }
-}
-
-/** Reads the entry as a [T], returning null when it is missing or no longer a known entry. */
-private suspend inline fun <reified T : Enum<T>> KeyValueStorage.getEnum(key: String): T? {
-    val name = get(key) ?: return null
-
-    return enumValues<T>().firstOrNull { it.name == name }
-        ?: run {
-            Log.w { "Dropping the stored value of $key: $name is no longer a known entry." }
-            null
-        }
 }
