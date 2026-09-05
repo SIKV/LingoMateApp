@@ -9,10 +9,6 @@ import sikv.lingomate.data.keyvaluestorage.getEnum
 import sikv.lingomate.data.keyvaluestorage.putEnum
 import sikv.lingomate.data.keyvaluestorage.putOrRemove
 
-/**
- * Persists what the user picked on the start chat screen, so the next launch opens on the
- * same selection.
- */
 internal class StartChatSelectionStorage(
     private val keyValueStorage: KeyValueStorage,
 ) {
