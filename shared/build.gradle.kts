@@ -33,6 +33,7 @@ kotlin {
             api(project(":data:chat"))
             api(project(":data:config"))
             api(project(":data:apiKeyStorage"))
+            api(project(":data:keyValueStorage"))
             api(project(":feature:startChat"))
             api(project(":feature:chat"))
             api(project(":feature:manageApiKeys"))
