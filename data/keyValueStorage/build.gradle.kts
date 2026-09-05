@@ -1,13 +1,11 @@
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidKotlinMultiplatformLibrary)
-    alias(libs.plugins.nativeCoroutines)
-    alias(libs.plugins.kotlinSerialization)
 }
 
 kotlin {
     androidLibrary {
-        namespace = "sikv.lingomate.data.chat"
+        namespace = "sikv.lingomate.data.keyvaluestorage"
         compileSdk = Configs.ANDROID_COMPILE_SDK
         minSdk = Configs.ANDROID_MIN_SDK
 
@@ -21,18 +19,20 @@ kotlin {
         }
     }
 
-    val xcfName = "data:chatKit"
+    val xcfName = "data:keyValueStorageKit"
 
     iosX64 {
         binaries.framework {
             baseName = xcfName
         }
     }
+
     iosArm64 {
         binaries.framework {
             baseName = xcfName
         }
     }
+
     iosSimulatorArm64 {
         binaries.framework {
             baseName = xcfName
@@ -44,19 +44,17 @@ kotlin {
             dependencies {
                 implementation(libs.kotlin.stdlib)
                 implementation(libs.koin.core)
-                implementation(libs.kotlinx.serialization.core)
-                implementation(project(":api:openai"))
-                implementation(project(":data:config"))
-                implementation(project(":data:keyValueStorage"))
+                implementation(libs.kotlinx.coroutines.core)
+                implementation(libs.androidx.datastore.preferencesCore)
+                implementation(libs.okio)
                 implementation(project(":logger"))
-                implementation(project(":onDeviceLLM"))
             }
         }
         commonTest {
             dependencies {
                 implementation(libs.kotlin.test)
                 implementation(libs.kotlinx.coroutines.test)
-                implementation(project(":data:keyValueStorage"))
+                implementation(libs.okio)
             }
         }
         androidMain {

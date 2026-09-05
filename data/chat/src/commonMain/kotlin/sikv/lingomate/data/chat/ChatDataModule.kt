@@ -8,11 +8,13 @@ import sikv.lingomate.data.chat.service.OnDeviceChatService
 import sikv.lingomate.data.chat.service.OpenAIChatService
 import sikv.lingomate.data.chat.service.PromptBuilder
 import sikv.lingomate.data.chat.service.StartChatService
+import sikv.lingomate.data.chat.storage.StartChatSelectionStorage
 
 val chatDataModule = module {
     single {
         StartChatService(
             configRepository = get(),
+            selectionStorage = StartChatSelectionStorage(keyValueStorage = get()),
             onDeviceLLM = get()
         )
     }
