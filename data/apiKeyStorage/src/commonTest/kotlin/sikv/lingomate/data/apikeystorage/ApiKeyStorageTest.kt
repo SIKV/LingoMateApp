@@ -74,8 +74,8 @@ class ApiKeyStorageTest {
     }
 
     @Test
-    fun flowStoredProviders_emitsEmptyListWhenNothingStored() = runTest {
-        assertEquals(emptyList(), apiKeyStorage.flowStoredProviders().first())
+    fun flowStoredProviders_emitsEmptySetWhenNothingStored() = runTest {
+        assertEquals(emptySet(), apiKeyStorage.flowStoredProviders().first())
     }
 
     @Test
@@ -85,7 +85,7 @@ class ApiKeyStorageTest {
         val storage = ApiKeyStorage(secureStorage)
 
         assertEquals(
-            listOf(ApiKeyProvider.OpenAI),
+            setOf(ApiKeyProvider.OpenAI),
             storage.flowStoredProviders().first()
         )
     }
@@ -95,7 +95,7 @@ class ApiKeyStorageTest {
         apiKeyStorage.store(ApiKeyProvider.OpenAI, "sk-123")
 
         assertEquals(
-            listOf(ApiKeyProvider.OpenAI),
+            setOf(ApiKeyProvider.OpenAI),
             apiKeyStorage.flowStoredProviders().first()
         )
     }
@@ -106,7 +106,7 @@ class ApiKeyStorageTest {
 
         apiKeyStorage.remove(ApiKeyProvider.OpenAI)
 
-        assertEquals(emptyList(), apiKeyStorage.flowStoredProviders().first())
+        assertEquals(emptySet(), apiKeyStorage.flowStoredProviders().first())
     }
 
     @Test
@@ -115,6 +115,6 @@ class ApiKeyStorageTest {
 
         apiKeyStorage.clear()
 
-        assertEquals(emptyList(), apiKeyStorage.flowStoredProviders().first())
+        assertEquals(emptySet(), apiKeyStorage.flowStoredProviders().first())
     }
 }

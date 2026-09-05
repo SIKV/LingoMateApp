@@ -8,34 +8,57 @@ struct StartChatButton: View {
 
     var body: some View {
         Button(action: action) {
-            HStack {
-                Spacer()
-                Text(L10n.startChatStartButton)
-                Spacer()
+            HStack(spacing: Spacing.sm) {
                 Image(systemName: "sparkles")
+                Text(L10n.startChatStartButton)
             }
-            .frame(maxWidth: .infinity)
-            .font(.headline)
-            .foregroundColor(.white)
-            .padding()
-            .background(
-                LinearGradient(
-                    gradient: Gradient(
-                        colors: [.blue, .purple]
-                    ),
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-                .hueRotation(.degrees(animateGradient ? 45 : 0))
-                .onAppear {
-                    withAnimation(.linear(duration: 5).repeatForever(autoreverses: true)) {
-                        animateGradient.toggle()
+            .font(.system(size: 19, weight: .semibold, design: .rounded))
+            .foregroundStyle(enabled ? AnyShapeStyle(.white) : AnyShapeStyle(.tertiary))
+            .frame(maxWidth: .infinity, minHeight: 60)
+            .background {
+                if enabled {
+                    LinearGradient(
+                        colors: [.blue, .purple],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                    .hueRotation(.degrees(animateGradient ? 45 : 0))
+                    .onAppear {
+                        withAnimation(.linear(duration: 5).repeatForever(autoreverses: true)) {
+                            animateGradient.toggle()
+                        }
                     }
+                } else {
+                    Color(.tertiarySystemFill)
                 }
-            )
-            .cornerRadius(35)
+            }
+            .clipShape(Capsule(style: .continuous))
+            // A brighter top edge fading downwards reads as light falling on the pill.
+            .overlay {
+                Capsule(style: .continuous)
+                    .strokeBorder(
+                        LinearGradient(
+                            colors: [.white.opacity(0.45), .white.opacity(0.05)],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        ),
+                        lineWidth: 1
+                    )
+                    .opacity(enabled ? 1 : 0)
+            }
+            .shadow(color: enabled ? .purple.opacity(0.35) : .clear, radius: 16, y: 8)
         }
+        .buttonStyle(PressScaleButtonStyle())
         .disabled(!enabled)
-        .opacity(enabled ? 1 : 0.5)
+        .animation(.easeInOut(duration: 0.2), value: enabled)
+    }
+}
+
+/// Presses sink the button slightly instead of only dimming it.
+private struct PressScaleButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed ? 0.97 : 1)
+            .animation(.spring(response: 0.3, dampingFraction: 0.6), value: configuration.isPressed)
     }
 }
