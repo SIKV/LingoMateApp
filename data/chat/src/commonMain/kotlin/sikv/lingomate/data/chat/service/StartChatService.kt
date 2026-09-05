@@ -30,11 +30,11 @@ class StartChatService internal constructor(
     }
 
     suspend fun getSelectedChatModel(): ChatModel? {
-        return selectionStorage.chatModel
+        return selectionStorage.getChatModel()
     }
 
-    fun selectChatModel(chatModel: ChatModel) {
-        selectionStorage.chatModel = chatModel
+    suspend fun selectChatModel(chatModel: ChatModel) {
+        selectionStorage.setChatModel(chatModel)
     }
 
     suspend fun getPracticeLanguages(): List<Language> {
@@ -43,11 +43,11 @@ class StartChatService internal constructor(
     }
 
     suspend fun getSelectedPracticeLanguage(): Language? {
-        return selectionStorage.practiceLanguage
+        return selectionStorage.getPracticeLanguage()
     }
 
-    fun selectPracticeLanguage(practiceLanguage: Language) {
-        selectionStorage.practiceLanguage = practiceLanguage
+    suspend fun selectPracticeLanguage(practiceLanguage: Language) {
+        selectionStorage.setPracticeLanguage(practiceLanguage)
     }
 
     suspend fun getAssistantLanguages(): List<Language> {
@@ -56,11 +56,11 @@ class StartChatService internal constructor(
     }
 
     suspend fun getSelectedAssistantLanguage(): Language? {
-        return selectionStorage.assistantLanguage
+        return selectionStorage.getAssistantLanguage()
     }
 
-    fun selectAssistantLanguage(assistantLanguage: Language) {
-        selectionStorage.assistantLanguage = assistantLanguage
+    suspend fun selectAssistantLanguage(assistantLanguage: Language) {
+        selectionStorage.setAssistantLanguage(assistantLanguage)
     }
 
     suspend fun getPracticeTypes(): List<PracticeType> {
@@ -68,10 +68,10 @@ class StartChatService internal constructor(
     }
 
     suspend fun getSelectedPracticeType(): PracticeType? {
-        return selectionStorage.practiceType
+        return selectionStorage.getPracticeType()
     }
 
-    fun selectPracticeType(practiceType: PracticeType) {
-        selectionStorage.practiceType = practiceType
+    suspend fun selectPracticeType(practiceType: PracticeType) {
+        selectionStorage.setPracticeType(practiceType)
     }
 }

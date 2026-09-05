@@ -7,19 +7,19 @@ class FakeKeyValueStorage : KeyValueStorage {
 
     val entries = mutableMapOf<String, String>()
 
-    override fun put(key: String, value: String) {
+    override suspend fun put(key: String, value: String) {
         entries[key] = value
     }
 
-    override fun get(key: String): String? {
+    override suspend fun get(key: String): String? {
         return entries[key]
     }
 
-    override fun remove(key: String) {
+    override suspend fun remove(key: String) {
         entries.remove(key)
     }
 
-    override fun clear() {
+    override suspend fun clear() {
         entries.clear()
     }
 }

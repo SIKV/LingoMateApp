@@ -1,17 +1,17 @@
 package sikv.lingomate.data.keyvaluestorage
 
 /**
- * Platform-specific key/value storage for values that survive app restarts.
+ * Key/value storage for values that survive app restarts.
  *
- * Implementations persist values in plain, unencrypted OS storage:
- *  - Android: SharedPreferences.
- *  - iOS: NSUserDefaults.
+ * Reads and writes are suspending: they touch the file system, and a write only returns once
+ * the value is durably stored.
  *
- * Nothing secret belongs here; use SecureStorage from `data:apiKeyStorage` for that.
+ * Values are stored unencrypted. Nothing secret belongs here; use SecureStorage from
+ * `data:apiKeyStorage` for that.
  */
 interface KeyValueStorage {
-    fun put(key: String, value: String)
-    fun get(key: String): String?
-    fun remove(key: String)
-    fun clear()
+    suspend fun put(key: String, value: String)
+    suspend fun get(key: String): String?
+    suspend fun remove(key: String)
+    suspend fun clear()
 }

@@ -29,7 +29,9 @@ class StartChatViewModel(
     }
 
     fun selectChatModel(chatModelOption: ChatModelOption) {
-        startChatService.selectChatModel(chatModelOption.chatModel)
+        viewModelScope.launch {
+            startChatService.selectChatModel(chatModelOption.chatModel)
+        }
 
         _uiState.update {
             it.copy(selectedChatModelOption = chatModelOption)
@@ -37,7 +39,9 @@ class StartChatViewModel(
     }
 
     fun selectPracticeLanguage(practiceLanguage: Language) {
-        startChatService.selectPracticeLanguage(practiceLanguage)
+        viewModelScope.launch {
+            startChatService.selectPracticeLanguage(practiceLanguage)
+        }
 
         _uiState.update {
             it.copy(selectedPracticeLanguage = practiceLanguage)
@@ -45,7 +49,9 @@ class StartChatViewModel(
     }
 
     fun selectAssistantLanguage(assistantLanguage: Language) {
-        startChatService.selectAssistantLanguage(assistantLanguage)
+        viewModelScope.launch {
+            startChatService.selectAssistantLanguage(assistantLanguage)
+        }
 
         _uiState.update {
             it.copy(selectedAssistantLanguage = assistantLanguage)
@@ -53,7 +59,9 @@ class StartChatViewModel(
     }
 
     fun selectPracticeType(practiceType: PracticeType) {
-        startChatService.selectPracticeType(practiceType)
+        viewModelScope.launch {
+            startChatService.selectPracticeType(practiceType)
+        }
 
         _uiState.update {
             it.copy(selectedPracticeType = practiceType)

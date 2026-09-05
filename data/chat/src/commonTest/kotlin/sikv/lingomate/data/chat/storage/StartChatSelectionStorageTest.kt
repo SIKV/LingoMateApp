@@ -1,5 +1,6 @@
 package sikv.lingomate.data.chat.storage
 
+import kotlinx.coroutines.test.runTest
 import sikv.lingomate.data.chat.domain.ChatModel
 import sikv.lingomate.data.chat.domain.ChatModelProvider
 import sikv.lingomate.data.chat.domain.Language
@@ -21,54 +22,54 @@ class StartChatSelectionStorageTest {
     }
 
     @Test
-    fun selections_areNullWhenNothingStored() {
-        assertNull(selectionStorage.chatModel)
-        assertNull(selectionStorage.practiceLanguage)
-        assertNull(selectionStorage.assistantLanguage)
-        assertNull(selectionStorage.practiceType)
+    fun selections_areNullWhenNothingStored() = runTest {
+        assertNull(selectionStorage.getChatModel())
+        assertNull(selectionStorage.getPracticeLanguage())
+        assertNull(selectionStorage.getAssistantLanguage())
+        assertNull(selectionStorage.getPracticeType())
     }
 
     @Test
-    fun selections_surviveANewInstance() {
+    fun selections_surviveANewInstance() = runTest {
         val chatModel = ChatModel(provider = ChatModelProvider.OPEN_AI, model = "gpt-5-mini")
 
-        selectionStorage.chatModel = chatModel
-        selectionStorage.practiceLanguage = Language.GERMAN
-        selectionStorage.assistantLanguage = Language.ENGLISH
-        selectionStorage.practiceType = PracticeType.TRANSLATION
+        selectionStorage.setChatModel(chatModel)
+        selectionStorage.setPracticeLanguage(Language.GERMAN)
+        selectionStorage.setAssistantLanguage(Language.ENGLISH)
+        selectionStorage.setPracticeType(PracticeType.TRANSLATION)
 
         val restored = StartChatSelectionStorage(keyValueStorage)
 
-        assertEquals(chatModel, restored.chatModel)
-        assertEquals(Language.GERMAN, restored.practiceLanguage)
-        assertEquals(Language.ENGLISH, restored.assistantLanguage)
-        assertEquals(PracticeType.TRANSLATION, restored.practiceType)
+        assertEquals(chatModel, restored.getChatModel())
+        assertEquals(Language.GERMAN, restored.getPracticeLanguage())
+        assertEquals(Language.ENGLISH, restored.getAssistantLanguage())
+        assertEquals(PracticeType.TRANSLATION, restored.getPracticeType())
     }
 
     @Test
-    fun selections_overwriteThePreviousValue() {
-        selectionStorage.practiceLanguage = Language.GERMAN
-        selectionStorage.practiceLanguage = Language.SPANISH
+    fun selections_overwriteThePreviousValue() = runTest {
+        selectionStorage.setPracticeLanguage(Language.GERMAN)
+        selectionStorage.setPracticeLanguage(Language.SPANISH)
 
-        assertEquals(Language.SPANISH, selectionStorage.practiceLanguage)
+        assertEquals(Language.SPANISH, selectionStorage.getPracticeLanguage())
     }
 
     @Test
-    fun selections_areDroppedWhenSetToNull() {
-        selectionStorage.chatModel = ChatModel(provider = ChatModelProvider.OPEN_AI, model = "gpt-5-mini")
-        selectionStorage.practiceType = PracticeType.CONVERSATION
+    fun selections_areDroppedWhenSetToNull() = runTest {
+        selectionStorage.setChatModel(ChatModel(provider = ChatModelProvider.OPEN_AI, model = "gpt-5-mini"))
+        selectionStorage.setPracticeType(PracticeType.CONVERSATION)
 
-        selectionStorage.chatModel = null
-        selectionStorage.practiceType = null
+        selectionStorage.setChatModel(null)
+        selectionStorage.setPracticeType(null)
 
-        assertNull(selectionStorage.chatModel)
-        assertNull(selectionStorage.practiceType)
+        assertNull(selectionStorage.getChatModel())
+        assertNull(selectionStorage.getPracticeType())
         assertEquals(0, keyValueStorage.entries.size)
     }
 
     @Test
-    fun chatModel_isStoredByProviderNameAndModel() {
-        selectionStorage.chatModel = ChatModel(provider = ChatModelProvider.OPEN_AI, model = "gpt-5-mini")
+    fun chatModel_isStoredByProviderNameAndModel() = runTest {
+        selectionStorage.setChatModel(ChatModel(provider = ChatModelProvider.OPEN_AI, model = "gpt-5-mini"))
 
         assertEquals(
             mapOf(
@@ -80,26 +81,26 @@ class StartChatSelectionStorageTest {
     }
 
     @Test
-    fun chatModel_isNullWhenOnlyPartOfItWasStored() {
+    fun chatModel_isNullWhenOnlyPartOfItWasStored() = runTest {
         keyValueStorage.put("start_chat.chat_model_provider", "OPEN_AI")
 
-        assertNull(selectionStorage.chatModel)
+        assertNull(selectionStorage.getChatModel())
 
         keyValueStorage.clear()
         keyValueStorage.put("start_chat.chat_model", "gpt-5-mini")
 
-        assertNull(selectionStorage.chatModel)
+        assertNull(selectionStorage.getChatModel())
     }
 
     @Test
-    fun selections_areNullWhenTheStoredNameIsNoLongerKnown() {
+    fun selections_areNullWhenTheStoredNameIsNoLongerKnown() = runTest {
         keyValueStorage.put("start_chat.chat_model_provider", "GONE_PROVIDER")
         keyValueStorage.put("start_chat.chat_model", "gpt-5-mini")
         keyValueStorage.put("start_chat.practice_language", "KLINGON")
         keyValueStorage.put("start_chat.practice_type", "DICTATION")
 
-        assertNull(selectionStorage.chatModel)
-        assertNull(selectionStorage.practiceLanguage)
-        assertNull(selectionStorage.practiceType)
+        assertNull(selectionStorage.getChatModel())
+        assertNull(selectionStorage.getPracticeLanguage())
+        assertNull(selectionStorage.getPracticeType())
     }
 }

@@ -44,11 +44,17 @@ kotlin {
             dependencies {
                 implementation(libs.kotlin.stdlib)
                 implementation(libs.koin.core)
+                implementation(libs.kotlinx.coroutines.core)
+                implementation(libs.androidx.datastore.preferencesCore)
+                implementation(libs.okio)
+                implementation(project(":logger"))
             }
         }
         commonTest {
             dependencies {
                 implementation(libs.kotlin.test)
+                implementation(libs.kotlinx.coroutines.test)
+                implementation(libs.okio)
             }
         }
         androidMain {

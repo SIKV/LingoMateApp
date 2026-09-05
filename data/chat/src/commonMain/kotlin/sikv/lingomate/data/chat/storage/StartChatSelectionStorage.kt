@@ -19,33 +19,45 @@ internal class StartChatSelectionStorage(
     private val keyValueStorage: KeyValueStorage,
 ) {
 
-    var chatModel: ChatModel?
-        get() {
-            val provider = keyValueStorage.getEnum<ChatModelProvider>(KEY_CHAT_MODEL_PROVIDER)
-                ?: return null
-            val model = keyValueStorage.get(KEY_CHAT_MODEL) ?: return null
+    suspend fun getChatModel(): ChatModel? {
+        val provider = keyValueStorage.getEnum<ChatModelProvider>(KEY_CHAT_MODEL_PROVIDER)
+            ?: return null
+        val model = keyValueStorage.get(KEY_CHAT_MODEL) ?: return null
 
-            return ChatModel(
-                provider = provider,
-                model = model
-            )
-        }
-        set(value) {
-            keyValueStorage.putOrRemove(KEY_CHAT_MODEL_PROVIDER, value?.provider?.name)
-            keyValueStorage.putOrRemove(KEY_CHAT_MODEL, value?.model)
-        }
+        return ChatModel(
+            provider = provider,
+            model = model
+        )
+    }
 
-    var practiceLanguage: Language?
-        get() = keyValueStorage.getEnum<Language>(KEY_PRACTICE_LANGUAGE)
-        set(value) = keyValueStorage.putOrRemove(KEY_PRACTICE_LANGUAGE, value?.name)
+    suspend fun setChatModel(chatModel: ChatModel?) {
+        keyValueStorage.putOrRemove(KEY_CHAT_MODEL_PROVIDER, chatModel?.provider?.name)
+        keyValueStorage.putOrRemove(KEY_CHAT_MODEL, chatModel?.model)
+    }
 
-    var assistantLanguage: Language?
-        get() = keyValueStorage.getEnum<Language>(KEY_ASSISTANT_LANGUAGE)
-        set(value) = keyValueStorage.putOrRemove(KEY_ASSISTANT_LANGUAGE, value?.name)
+    suspend fun getPracticeLanguage(): Language? {
+        return keyValueStorage.getEnum<Language>(KEY_PRACTICE_LANGUAGE)
+    }
 
-    var practiceType: PracticeType?
-        get() = keyValueStorage.getEnum<PracticeType>(KEY_PRACTICE_TYPE)
-        set(value) = keyValueStorage.putOrRemove(KEY_PRACTICE_TYPE, value?.name)
+    suspend fun setPracticeLanguage(practiceLanguage: Language?) {
+        keyValueStorage.putOrRemove(KEY_PRACTICE_LANGUAGE, practiceLanguage?.name)
+    }
+
+    suspend fun getAssistantLanguage(): Language? {
+        return keyValueStorage.getEnum<Language>(KEY_ASSISTANT_LANGUAGE)
+    }
+
+    suspend fun setAssistantLanguage(assistantLanguage: Language?) {
+        keyValueStorage.putOrRemove(KEY_ASSISTANT_LANGUAGE, assistantLanguage?.name)
+    }
+
+    suspend fun getPracticeType(): PracticeType? {
+        return keyValueStorage.getEnum<PracticeType>(KEY_PRACTICE_TYPE)
+    }
+
+    suspend fun setPracticeType(practiceType: PracticeType?) {
+        keyValueStorage.putOrRemove(KEY_PRACTICE_TYPE, practiceType?.name)
+    }
 
     private companion object {
         const val KEY_CHAT_MODEL_PROVIDER = "start_chat.chat_model_provider"
@@ -57,7 +69,7 @@ internal class StartChatSelectionStorage(
 }
 
 /** Stores [value], or drops the entry when it is null. */
-private fun KeyValueStorage.putOrRemove(key: String, value: String?) {
+private suspend fun KeyValueStorage.putOrRemove(key: String, value: String?) {
     if (value == null) {
         remove(key)
     } else {
@@ -66,7 +78,7 @@ private fun KeyValueStorage.putOrRemove(key: String, value: String?) {
 }
 
 /** Reads the entry as a [T], returning null when it is missing or no longer a known entry. */
-private inline fun <reified T : Enum<T>> KeyValueStorage.getEnum(key: String): T? {
+private suspend inline fun <reified T : Enum<T>> KeyValueStorage.getEnum(key: String): T? {
     val name = get(key) ?: return null
 
     return enumValues<T>().firstOrNull { it.name == name }
