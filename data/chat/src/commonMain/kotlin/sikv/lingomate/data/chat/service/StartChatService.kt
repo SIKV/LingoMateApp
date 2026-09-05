@@ -5,21 +5,16 @@ import sikv.lingomate.data.chat.domain.Language
 import sikv.lingomate.data.chat.domain.PracticeType
 import sikv.lingomate.data.chat.mapping.toChatModels
 import sikv.lingomate.data.chat.mapping.toLanguages
+import sikv.lingomate.data.chat.storage.StartChatSelectionStorage
 import sikv.lingomate.data.config.ConfigRepository
 import sikv.lingomate.logger.Log
 import sikv.lingomate.ondevice.llm.OnDeviceLLM
 
-class StartChatService(
+class StartChatService internal constructor(
     private val configRepository: ConfigRepository,
+    private val selectionStorage: StartChatSelectionStorage,
     private val onDeviceLLM: OnDeviceLLM
 ) {
-
-    // TODO: Implement persistent storage.
-
-    private var selectedChatModel: ChatModel? = null
-    private var selectedPracticeLanguage: Language? = null
-    private var selectedAssistantLanguage: Language? = null
-    private var selectedPracticeType: PracticeType? = null
 
     suspend fun getChatModels(): List<ChatModel> {
         // TODO: Offer the on-device model once OnDeviceLLM is implemented. It cannot come from
@@ -35,11 +30,11 @@ class StartChatService(
     }
 
     suspend fun getSelectedChatModel(): ChatModel? {
-        return selectedChatModel
+        return selectionStorage.chatModel
     }
 
     fun selectChatModel(chatModel: ChatModel) {
-        this.selectedChatModel = chatModel
+        selectionStorage.chatModel = chatModel
     }
 
     suspend fun getPracticeLanguages(): List<Language> {
@@ -48,11 +43,11 @@ class StartChatService(
     }
 
     suspend fun getSelectedPracticeLanguage(): Language? {
-        return selectedPracticeLanguage
+        return selectionStorage.practiceLanguage
     }
 
     fun selectPracticeLanguage(practiceLanguage: Language) {
-        this.selectedPracticeLanguage = practiceLanguage
+        selectionStorage.practiceLanguage = practiceLanguage
     }
 
     suspend fun getAssistantLanguages(): List<Language> {
@@ -61,11 +56,11 @@ class StartChatService(
     }
 
     suspend fun getSelectedAssistantLanguage(): Language? {
-        return selectedAssistantLanguage
+        return selectionStorage.assistantLanguage
     }
 
     fun selectAssistantLanguage(assistantLanguage: Language) {
-        this.selectedAssistantLanguage = assistantLanguage
+        selectionStorage.assistantLanguage = assistantLanguage
     }
 
     suspend fun getPracticeTypes(): List<PracticeType> {
@@ -73,10 +68,10 @@ class StartChatService(
     }
 
     suspend fun getSelectedPracticeType(): PracticeType? {
-        return selectedPracticeType
+        return selectionStorage.practiceType
     }
 
     fun selectPracticeType(practiceType: PracticeType) {
-        this.selectedPracticeType = practiceType
+        selectionStorage.practiceType = practiceType
     }
 }
