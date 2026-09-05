@@ -46,11 +46,14 @@ struct ChatScreen: View {
                     }
                     .padding(.vertical, Spacing.md)
                 }
+                .scrollDismissesKeyboard(.interactively)
                 .onChange(of: chatVM.state.messages.count) {
-                    if let last = chatVM.state.messages.last {
-                        withAnimation {
-                            proxy.scrollTo(last.id, anchor: .bottom)
-                        }
+                    scrollToLastMessage(proxy)
+                }
+                // Keep the latest message visible when the keyboard pushes the list up.
+                .onChange(of: isInputFocused) {
+                    if isInputFocused {
+                        scrollToLastMessage(proxy)
                     }
                 }
             }
@@ -68,7 +71,13 @@ struct ChatScreen: View {
                 .background(.ultraThinMaterial)
                 .overlay(Divider(), alignment: .top)
         }
-        .ignoresSafeArea(.keyboard, edges: .bottom)
+    }
+
+    private func scrollToLastMessage(_ proxy: ScrollViewProxy) {
+        guard let last = chatVM.state.messages.last else { return }
+        withAnimation {
+            proxy.scrollTo(last.id, anchor: .bottom)
+        }
     }
     
     private var inputBar: some View {
