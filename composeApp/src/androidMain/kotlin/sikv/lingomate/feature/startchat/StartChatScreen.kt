@@ -20,7 +20,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -42,9 +41,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -181,17 +182,21 @@ private fun ChatConfigCard(
     onSelectPracticeType: (PracticeType) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val shape = RoundedCornerShape(MaterialTheme.radius.medium)
+
     Column(
         modifier = modifier
             .border(
                 width = 1.dp,
                 color = MaterialTheme.colorScheme.surfaceDim,
-                shape = RoundedCornerShape(MaterialTheme.radius.medium)
+                shape = shape
             )
             .background(
                 color = MaterialTheme.colorScheme.surfaceContainerLow,
-                shape = RoundedCornerShape(MaterialTheme.radius.medium)
+                shape = shape
             )
+            // Clip the card so the row ripples stay inside its rounded corners.
+            .clip(shape)
     ) {
         SelectorRow(
             label = stringResource(R.string.start_chat_chat_model_label),
@@ -408,6 +413,9 @@ fun StartChatButton(
     enabled: Boolean = true,
     onClick: () -> Unit
 ) {
+    val shape = RoundedCornerShape(MaterialTheme.radius.extraMedium)
+    val glowColor = MaterialTheme.colorScheme.tertiary
+
     val colors = listOf(
         MaterialTheme.colorScheme.primary,
         MaterialTheme.colorScheme.tertiary
@@ -431,28 +439,60 @@ fun StartChatButton(
         tileMode = TileMode.Mirror
     )
 
+    val backgroundModifier = if (enabled) {
+        Modifier
+            // A colored shadow spreading past the edges reads as the button glowing.
+            .shadow(
+                elevation = 16.dp,
+                shape = shape,
+                ambientColor = glowColor,
+                spotColor = glowColor
+            )
+            .background(brush, shape = shape)
+            // A brighter top edge fading downwards reads as light falling on the button.
+            .border(
+                width = 1.dp,
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        Color.White.copy(alpha = 0.45f),
+                        Color.White.copy(alpha = 0.05f)
+                    )
+                ),
+                shape = shape
+            )
+    } else {
+        Modifier.background(
+            color = MaterialTheme.colorScheme.surfaceContainerHighest,
+            shape = shape
+        )
+    }
+
+    val contentColor = if (enabled) {
+        MaterialTheme.colorScheme.onPrimary
+    } else {
+        MaterialTheme.colorScheme.onSurfaceVariant
+    }
+
     Box(
         modifier = modifier
             .height(64.dp)
-            .alpha(if (enabled) 1f else 0.5f)
-            .background(brush, shape = RoundedCornerShape(MaterialTheme.radius.extraMedium))
+            .then(backgroundModifier)
+            .clip(shape)
             .clickable(enabled = enabled, onClick = onClick),
         contentAlignment = Alignment.Center
     ) {
         Text(
             text = stringResource(R.string.start_chat_start_button),
-            color = MaterialTheme.colorScheme.onPrimary,
+            color = contentColor,
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Black,
             modifier = Modifier.align(Alignment.Center)
         )
 
-        Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
-
         Icon(
             painter = painterResource(R.drawable.ic_auto_awesome_24),
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.onPrimary,
+            tint = contentColor,
             modifier = Modifier
                 .align(Alignment.CenterEnd)
                 .padding(horizontal = MaterialTheme.spacing.extraMedium)
