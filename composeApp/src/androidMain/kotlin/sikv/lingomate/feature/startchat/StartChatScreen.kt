@@ -6,6 +6,7 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -42,6 +43,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
@@ -135,19 +137,25 @@ private fun Header(
         modifier = modifier
     ) {
         if (showIcon) {
+            // Launcher layers are 108dp with the visible 72dp in the middle, so scale up to match the app icon.
             Box(
-                contentAlignment = Alignment.Center,
                 modifier = Modifier
                     .size(72.dp)
-                    .background(
-                        color = MaterialTheme.colorScheme.primaryContainer,
-                        shape = CircleShape
-                    )
+                    .clip(CircleShape)
             ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_auto_awesome_24),
+                Image(
+                    painter = painterResource(R.mipmap.ic_launcher_background),
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onPrimaryContainer
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .scale(1.5f)
+                )
+                Image(
+                    painter = painterResource(R.mipmap.ic_launcher_foreground),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .scale(1.5f)
                 )
             }
 
