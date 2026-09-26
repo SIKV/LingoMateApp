@@ -1,4 +1,4 @@
-<img width="128" height="128" src="https://github.com/user-attachments/assets/a71bb89f-e794-401f-b43f-d50d85dfc3f1" />
+<img width="148" height="148" src="https://github.com/user-attachments/assets/4ff309bf-8f92-48bb-b586-f8ad79440963" />
 
 # LingoMate
 
@@ -26,11 +26,11 @@ Shared code is split into small modules rather than one monolithic
 ## Screenshots
 
 #### Android
-<img width="250" src="https://github.com/user-attachments/assets/2ce1058a-da6b-4863-9357-998c3f3b1ea6" />
+<img width="250" src="https://github.com/user-attachments/assets/2d744e11-8c6e-4d32-8898-b399ca11c36c" />
 <img width="250" src="https://github.com/user-attachments/assets/59a7349a-5312-4e19-a21c-3a7c554aa87f" />
 
 #### iOS
-<img width="250" src="https://github.com/user-attachments/assets/f5fe9b20-f0ab-4569-996c-57e2b7cae375" />
+<img width="250" src="https://github.com/user-attachments/assets/3853baa4-9bfd-43a6-9764-a2ad77ff79cb" />
 <img width="250" src="https://github.com/user-attachments/assets/11cd875a-18c2-42a5-9417-004a63e15c8a" />
 
 ## Remote config
