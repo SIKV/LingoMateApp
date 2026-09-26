@@ -1,3 +1,5 @@
+<img width="128" height="128" src="https://github.com/user-attachments/assets/a71bb89f-e794-401f-b43f-d50d85dfc3f1" />
+
 # LingoMate
 
 ### 🚧 Work in progress 🚧
