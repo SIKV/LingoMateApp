@@ -49,14 +49,11 @@ struct StartChatScreen: View {
     private func header(showIcon: Bool) -> some View {
         VStack(spacing: Spacing.md) {
             if showIcon {
-                ZStack {
-                    Circle()
-                        .fill(Color.accentColor.opacity(0.12))
-                        .frame(width: 72, height: 72)
-                    Image(systemName: "sparkles")
-                        .foregroundStyle(Color.accentColor)
-                        .font(.system(size: 28, weight: .semibold))
-                }
+                Image("Logo")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 72, height: 72)
+                    .clipShape(Circle())
             }
 
             Text(L10n.startChatGreeting)
