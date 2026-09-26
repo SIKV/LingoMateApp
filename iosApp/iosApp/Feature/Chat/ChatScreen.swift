@@ -18,6 +18,13 @@ struct ChatScreen: View {
     private var canSend: Bool {
         !inputText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && !isSending
     }
+    // Replies update the last message in place (same id, growing text) rather than appending
+    // a new one, so watching just the message count misses that change. Track id/text/status
+    // together to re-scroll whenever the visible content actually changes.
+    private var lastMessageSignature: String {
+        guard let last = chatVM.state.messages.last else { return "" }
+        return "\(last.id)-\(last.text)-\(last.status)"
+    }
     
     init(chatConfig: ChatConfig) {
         self.chatConfig = chatConfig
@@ -47,7 +54,7 @@ struct ChatScreen: View {
                     .padding(.vertical, Spacing.md)
                 }
                 .scrollDismissesKeyboard(.interactively)
-                .onChange(of: chatVM.state.messages.count) {
+                .onChange(of: lastMessageSignature) {
                     scrollToLastMessage(proxy)
                 }
                 // Keep the latest message visible when the keyboard pushes the list up.
