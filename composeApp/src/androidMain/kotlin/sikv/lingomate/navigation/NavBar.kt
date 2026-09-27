@@ -1,7 +1,7 @@
 package sikv.lingomate.navigation
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -36,7 +36,7 @@ private fun AppRoute.icon(): Painter {
     return when (this) {
         // Mirrors the icon in the start chat screen header.
         AppRoute.Chat -> painterResource(R.drawable.ic_auto_awesome_24)
-        AppRoute.More -> rememberVectorPainter(Icons.Default.Menu)
+        AppRoute.More -> rememberVectorPainter(Icons.Default.MoreHoriz)
     }
 }
 
