@@ -84,4 +84,11 @@ enum L10n {
             provider
         )
     }
+
+    static func moreAppVersion(_ version: String) -> String {
+        String(
+            format: String(localized: "more_app_version"),
+            version
+        )
+    }
 }

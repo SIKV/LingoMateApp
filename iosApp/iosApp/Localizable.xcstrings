@@ -532,6 +532,17 @@
         }
       }
     },
+    "more_app_version" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version %@"
+          }
+        }
+      }
+    },
     "more_manage_api_keys_subtitle" : {
       "extractionState" : "manual",
       "localizations" : {

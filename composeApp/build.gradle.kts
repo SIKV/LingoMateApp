@@ -52,7 +52,10 @@ android {
         minSdk = Configs.ANDROID_MIN_SDK
         targetSdk = Configs.ANDROID_TARGET_SDK
         versionCode = 1
-        versionName = "1.0"
+        versionName = "0.1.0"
+    }
+    buildFeatures {
+        buildConfig = true
     }
     packaging {
         resources {

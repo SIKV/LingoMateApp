@@ -18,6 +18,16 @@ struct MoreView: View {
                 }
             }
         }
+        .safeAreaInset(edge: .bottom) {
+            Text(L10n.moreAppVersion(appVersion))
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+                .padding(.bottom, Spacing.sm)
+        }
         .navigationTitle(L10n.moreTitle)
+    }
+
+    private var appVersion: String {
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? ""
     }
 }
