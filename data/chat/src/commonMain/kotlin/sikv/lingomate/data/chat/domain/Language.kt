@@ -9,26 +9,29 @@ import kotlin.native.ObjCName
  */
 @Serializable
 @ObjCName("Language", exact = true)
-enum class Language {
-    ARABIC,
-    CZECH,
-    DANISH,
-    DUTCH,
-    ENGLISH,
-    FINNISH,
-    FRENCH,
-    GERMAN,
-    GREEK,
-    HUNGARIAN,
-    ITALIAN,
-    JAPANESE,
-    KOREAN,
-    NORWEGIAN,
-    POLISH,
-    PORTUGUESE,
-    ROMANIAN,
-    SPANISH,
-    SWEDISH,
-    TURKISH,
-    UKRAINIAN,
+enum class Language(
+    // Flag of the country most associated with the language, shown next to its name.
+    val flagEmoji: String
+) {
+    ARABIC("🇸🇦"),
+    CZECH("🇨🇿"),
+    DANISH("🇩🇰"),
+    DUTCH("🇳🇱"),
+    ENGLISH("🇬🇧"),
+    FINNISH("🇫🇮"),
+    FRENCH("🇫🇷"),
+    GERMAN("🇩🇪"),
+    GREEK("🇬🇷"),
+    HUNGARIAN("🇭🇺"),
+    ITALIAN("🇮🇹"),
+    JAPANESE("🇯🇵"),
+    KOREAN("🇰🇷"),
+    NORWEGIAN("🇳🇴"),
+    POLISH("🇵🇱"),
+    PORTUGUESE("🇵🇹"),
+    ROMANIAN("🇷🇴"),
+    SPANISH("🇪🇸"),
+    SWEDISH("🇸🇪"),
+    TURKISH("🇹🇷"),
+    UKRAINIAN("🇺🇦"),
 }

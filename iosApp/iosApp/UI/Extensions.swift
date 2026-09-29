@@ -5,11 +5,13 @@ extension GeometryProxy {
     var isLandscape: Bool { size.width > size.height }
 }
 
-extension ChatModelOption {
-    var localizedName: LocalizedStringKey {
-        switch chatModel.provider {
-        case .onDevice: return L10n.chatModelProviderOnDevice
-        default: return LocalizedStringKey(chatModel.model)
+extension ChatModelProvider {
+    var localizedNameString: String {
+        switch self {
+        case .onDevice: return NSLocalizedString("chat_model_provider_on_device", comment: "")
+        case .openAi: return NSLocalizedString("chat_model_provider_open_ai", comment: "")
+        default:
+            fatalError("Unknown ChatModelProvider value: \(self)")
         }
     }
 }
@@ -42,6 +44,10 @@ extension Language {
             fatalError("Unknown Language value: \(self)")
         }
     }
+
+    var localizedNameWithFlag: Text {
+        Text(verbatim: "\(flagEmoji) ") + Text(localizedName)
+    }
 }
 
 extension PracticeType {
@@ -49,6 +55,15 @@ extension PracticeType {
         switch self {
         case .conversation: return L10n.practiceTypeConversation
         case .translation: return L10n.practiceTypeTranslation
+        default:
+            fatalError("Unknown PracticeType value: \(self)")
+        }
+    }
+
+    var localizedDescription: LocalizedStringKey {
+        switch self {
+        case .conversation: return L10n.practiceTypeConversationDescription
+        case .translation: return L10n.practiceTypeTranslationDescription
         default:
             fatalError("Unknown PracticeType value: \(self)")
         }

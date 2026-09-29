@@ -7,11 +7,15 @@ import sikv.lingomate.data.apikeystorage.ApiKeyProvider
 import sikv.lingomate.data.chat.domain.ChatModelProvider
 import sikv.lingomate.data.chat.domain.Language
 import sikv.lingomate.data.chat.domain.PracticeType
-import sikv.lingomate.feature.startchat.ChatModelOption
 
 @Composable
 fun Language.toLocalizedString(): String {
     return stringResource(languageNameRes)
+}
+
+@Composable
+fun Language.toLocalizedStringWithFlag(): String {
+    return "$flagEmoji ${toLocalizedString()}"
 }
 
 private val Language.languageNameRes: Int
@@ -48,10 +52,18 @@ fun PracticeType.toLocalizedString(): String {
 }
 
 @Composable
-fun ChatModelOption.toLocalizedString(): String {
-    return when (chatModel.provider) {
+fun PracticeType.toLocalizedDescription(): String {
+    return when (this) {
+        PracticeType.CONVERSATION -> stringResource(R.string.practice_type_conversation_description)
+        PracticeType.TRANSLATION -> stringResource(R.string.practice_type_translation_description)
+    }
+}
+
+@Composable
+fun ChatModelProvider.toLocalizedString(): String {
+    return when (this) {
         ChatModelProvider.ON_DEVICE -> stringResource(R.string.chat_model_provider_on_device)
-        ChatModelProvider.OPEN_AI -> chatModel.model
+        ChatModelProvider.OPEN_AI -> stringResource(R.string.chat_model_provider_open_ai)
     }
 }
 
