@@ -10,9 +10,10 @@ struct StartChatButton: View {
         Button(action: action) {
             HStack(spacing: Spacing.sm) {
                 Image(systemName: "sparkles")
+                    .font(.system(size: 24, weight: .bold))
                 Text(L10n.startChatStartButton)
             }
-            .font(.system(size: 19, weight: .semibold, design: .rounded))
+            .font(.system(size: 22, weight: .bold, design: .rounded))
             .foregroundStyle(enabled ? AnyShapeStyle(.white) : AnyShapeStyle(.tertiary))
             .frame(maxWidth: .infinity, minHeight: 60)
             .background {
