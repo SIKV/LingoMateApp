@@ -43,6 +43,7 @@ fun LingoMateTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
+        typography = Typography,
         content = content
     )
 }

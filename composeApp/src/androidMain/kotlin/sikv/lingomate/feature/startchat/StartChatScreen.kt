@@ -1,6 +1,5 @@
 package sikv.lingomate.feature.startchat
 
-import androidx.annotation.DrawableRes
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -28,6 +27,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.Key
 import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -51,12 +51,12 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TileMode
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.compose.viewmodel.koinViewModel
 import sikv.lingomate.R
@@ -232,7 +232,7 @@ private fun ChatConfigCard(
             menuAction = if (state.chatModelOptions.any { it.apiKeyNeeded }) {
                 SelectorMenuAction(
                     title = stringResource(R.string.start_chat_api_key_hint),
-                    iconRes = R.drawable.ic_key_24,
+                    icon = Icons.Rounded.Key,
                     onClick = onNavigateToManageApiKeys
                 )
             } else {
@@ -319,9 +319,7 @@ private fun <T : Any> SelectorRow(
                 Text(
                     text = selected?.let { optionLabel(it) }
                         ?: stringResource(R.string.start_chat_not_selected),
-                    // Between titleMedium and titleLarge, the same size as the iOS row value.
-                    style = MaterialTheme.typography.titleLarge.copy(fontSize = 20.sp, lineHeight = 26.sp),
-                    fontWeight = FontWeight.Medium,
+                    style = MaterialTheme.typography.titleMedium,
                     color = if (selected != null) {
                         MaterialTheme.colorScheme.onSurface
                     } else {
@@ -392,7 +390,7 @@ private fun <T : Any> SelectorRow(
                     text = { Text(menuAction.title) },
                     leadingIcon = {
                         Icon(
-                            painter = painterResource(menuAction.iconRes),
+                            imageVector = menuAction.icon,
                             contentDescription = null
                         )
                     },
@@ -410,7 +408,7 @@ private fun <T : Any> SelectorRow(
 // Trailing action shown after a divider at the bottom of a selector menu.
 private class SelectorMenuAction(
     val title: String,
-    @DrawableRes val iconRes: Int,
+    val icon: ImageVector,
     val onClick: () -> Unit
 )
 
