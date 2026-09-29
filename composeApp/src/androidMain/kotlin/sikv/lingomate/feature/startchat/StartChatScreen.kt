@@ -1,5 +1,6 @@
 package sikv.lingomate.feature.startchat
 
+import androidx.annotation.DrawableRes
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -32,6 +33,7 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -54,13 +56,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.compose.viewmodel.koinViewModel
 import sikv.lingomate.R
 import sikv.lingomate.data.chat.domain.ChatConfig
 import sikv.lingomate.data.chat.domain.Language
 import sikv.lingomate.data.chat.domain.PracticeType
+import sikv.lingomate.feature.toLocalizedDescription
 import sikv.lingomate.feature.toLocalizedString
+import sikv.lingomate.feature.toLocalizedStringWithFlag
 import sikv.lingomate.ui.isLandscape
 import sikv.lingomate.ui.theme.radius
 import sikv.lingomate.ui.theme.spacing
@@ -211,22 +216,25 @@ private fun ChatConfigCard(
             options = state.chatModelOptions,
             selected = state.selectedChatModelOption,
             onSelect = onSelectChatModelOption,
-            optionLabel = { it.toLocalizedString() },
-            optionNote = { option ->
+            optionLabel = { it.chatModel.model },
+            optionDescription = { option ->
+                val provider = option.chatModel.provider.toLocalizedString()
+
+                // Name the provider either way, so it's clear whose key to add.
                 if (option.apiKeyNeeded) {
-                    stringResource(R.string.start_chat_no_api_key)
+                    stringResource(R.string.start_chat_add_provider_key, provider)
                 } else {
-                   null
+                    provider
                 }
             },
             optionEnabled = { !it.apiKeyNeeded },
-            menuFooter = if (state.chatModelOptions.any { it.apiKeyNeeded }) {
-                {
-                    MenuHint(
-                        text = stringResource(R.string.start_chat_api_key_hint),
-                        onClick = onNavigateToManageApiKeys
-                    )
-                }
+            // Offer a way out only when a key is what's missing.
+            menuAction = if (state.chatModelOptions.any { it.apiKeyNeeded }) {
+                SelectorMenuAction(
+                    title = stringResource(R.string.start_chat_api_key_hint),
+                    iconRes = R.drawable.ic_key_24,
+                    onClick = onNavigateToManageApiKeys
+                )
             } else {
                 null
             }
@@ -239,7 +247,7 @@ private fun ChatConfigCard(
             options = state.practiceLanguages,
             selected = state.selectedPracticeLanguage,
             onSelect = onSelectPracticeLanguage,
-            optionLabel = { it.toLocalizedString() }
+            optionLabel = { it.toLocalizedStringWithFlag() }
         )
 
         SelectorDivider()
@@ -249,7 +257,7 @@ private fun ChatConfigCard(
             options = state.assistantLanguages,
             selected = state.selectedAssistantLanguage,
             onSelect = onSelectAssistantLanguage,
-            optionLabel = { it.toLocalizedString() }
+            optionLabel = { it.toLocalizedStringWithFlag() }
         )
 
         SelectorDivider()
@@ -259,7 +267,8 @@ private fun ChatConfigCard(
             options = state.practiceTypes,
             selected = state.selectedPracticeType,
             onSelect = onSelectPracticeType,
-            optionLabel = { it.toLocalizedString() }
+            optionLabel = { it.toLocalizedString() },
+            optionDescription = { it.toLocalizedDescription() }
         )
     }
 }
@@ -280,9 +289,10 @@ private fun <T : Any> SelectorRow(
     onSelect: (T) -> Unit,
     optionLabel: @Composable (T) -> String,
     modifier: Modifier = Modifier,
-    optionNote: @Composable (T) -> String? = { null },
+    // Shown under the option in the menu only, the row keeps showing just the label.
+    optionDescription: @Composable (T) -> String? = { null },
     optionEnabled: (T) -> Boolean = { true },
-    menuFooter: @Composable (() -> Unit)? = null
+    menuAction: SelectorMenuAction? = null
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -300,7 +310,7 @@ private fun <T : Any> SelectorRow(
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = label,
-                    style = MaterialTheme.typography.labelMedium,
+                    style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
@@ -309,7 +319,8 @@ private fun <T : Any> SelectorRow(
                 Text(
                     text = selected?.let { optionLabel(it) }
                         ?: stringResource(R.string.start_chat_not_selected),
-                    style = MaterialTheme.typography.bodyLarge,
+                    // Between titleMedium and titleLarge, the same size as the iOS row value.
+                    style = MaterialTheme.typography.titleLarge.copy(fontSize = 20.sp, lineHeight = 26.sp),
                     fontWeight = FontWeight.Medium,
                     color = if (selected != null) {
                         MaterialTheme.colorScheme.onSurface
@@ -331,14 +342,33 @@ private fun <T : Any> SelectorRow(
             onDismissRequest = { expanded = false }
         ) {
             options.forEach { option ->
-                val note = optionNote(option)
+                val description = optionDescription(option)
+                val enabled = optionEnabled(option)
 
                 DropdownMenuItem(
-                    text = { Text(optionLabel(option)) },
-                    enabled = optionEnabled(option),
-                    trailingIcon = if (note != null) {
-                        { OptionNoteBadge(note) }
-                    } else if (option == selected) {
+                    text = {
+                        if (description != null) {
+                            Column(
+                                modifier = Modifier.padding(vertical = MaterialTheme.spacing.small)
+                            ) {
+                                Text(optionLabel(option))
+                                Text(
+                                    text = description,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    // A disabled item dims its description along with its label.
+                                    color = if (enabled) {
+                                        MaterialTheme.colorScheme.onSurfaceVariant
+                                    } else {
+                                        LocalContentColor.current
+                                    }
+                                )
+                            }
+                        } else {
+                            Text(optionLabel(option))
+                        }
+                    },
+                    enabled = enabled,
+                    trailingIcon = if (option == selected) {
                         {
                             Icon(
                                 imageVector = Icons.Rounded.Check,
@@ -356,55 +386,33 @@ private fun <T : Any> SelectorRow(
                 )
             }
 
-            if (menuFooter != null) {
+            if (menuAction != null) {
                 HorizontalDivider(color = MaterialTheme.colorScheme.surfaceDim)
-                menuFooter()
+                DropdownMenuItem(
+                    text = { Text(menuAction.title) },
+                    leadingIcon = {
+                        Icon(
+                            painter = painterResource(menuAction.iconRes),
+                            contentDescription = null
+                        )
+                    },
+                    onClick = {
+                        // Close first, so the menu doesn't linger over the screen the action opens.
+                        expanded = false
+                        menuAction.onClick()
+                    }
+                )
             }
         }
     }
 }
 
-@Composable
-private fun MenuHint(
-    text: String,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Text(
-        text = text,
-        style = MaterialTheme.typography.bodySmall,
-        color = MaterialTheme.colorScheme.primary,
-        textAlign = TextAlign.Center,
-        modifier = modifier
-            .clickable(onClick = onClick)
-            .fillMaxSize()
-            .padding(
-                horizontal = MaterialTheme.spacing.small,
-                vertical = MaterialTheme.spacing.small
-            )
-    )
-}
-
-@Composable
-private fun OptionNoteBadge(
-    text: String,
-    modifier: Modifier = Modifier
-) {
-    Text(
-        text = text,
-        style = MaterialTheme.typography.labelSmall,
-        color = MaterialTheme.colorScheme.onSurfaceVariant,
-        modifier = modifier
-            .background(
-                color = MaterialTheme.colorScheme.surfaceContainerHighest,
-                shape = CircleShape
-            )
-            .padding(
-                horizontal = MaterialTheme.spacing.small,
-                vertical = MaterialTheme.spacing.extraSmall
-            )
-    )
-}
+// Trailing action shown after a divider at the bottom of a selector menu.
+private class SelectorMenuAction(
+    val title: String,
+    @DrawableRes val iconRes: Int,
+    val onClick: () -> Unit
+)
 
 private fun StartChatState.toChatConfig(): ChatConfig? {
     return ChatConfig(

@@ -78,10 +78,14 @@ struct StartChatScreen: View {
             SelectorRow(
                 label: L10n.startChatChatModelLabel,
                 options: startChatVM.state.chatModelOptions,
-                selectedLabel: startChatVM.state.selectedChatModelOption?.localizedName,
-                optionLabel: { $0.localizedName },
+                selectedLabel: startChatVM.state.selectedChatModelOption.map { Text(verbatim: $0.chatModel.model) },
+                optionLabel: { Text(verbatim: $0.chatModel.model) },
                 onSelect: startChatVM.selectChatModel,
-                optionNote: { $0.apiKeyNeeded ? L10n.startChatNoApiKey : nil },
+                optionNote: { option in
+                    let provider = option.chatModel.provider.localizedNameString
+                    // Name the provider either way, so it's clear whose key to add.
+                    return Text(verbatim: option.apiKeyNeeded ? L10n.startChatAddProviderKey(provider) : provider)
+                },
                 isOptionEnabled: { !$0.apiKeyNeeded },
                 // Offer a way out only when a key is what's missing.
                 menuAction: anyApiKeyNeeded
@@ -98,8 +102,8 @@ struct StartChatScreen: View {
             SelectorRow(
                 label: L10n.startChatPracticeLanguageLabel,
                 options: startChatVM.state.practiceLanguages,
-                selectedLabel: startChatVM.state.selectedPracticeLanguage?.localizedName,
-                optionLabel: { $0.localizedName },
+                selectedLabel: startChatVM.state.selectedPracticeLanguage?.localizedNameWithFlag,
+                optionLabel: { $0.localizedNameWithFlag },
                 onSelect: startChatVM.selectPracticeLanguage
             )
 
@@ -108,8 +112,8 @@ struct StartChatScreen: View {
             SelectorRow(
                 label: L10n.startChatAssistantLanguageLabel,
                 options: startChatVM.state.assistantLanguages,
-                selectedLabel: startChatVM.state.selectedAssistantLanguage?.localizedName,
-                optionLabel: { $0.localizedName },
+                selectedLabel: startChatVM.state.selectedAssistantLanguage?.localizedNameWithFlag,
+                optionLabel: { $0.localizedNameWithFlag },
                 onSelect: startChatVM.selectAssistantLanguage
             )
 
@@ -118,9 +122,10 @@ struct StartChatScreen: View {
             SelectorRow(
                 label: L10n.startChatPracticeTypeLabel,
                 options: startChatVM.state.practiceTypes,
-                selectedLabel: startChatVM.state.selectedPracticeType?.localizedName,
-                optionLabel: { $0.localizedName },
-                onSelect: startChatVM.selectPracticeType
+                selectedLabel: startChatVM.state.selectedPracticeType.map { Text($0.localizedName) },
+                optionLabel: { Text($0.localizedName) },
+                onSelect: startChatVM.selectPracticeType,
+                optionNote: { Text($0.localizedDescription) }
             )
         }
         .background(
@@ -144,12 +149,12 @@ struct StartChatScreen: View {
 private struct SelectorRow<Option>: View {
     let label: LocalizedStringKey
     let options: [Option]
-    let selectedLabel: LocalizedStringKey?
-    let optionLabel: (Option) -> LocalizedStringKey
+    let selectedLabel: Text?
+    let optionLabel: (Option) -> Text
     let onSelect: (Option) -> Void
 
-    /// Secondary line under an option, explaining why it reads the way it does.
-    var optionNote: (Option) -> LocalizedStringKey? = { _ in nil }
+    /// Secondary line under an option in the menu, such as its provider or what it means.
+    var optionNote: (Option) -> Text? = { _ in nil }
     var isOptionEnabled: (Option) -> Bool = { _ in true }
     var menuAction: SelectorMenuAction?
 
@@ -160,11 +165,11 @@ private struct SelectorRow<Option>: View {
                     Button {
                         onSelect(option)
                     } label: {
-                        Text(optionLabel(option))
+                        optionLabel(option)
 
                         // A second label becomes the menu item's subtitle.
                         if let note = optionNote(option) {
-                            Text(note)
+                            note
                         }
                     }
                     .disabled(!isOptionEnabled(option))
@@ -187,7 +192,7 @@ private struct SelectorRow<Option>: View {
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
 
-                    Text(selectedLabel ?? L10n.startChatNotSelected)
+                    (selectedLabel ?? Text(L10n.startChatNotSelected))
                         .font(.title3.weight(.medium))
                         .foregroundStyle(selectedLabel == nil ? .secondary : .primary)
                 }

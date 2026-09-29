@@ -290,6 +290,17 @@
         }
       }
     },
+    "chat_model_provider_open_ai" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OpenAI"
+          }
+        }
+      }
+    },
     "chat_type_message_hint" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -587,6 +598,17 @@
         }
       }
     },
+    "practice_type_conversation_description" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chat about real-life situations."
+          }
+        }
+      }
+    },
     "practice_type_translation" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -598,13 +620,24 @@
         }
       }
     },
+    "practice_type_translation_description" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Translate sentences into your practice language."
+          }
+        }
+      }
+    },
     "start_chat_api_key_hint" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Manage API keys…"
+            "value" : "Manage API keys"
           }
         }
       }
@@ -642,13 +675,13 @@
         }
       }
     },
-    "start_chat_no_api_key" : {
+    "start_chat_add_provider_key" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No API key"
+            "value" : "Add your %@ key to unlock"
           }
         }
       }

@@ -27,7 +27,8 @@ enum L10n {
     static let languageUkrainian = LocalizedStringKey("language_ukrainian")
     static let practiceTypeConversation = LocalizedStringKey("practice_type_conversation")
     static let practiceTypeTranslation = LocalizedStringKey("practice_type_translation")
-    static let chatModelProviderOnDevice = LocalizedStringKey("chat_model_provider_on_device")
+    static let practiceTypeConversationDescription = LocalizedStringKey("practice_type_conversation_description")
+    static let practiceTypeTranslationDescription = LocalizedStringKey("practice_type_translation_description")
 
     static let startChatGreeting = LocalizedStringKey("start_chat_greeting")
     static let startChatInfo = LocalizedStringKey("start_chat_info")
@@ -37,7 +38,6 @@ enum L10n {
     static let startChatAssistantLanguageLabel = LocalizedStringKey("start_chat_assistant_language_label")
     static let startChatPracticeTypeLabel = LocalizedStringKey("start_chat_practice_type_label")
     static let startChatNotSelected = LocalizedStringKey("start_chat_not_selected")
-    static let startChatNoApiKey = LocalizedStringKey("start_chat_no_api_key")
     static let startChatApiKeyHint = LocalizedStringKey("start_chat_api_key_hint")
     
     static let chatMessageStatusDelivered = LocalizedStringKey("chat_message_status_delivered")
@@ -68,6 +68,14 @@ enum L10n {
     static let manageApiKeysReplaceConfirmTitle = LocalizedStringKey("manage_api_keys_replace_confirm_title")
     static let manageApiKeysReplaceConfirmButton = LocalizedStringKey("manage_api_keys_replace_confirm_button")
     static let manageApiKeysDeleteConfirmTitle = LocalizedStringKey("manage_api_keys_delete_confirm_title")
+
+    /// Note under a model that can't be picked yet, naming the provider whose key is missing.
+    static func startChatAddProviderKey(_ provider: String) -> String {
+        String(
+            format: String(localized: "start_chat_add_provider_key"),
+            provider
+        )
+    }
 
     /// Confirmation body naming the provider whose key is about to be overwritten.
     static func manageApiKeysReplaceConfirmMessage(_ provider: String) -> String {
