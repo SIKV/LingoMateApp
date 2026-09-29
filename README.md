@@ -26,11 +26,11 @@ Shared code is split into small modules rather than one monolithic
 ## Screenshots
 
 #### Android
-<img width="250" src="https://github.com/user-attachments/assets/2d744e11-8c6e-4d32-8898-b399ca11c36c" />
+<img width="250" src="https://github.com/user-attachments/assets/b7a4cb4c-be18-4fca-a643-0072ecb69696" />
 <img width="250" src="https://github.com/user-attachments/assets/59a7349a-5312-4e19-a21c-3a7c554aa87f" />
 
 #### iOS
-<img width="250" src="https://github.com/user-attachments/assets/3853baa4-9bfd-43a6-9764-a2ad77ff79cb" />
+<img width="250" src="https://github.com/user-attachments/assets/6a2ad3a5-6359-463b-a1fc-b82e059327de" />
 <img width="250" src="https://github.com/user-attachments/assets/11cd875a-18c2-42a5-9417-004a63e15c8a" />
 
 ## Remote config
