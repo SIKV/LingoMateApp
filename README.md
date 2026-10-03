@@ -41,10 +41,6 @@ published to GitHub Pages by the `publish-remote-config` workflow on every push 
 that touches it, and is fetched at runtime. There is a bundled fallback for when the fetch
 fails, so the app still starts offline.
 
-The app caches the last config it fetched and starts with it, refreshing the cache in the
-background. A published change therefore shows up on the second launch after it reaches a
-device, not the first. Only a launch with nothing cached yet waits for the fetch.
-
 ## Adding your API key
 
 The key is entered in the app, not at build time: open **Manage API keys** and paste it
