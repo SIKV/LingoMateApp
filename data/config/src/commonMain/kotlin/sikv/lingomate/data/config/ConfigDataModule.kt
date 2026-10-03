@@ -15,6 +15,7 @@ val configDataModule = module {
             remoteConfigDataSource = get(),
             cachedConfigDataSource = get(),
             fallbackConfigDataSource = get(),
+            // Lives as long as the app, so the refresh isn't tied to the caller's scope.
             refreshScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
         )
     }
