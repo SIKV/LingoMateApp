@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidKotlinMultiplatformLibrary)
+    alias(libs.plugins.kotlinSerialization)
 }
 
 kotlin {
@@ -43,13 +44,18 @@ kotlin {
                 implementation(libs.kotlin.stdlib)
                 implementation(libs.koin.core)
                 implementation(libs.kotlinx.coroutines.core)
+                implementation(libs.kotlinx.serialization.json)
                 implementation(project(":api:remoteConfig"))
+                implementation(project(":data:keyValueStorage"))
                 implementation(project(":logger"))
             }
         }
         commonTest {
             dependencies {
                 implementation(libs.kotlin.test)
+                implementation(libs.kotlinx.coroutines.test)
+                implementation(libs.ktor.client.core)
+                implementation(libs.ktor.client.mock)
             }
         }
         androidMain {
