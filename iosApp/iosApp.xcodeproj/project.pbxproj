@@ -11,6 +11,7 @@
 		C52A1E052ECFAE390006A82C /* KMPNativeCoroutinesCombine in Frameworks */ = {isa = PBXBuildFile; productRef = C52A1E042ECFAE390006A82C /* KMPNativeCoroutinesCombine */; };
 		C52A1E072ECFAE390006A82C /* KMPNativeCoroutinesCore in Frameworks */ = {isa = PBXBuildFile; productRef = C52A1E062ECFAE390006A82C /* KMPNativeCoroutinesCore */; };
 		C52A1E092ECFAE390006A82C /* KMPNativeCoroutinesRxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = C52A1E082ECFAE390006A82C /* KMPNativeCoroutinesRxSwift */; };
+		C5C86D703071711A00DB32CB /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = C5C86D6F3071711A00DB32CB /* Sentry */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +49,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C5C86D703071711A00DB32CB /* Sentry in Frameworks */,
 				C52A1E032ECFAE390006A82C /* KMPNativeCoroutinesAsync in Frameworks */,
 				C52A1E052ECFAE390006A82C /* KMPNativeCoroutinesCombine in Frameworks */,
 				C52A1E072ECFAE390006A82C /* KMPNativeCoroutinesCore in Frameworks */,
@@ -100,6 +102,7 @@
 				C52A1E042ECFAE390006A82C /* KMPNativeCoroutinesCombine */,
 				C52A1E062ECFAE390006A82C /* KMPNativeCoroutinesCore */,
 				C52A1E082ECFAE390006A82C /* KMPNativeCoroutinesRxSwift */,
+				C5C86D6F3071711A00DB32CB /* Sentry */,
 			);
 			productName = iosApp;
 			productReference = CDEBB6388EA4A20D5FE0047C /* LingoMate.app */;
@@ -131,6 +134,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				C52A1E012ECFAE390006A82C /* XCRemoteSwiftPackageReference "KMP-NativeCoroutines" */,
+				C5C86D6E3071711A00DB32CB /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 75587AF2D6DA16E60E46083E /* Products */;
@@ -407,6 +411,14 @@
 				kind = branch;
 			};
 		};
+		C5C86D6E3071711A00DB32CB /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/getsentry/sentry-cocoa.git";
+			requirement = {
+				kind = exactVersion;
+				version = 8.58.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -429,6 +441,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = C52A1E012ECFAE390006A82C /* XCRemoteSwiftPackageReference "KMP-NativeCoroutines" */;
 			productName = KMPNativeCoroutinesRxSwift;
+		};
+		C5C86D6F3071711A00DB32CB /* Sentry */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C5C86D6E3071711A00DB32CB /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			productName = Sentry;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
