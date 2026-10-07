@@ -24,7 +24,8 @@ import sikv.lingomate.logger.Log
 class OpenAIApi(
     private val client: HttpClient,
     private val json: Json,
-    private val apiKeyProvider: OpenAIApiKeyProvider
+    private val apiKeyProvider: OpenAIApiKeyProvider,
+    private val responsesUrl: String
 ) {
     fun streamResponse(
         model: String,
@@ -43,8 +44,7 @@ class OpenAIApi(
 
         client.sse(
             request = {
-                // TODO: Refactor.
-                url("https://api.openai.com/v1/responses")
+                url(responsesUrl)
                 method = HttpMethod.Post
                 contentType(ContentType.Application.Json)
                 bearerAuth(apiKey)
