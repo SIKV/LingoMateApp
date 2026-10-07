@@ -79,3 +79,4 @@ kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", versio
 androidKotlinMultiplatformLibrary = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
 nativeCoroutines = { id = "com.rickclephas.kmp.nativecoroutines", version = "1.0.0-ALPHA-48" }
 androidLint = { id = "com.android.lint", version.ref = "agp" }
+sentry = { id = "io.sentry.kotlin.multiplatform.gradle", version = "0.27.0" }
