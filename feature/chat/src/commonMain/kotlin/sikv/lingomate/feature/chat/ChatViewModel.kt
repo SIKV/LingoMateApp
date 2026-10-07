@@ -35,7 +35,10 @@ class ChatViewModel(
     }
 
     fun sendMessage(message: String) {
-        chatService.sendMessage(message, viewModelScope)
+        val trimmedMessage = message.trim()
+        if (trimmedMessage.isEmpty()) return
+
+        chatService.sendMessage(trimmedMessage, viewModelScope)
     }
 
     fun retryMessage(messageId: String) {

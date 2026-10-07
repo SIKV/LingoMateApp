@@ -38,7 +38,6 @@ class ChatVM: ObservableObject {
     }
     
     func send(_ text: String) {
-        guard !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
         viewModel.sendMessage(message: text)
     }
     

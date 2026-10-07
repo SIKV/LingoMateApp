@@ -67,9 +67,20 @@ fun ChatScreen(
     var inputText by remember { mutableStateOf("") }
     val listState = rememberLazyListState()
 
-    LaunchedEffect(state.messages.size) {
-        if (state.messages.isNotEmpty()) {
-            listState.animateScrollToItem(state.messages.lastIndex)
+    val lastMessageId = state.messages.lastOrNull()?.id
+
+    // The list below uses reverseLayout, so its scroll position is anchored to the bottom edge
+    // and item 0 (the newest message) sits at the bottom. Scrolling to item 0 shows the bottom
+    // of the newest message, and while a reply streams in it grows upward, so its latest text
+    // stays visible. If the user has scrolled up, the growing reply doesn't move them.
+    //
+    // The list keeps its position by item key, so a newly added message lands just below the
+    // visible area. This effect then scrolls it into view. It's keyed by the newest message's ID
+    // rather than the message count: retrying removes the failed message and adds a new one in
+    // the same step, which leaves the count unchanged.
+    LaunchedEffect(lastMessageId) {
+        if (lastMessageId != null) {
+            listState.animateScrollToItem(0)
         }
     }
 
@@ -100,10 +111,12 @@ fun ChatScreen(
                     .weight(1f)
                     .fillMaxWidth()
                     .padding(horizontal = MaterialTheme.spacing.medium),
-                verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
+                reverseLayout = true,
+                // A reversed list stacks a few messages at the bottom; keep them at the top instead.
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small, Alignment.Top),
                 contentPadding = PaddingValues(vertical = MaterialTheme.spacing.medium)
             ) {
-                items(state.messages, key = { it.id }) { message ->
+                items(state.messages.asReversed(), key = { it.id }) { message ->
                     ChatBubble(
                         onRetryPressed = {
                             viewModel.retryMessage(message.id)
