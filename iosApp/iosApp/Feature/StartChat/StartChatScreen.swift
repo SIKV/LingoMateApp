@@ -83,8 +83,13 @@ struct StartChatScreen: View {
                 onSelect: startChatVM.selectChatModel,
                 optionNote: { option in
                     let provider = option.chatModel.provider.localizedNameString
-                    // Name the provider either way, so it's clear whose key to add.
-                    return Text(verbatim: option.apiKeyNeeded ? L10n.startChatAddProviderKey(provider) : provider)
+                    // Name the provider either way, so it's clear whose key to add. The missing key takes the line
+                    // over the tier: the model can't be picked until it's added.
+                    if option.apiKeyNeeded {
+                        return Text(verbatim: L10n.startChatAddProviderKey(provider))
+                    }
+                    let note = [provider, option.tier?.localizedDescriptionString].compactMap { $0 }
+                    return Text(verbatim: note.joined(separator: " · "))
                 },
                 isOptionEnabled: { !$0.apiKeyNeeded },
                 // Offer a way out only when a key is what's missing.

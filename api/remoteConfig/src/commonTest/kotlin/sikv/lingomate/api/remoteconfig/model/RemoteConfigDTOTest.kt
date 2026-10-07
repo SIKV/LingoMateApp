@@ -20,11 +20,13 @@ class RemoteConfigDTOTest {
               "chat_models": [
                 {
                   "provider": "OPEN_AI",
-                  "model": "gpt-5-nano"
+                  "model": "gpt-5-nano",
+                  "tier": "fast"
                 },
                 {
                   "provider": "OPEN_AI",
-                  "model": "gpt-5.1"
+                  "model": "gpt-5.1",
+                  "tier": "smart"
                 }
               ],
               "languages": ["en", "uk"]
@@ -34,8 +36,8 @@ class RemoteConfigDTOTest {
 
         assertEquals(
             listOf(
-                ChatModelDTO(provider = "OPEN_AI", model = "gpt-5-nano"),
-                ChatModelDTO(provider = "OPEN_AI", model = "gpt-5.1")
+                ChatModelDTO(provider = "OPEN_AI", model = "gpt-5-nano", tier = "fast"),
+                ChatModelDTO(provider = "OPEN_AI", model = "gpt-5.1", tier = "smart")
             ),
             config.chatModels
         )

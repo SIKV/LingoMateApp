@@ -2,19 +2,13 @@
   "chat_models": [
     {
       "provider": "OPEN_AI",
-      "model": "gpt-5-nano"
+      "model": "gpt-6-luna",
+      "tier": "fast"
     },
     {
       "provider": "OPEN_AI",
-      "model": "gpt-5-mini"
-    },
-    {
-      "provider": "OPEN_AI",
-      "model": "gpt-4.1"
-    },
-    {
-      "provider": "OPEN_AI",
-      "model": "gpt-5.1"
+      "model": "gpt-6.1-sol",
+      "tier": "smart"
     }
   ],
   "languages": [

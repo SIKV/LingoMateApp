@@ -8,5 +8,7 @@ internal data class CachedChatModel(
     @SerialName("provider")
     val provider: String,
     @SerialName("model")
-    val model: String
+    val model: String,
+    @SerialName("tier")
+    val tier: String
 )

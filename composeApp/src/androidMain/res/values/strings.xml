@@ -26,6 +26,8 @@
 
     <string name="chat_model_provider_on_device">On-device</string>
     <string name="chat_model_provider_open_ai">OpenAI</string>
+    <string name="chat_model_tier_fast">Fastest, lowest cost</string>
+    <string name="chat_model_tier_smart">Smartest, highest cost</string>
     <string name="practice_type_conversation">Conversation</string>
     <string name="practice_type_translation">Translation</string>
     <string name="practice_type_conversation_description">Chat about real-life situations.</string>

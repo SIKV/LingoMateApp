@@ -10,7 +10,8 @@ internal fun CachedConfig.toConfig(): Config {
         chatModels = chatModels.map { chatModel ->
             ConfigChatModel(
                 provider = chatModel.provider,
-                model = chatModel.model
+                model = chatModel.model,
+                tier = chatModel.tier
             )
         },
         languageCodes = languageCodes
@@ -22,7 +23,8 @@ internal fun Config.toCachedConfig(): CachedConfig {
         chatModels = chatModels.map { chatModel ->
             CachedChatModel(
                 provider = chatModel.provider,
-                model = chatModel.model
+                model = chatModel.model,
+                tier = chatModel.tier
             )
         },
         languageCodes = languageCodes

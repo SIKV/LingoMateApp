@@ -20,7 +20,8 @@ private fun RemoteConfigDTO.toConfig(): Config {
         chatModels = chatModels.map { chatModel ->
             ConfigChatModel(
                 provider = chatModel.provider,
-                model = chatModel.model
+                model = chatModel.model,
+                tier = chatModel.tier
             )
         },
         languageCodes = languages

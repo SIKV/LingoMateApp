@@ -16,6 +16,17 @@ extension ChatModelProvider {
     }
 }
 
+extension ChatModelTier {
+    var localizedDescriptionString: String {
+        switch self {
+        case .fast: return NSLocalizedString("chat_model_tier_fast", comment: "")
+        case .smart: return NSLocalizedString("chat_model_tier_smart", comment: "")
+        default:
+            fatalError("Unknown ChatModelTier value: \(self)")
+        }
+    }
+}
+
 extension Language {
     var localizedName: LocalizedStringKey {
         switch self {

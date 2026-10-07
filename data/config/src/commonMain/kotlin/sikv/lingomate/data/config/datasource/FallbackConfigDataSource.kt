@@ -10,7 +10,8 @@ class FallbackConfigDataSource {
             chatModels = listOf(
                 ConfigChatModel(
                     provider = "OPEN_AI",
-                    model = "gpt-5-mini"
+                    model = "gpt-6-luna",
+                    tier = "fast"
                 )
             ),
             languageCodes = listOf(

@@ -5,6 +5,7 @@ import androidx.compose.ui.res.stringResource
 import sikv.lingomate.R
 import sikv.lingomate.data.apikeystorage.ApiKeyProvider
 import sikv.lingomate.data.chat.domain.ChatModelProvider
+import sikv.lingomate.data.chat.domain.ChatModelTier
 import sikv.lingomate.data.chat.domain.Language
 import sikv.lingomate.data.chat.domain.PracticeType
 
@@ -64,6 +65,14 @@ fun ChatModelProvider.toLocalizedString(): String {
     return when (this) {
         ChatModelProvider.ON_DEVICE -> stringResource(R.string.chat_model_provider_on_device)
         ChatModelProvider.OPEN_AI -> stringResource(R.string.chat_model_provider_open_ai)
+    }
+}
+
+@Composable
+fun ChatModelTier.toLocalizedString(): String {
+    return when (this) {
+        ChatModelTier.FAST -> stringResource(R.string.chat_model_tier_fast)
+        ChatModelTier.SMART -> stringResource(R.string.chat_model_tier_smart)
     }
 }
 
