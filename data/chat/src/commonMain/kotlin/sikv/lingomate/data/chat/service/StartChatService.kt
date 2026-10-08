@@ -1,6 +1,7 @@
 package sikv.lingomate.data.chat.service
 
 import sikv.lingomate.data.chat.domain.ChatModel
+import sikv.lingomate.data.chat.domain.ChatModelEntry
 import sikv.lingomate.data.chat.domain.Language
 import sikv.lingomate.data.chat.domain.PracticeType
 import sikv.lingomate.data.chat.mapping.toChatModels
@@ -16,7 +17,7 @@ class StartChatService internal constructor(
     private val onDeviceLLM: OnDeviceLLM
 ) {
 
-    suspend fun getChatModels(): List<ChatModel> {
+    suspend fun getChatModels(): List<ChatModelEntry> {
         // TODO: Offer the on-device model once OnDeviceLLM is implemented. It cannot come from
         //  the config: whether it can run depends on the device.
 

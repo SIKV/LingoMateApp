@@ -21,7 +21,7 @@ class CachedConfigDataSourceTest {
     @Test
     fun readsBackTheCachedConfigAfterARelaunch() = runTest {
         val config = Config(
-            chatModels = listOf(ConfigChatModel(provider = "OPEN_AI", model = "gpt-5.1")),
+            chatModels = listOf(ConfigChatModel(provider = "OPEN_AI", model = "gpt-5.1", tier = "fast")),
             languageCodes = listOf("uk", "de")
         )
 

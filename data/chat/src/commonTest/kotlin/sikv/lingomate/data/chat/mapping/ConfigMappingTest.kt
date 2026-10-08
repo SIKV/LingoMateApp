@@ -1,7 +1,9 @@
 package sikv.lingomate.data.chat.mapping
 
 import sikv.lingomate.data.chat.domain.ChatModel
+import sikv.lingomate.data.chat.domain.ChatModelEntry
 import sikv.lingomate.data.chat.domain.ChatModelProvider
+import sikv.lingomate.data.chat.domain.ChatModelTier
 import sikv.lingomate.data.chat.domain.Language
 import sikv.lingomate.data.config.datasource.FallbackConfigDataSource
 import sikv.lingomate.data.config.domain.Config
@@ -15,15 +17,15 @@ class ConfigMappingTest {
     fun keepsTheModelsAndTheirOrder() {
         val config = Config(
             chatModels = listOf(
-                ConfigChatModel(provider = "OPEN_AI", model = "gpt-5-nano"),
-                ConfigChatModel(provider = "OPEN_AI", model = "gpt-5.1")
+                ConfigChatModel(provider = "OPEN_AI", model = "gpt-5-nano", tier = "fast"),
+                ConfigChatModel(provider = "OPEN_AI", model = "gpt-5.1", tier = "smart")
             )
         )
 
         assertEquals(
             listOf(
-                ChatModel(ChatModelProvider.OPEN_AI, "gpt-5-nano"),
-                ChatModel(ChatModelProvider.OPEN_AI, "gpt-5.1")
+                ChatModelEntry(ChatModel(ChatModelProvider.OPEN_AI, "gpt-5-nano"), ChatModelTier.FAST),
+                ChatModelEntry(ChatModel(ChatModelProvider.OPEN_AI, "gpt-5.1"), ChatModelTier.SMART)
             ),
             config.toChatModels()
         )
@@ -33,13 +35,13 @@ class ConfigMappingTest {
     fun dropsAModelOfAnUnknownProvider() {
         val config = Config(
             chatModels = listOf(
-                ConfigChatModel(provider = "ANTHROPIC", model = "claude-opus-5"),
-                ConfigChatModel(provider = "OPEN_AI", model = "gpt-5-mini")
+                ConfigChatModel(provider = "ANTHROPIC", model = "claude-opus-5", tier = "smart"),
+                ConfigChatModel(provider = "OPEN_AI", model = "gpt-5-mini", tier = "fast")
             )
         )
 
         assertEquals(
-            listOf(ChatModel(ChatModelProvider.OPEN_AI, "gpt-5-mini")),
+            listOf(ChatModelEntry(ChatModel(ChatModelProvider.OPEN_AI, "gpt-5-mini"), ChatModelTier.FAST)),
             config.toChatModels()
         )
     }
@@ -48,11 +50,25 @@ class ConfigMappingTest {
     fun dropsAModelWithABlankName() {
         val config = Config(
             chatModels = listOf(
-                ConfigChatModel(provider = "OPEN_AI", model = " ")
+                ConfigChatModel(provider = "OPEN_AI", model = " ", tier = "fast")
             )
         )
 
         assertEquals(emptyList(), config.toChatModels())
+    }
+
+    @Test
+    fun keepsAModelOfAnUnknownTierWithoutATier() {
+        val config = Config(
+            chatModels = listOf(
+                ConfigChatModel(provider = "OPEN_AI", model = "gpt-5-mini", tier = "balanced")
+            )
+        )
+
+        assertEquals(
+            listOf(ChatModelEntry(ChatModel(ChatModelProvider.OPEN_AI, "gpt-5-mini"), tier = null)),
+            config.toChatModels()
+        )
     }
 
     @Test
@@ -93,7 +109,7 @@ class ConfigMappingTest {
     fun readsTheChatModelTheAppFallsBackTo() {
         val config = FallbackConfigDataSource().getConfig()
 
-        assertEquals(1, config.toChatModels().size)
+        assertEquals(ChatModelTier.FAST, config.toChatModels().single().tier)
     }
 
     @Test

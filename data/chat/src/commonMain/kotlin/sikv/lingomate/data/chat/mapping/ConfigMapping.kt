@@ -1,11 +1,13 @@
 package sikv.lingomate.data.chat.mapping
 
 import sikv.lingomate.data.chat.domain.ChatModel
+import sikv.lingomate.data.chat.domain.ChatModelEntry
 import sikv.lingomate.data.chat.domain.ChatModelProvider
+import sikv.lingomate.data.chat.domain.ChatModelTier
 import sikv.lingomate.data.chat.domain.Language
 import sikv.lingomate.data.config.domain.Config
 
-internal fun Config.toChatModels(): List<ChatModel> {
+internal fun Config.toChatModels(): List<ChatModelEntry> {
     return chatModels.mapNotNull { chatModel ->
         val provider = chatModel.provider.toChatModelProvider() ?: return@mapNotNull null
 
@@ -13,9 +15,12 @@ internal fun Config.toChatModels(): List<ChatModel> {
             return@mapNotNull null
         }
 
-        ChatModel(
-            provider = provider,
-            model = chatModel.model
+        ChatModelEntry(
+            chatModel = ChatModel(
+                provider = provider,
+                model = chatModel.model
+            ),
+            tier = chatModel.tier.toChatModelTier()
         )
     }
 }
@@ -23,6 +28,14 @@ internal fun Config.toChatModels(): List<ChatModel> {
 private fun String.toChatModelProvider(): ChatModelProvider? {
     return when (this) {
         "OPEN_AI" -> ChatModelProvider.OPEN_AI
+        else -> null
+    }
+}
+
+private fun String.toChatModelTier(): ChatModelTier? {
+    return when (this) {
+        "fast" -> ChatModelTier.FAST
+        "smart" -> ChatModelTier.SMART
         else -> null
     }
 }

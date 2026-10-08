@@ -220,11 +220,12 @@ private fun ChatConfigCard(
             optionDescription = { option ->
                 val provider = option.chatModel.provider.toLocalizedString()
 
-                // Name the provider either way, so it's clear whose key to add.
+                // Name the provider either way, so it's clear whose key to add. The missing key takes the line
+                // over the tier: the model can't be picked until it's added.
                 if (option.apiKeyNeeded) {
                     stringResource(R.string.start_chat_add_provider_key, provider)
                 } else {
-                    provider
+                    listOfNotNull(provider, option.tier?.toLocalizedString()).joinToString(" · ")
                 }
             },
             optionEnabled = { !it.apiKeyNeeded },

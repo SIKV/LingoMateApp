@@ -93,7 +93,7 @@ class StartChatViewModel(
                 val chatModels = startChatService.getChatModels()
                 val selectedChatModel = startChatService.getSelectedChatModel()
 
-                val chatModelOptions = chatModels.map { chatModel ->
+                val chatModelOptions = chatModels.map { (chatModel, tier) ->
                     val apiKeyNeeded = if (chatModel.provider.apiKeyRequired) {
                         !storedProviders.contains(chatModel.provider.toApiKeyProvider())
                     } else {
@@ -102,6 +102,7 @@ class StartChatViewModel(
 
                     ChatModelOption(
                         chatModel = chatModel,
+                        tier = tier,
                         apiKeyNeeded = apiKeyNeeded
                     )
                 }

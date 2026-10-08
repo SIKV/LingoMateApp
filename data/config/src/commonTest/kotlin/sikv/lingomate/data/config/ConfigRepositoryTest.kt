@@ -32,18 +32,18 @@ class ConfigRepositoryTest {
     private val refreshScope = CoroutineScope(SupervisorJob())
 
     private val cachedConfig = Config(
-        chatModels = listOf(ConfigChatModel(provider = "OPEN_AI", model = "gpt-5-nano")),
+        chatModels = listOf(ConfigChatModel(provider = "OPEN_AI", model = "gpt-5-nano", tier = "fast")),
         languageCodes = listOf("en", "uk")
     )
 
     private val remoteConfig = Config(
-        chatModels = listOf(ConfigChatModel(provider = "OPEN_AI", model = "gpt-5.1")),
+        chatModels = listOf(ConfigChatModel(provider = "OPEN_AI", model = "gpt-5.1", tier = "fast")),
         languageCodes = listOf("de", "fr")
     )
 
     private val remoteConfigJson = """
         {
-          "chat_models": [{ "provider": "OPEN_AI", "model": "gpt-5.1" }],
+          "chat_models": [{ "provider": "OPEN_AI", "model": "gpt-5.1", "tier": "fast" }],
           "languages": ["de", "fr"]
         }
     """.trimIndent()

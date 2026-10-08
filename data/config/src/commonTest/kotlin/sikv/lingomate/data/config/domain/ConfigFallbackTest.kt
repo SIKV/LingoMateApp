@@ -6,14 +6,14 @@ import kotlin.test.assertEquals
 class ConfigFallbackTest {
 
     private val fallback = Config(
-        chatModels = listOf(ConfigChatModel(provider = "OPEN_AI", model = "fallback-model")),
+        chatModels = listOf(ConfigChatModel(provider = "OPEN_AI", model = "fallback-model", tier = "fast")),
         languageCodes = listOf("en")
     )
 
     @Test
     fun keepsTheSectionsTheConfigCarries() {
         val config = Config(
-            chatModels = listOf(ConfigChatModel(provider = "OPEN_AI", model = "gpt-5.1")),
+            chatModels = listOf(ConfigChatModel(provider = "OPEN_AI", model = "gpt-5.1", tier = "fast")),
             languageCodes = listOf("uk", "de")
         )
 

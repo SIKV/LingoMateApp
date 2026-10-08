@@ -301,6 +301,28 @@
         }
       }
     },
+    "chat_model_tier_fast" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fastest, lowest cost"
+          }
+        }
+      }
+    },
+    "chat_model_tier_smart" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Smartest, highest cost"
+          }
+        }
+      }
+    },
     "chat_type_message_hint" : {
       "extractionState" : "manual",
       "localizations" : {
