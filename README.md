@@ -2,6 +2,8 @@
 
 # LingoMate
 
+![publish-remote-config](https://github.com/SIKV/LingoMateApp/actions/workflows/publish-remote-config.yml/badge.svg)
+
 ### 🚧 Work in progress 🚧
 
 A cross-platform language-learning chat app built with Kotlin Multiplatform.
