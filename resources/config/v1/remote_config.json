@@ -12,8 +12,26 @@
     }
   ],
   "languages": [
+    "ar",
+    "cs",
+    "da",
+    "nl",
     "en",
+    "fi",
+    "fr",
+    "de",
+    "el",
+    "hu",
+    "it",
+    "ja",
+    "ko",
+    "no",
+    "pl",
+    "pt",
+    "ro",
     "es",
+    "sv",
+    "tr",
     "uk"
   ]
 }
