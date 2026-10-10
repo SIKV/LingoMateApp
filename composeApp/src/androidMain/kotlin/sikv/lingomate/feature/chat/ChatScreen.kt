@@ -22,6 +22,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.Send
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -58,6 +59,7 @@ import sikv.lingomate.ui.theme.spacing
 @Composable
 fun ChatScreen(
     onBackPressed: () -> Unit,
+    onEndChatPressed: (List<ChatMessage>) -> Unit,
     chatConfig: ChatConfig,
     viewModel: ChatViewModel = koinViewModel(
         parameters = { parametersOf(chatConfig) }
@@ -96,6 +98,16 @@ fun ChatScreen(
                         )
                     }
                 },
+                actions = {
+                    if (state.canEndChat) {
+                        Button(
+                            onClick = { onEndChatPressed(state.messages) },
+                            modifier = Modifier.padding(end = MaterialTheme.spacing.small)
+                        ) {
+                            Text(stringResource(R.string.chat_end_button))
+                        }
+                    }
+                }
             )
         }
     ) { padding ->
@@ -147,13 +159,14 @@ private fun ChatBubble(
     message: ChatMessage
 ) {
     val isUser = message.role == ChatMessage.Role.USER
+    // Primary is left to the buttons, so the user's bubbles take the container tone of it.
     val bubbleColor = if (isUser) {
-        MaterialTheme.colorScheme.primary
+        MaterialTheme.colorScheme.primaryContainer
     } else {
         MaterialTheme.colorScheme.surfaceVariant
     }
     val textColor = if (isUser) {
-        MaterialTheme.colorScheme.onPrimary
+        MaterialTheme.colorScheme.onPrimaryContainer
     } else {
         MaterialTheme.colorScheme.onSurfaceVariant
     }

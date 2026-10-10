@@ -73,6 +73,17 @@ struct ChatScreen: View {
             chatVM.cancel()
         }
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            if chatVM.state.canEndChat {
+                ToolbarItem(placement: .topBarTrailing) {
+                    GradientButton(L10n.chatEndButton) {
+                        // The recap takes the chat's place, so leaving it goes back to where the chat was started.
+                        appRouter.replaceLast(with: .chatRecap(chatConfig, chatVM.state.messages))
+                    }
+                }
+                .hidingSharedBackground()
+            }
+        }
         .safeAreaInset(edge: .bottom) {
             inputBar
                 .background(.ultraThinMaterial)
@@ -121,30 +132,10 @@ struct ChatScreen: View {
     }
 
     private var sendButton: some View {
-        Button {
+        GradientButton(systemImage: "paperplane.fill") {
             send()
-        } label: {
-            Image(systemName: "paperplane.fill")
-                .font(.system(size: 15, weight: .semibold))
-                .foregroundStyle(canSend ? AnyShapeStyle(.white) : AnyShapeStyle(.tertiary))
-                .frame(width: 38, height: 38)
-                .background {
-                    if canSend {
-                        LinearGradient(
-                            colors: [.blue, .purple],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    } else {
-                        Color(.tertiarySystemFill)
-                    }
-                }
-                .clipShape(Circle())
         }
-        .buttonStyle(.plain)
         .disabled(!canSend)
-        .scaleEffect(canSend ? 1 : 0.92)
-        .animation(.spring(response: 0.3, dampingFraction: 0.7), value: canSend)
     }
 
     private func send() {

@@ -3,8 +3,10 @@ package sikv.lingomate.data.chat
 import org.koin.dsl.module
 import sikv.lingomate.data.chat.domain.ChatConfig
 import sikv.lingomate.data.chat.domain.ChatModelProvider
+import sikv.lingomate.data.chat.service.ChatRecapService
 import sikv.lingomate.data.chat.service.ChatService
 import sikv.lingomate.data.chat.service.OnDeviceChatService
+import sikv.lingomate.data.chat.service.OpenAIChatRecapService
 import sikv.lingomate.data.chat.service.OpenAIChatService
 import sikv.lingomate.data.chat.service.PromptBuilder
 import sikv.lingomate.data.chat.service.StartChatService
@@ -33,6 +35,20 @@ val chatDataModule = module {
                     chatConfig = chatConfig,
                     openAIApi = get(),
                     promptBuilder = get()
+                )
+            }
+        }
+    }
+
+    factory<ChatRecapService> { (chatConfig: ChatConfig) ->
+        when (chatConfig.chatModel.provider) {
+            ChatModelProvider.ON_DEVICE -> TODO("Not yet implemented")
+            ChatModelProvider.OPEN_AI -> {
+                OpenAIChatRecapService(
+                    chatConfig = chatConfig,
+                    openAIApi = get(),
+                    promptBuilder = get(),
+                    json = get()
                 )
             }
         }

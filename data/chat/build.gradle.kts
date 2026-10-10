@@ -45,6 +45,7 @@ kotlin {
                 implementation(libs.kotlin.stdlib)
                 implementation(libs.koin.core)
                 implementation(libs.kotlinx.serialization.core)
+                implementation(libs.kotlinx.serialization.json)
                 implementation(project(":api:openai"))
                 implementation(project(":data:config"))
                 implementation(project(":data:keyValueStorage"))

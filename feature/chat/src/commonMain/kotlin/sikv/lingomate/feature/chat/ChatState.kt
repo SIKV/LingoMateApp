@@ -7,6 +7,7 @@ import kotlin.native.ObjCName
 data class ChatState(
     val messages: List<ChatMessage> = emptyList(),
     val currentMessage: String? = null,
+    val canEndChat: Boolean = false,
 ) {
     companion object {
         fun empty() = ChatState()

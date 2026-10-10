@@ -20,6 +20,8 @@ struct ContentView: View {
                 switch route {
                 case .chat(let chatConfig):
                     ChatScreen(chatConfig: chatConfig)
+                case .chatRecap(let chatConfig, let messages):
+                    ChatRecapScreen(chatConfig: chatConfig, messages: messages)
                 case .chatDetails:
                     ChatDetailsView()
                 case .manageApiKeys:

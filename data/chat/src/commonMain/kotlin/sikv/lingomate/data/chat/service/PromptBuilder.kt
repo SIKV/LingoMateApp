@@ -1,6 +1,7 @@
 package sikv.lingomate.data.chat.service
 
 import sikv.lingomate.data.chat.domain.ChatConfig
+import sikv.lingomate.data.chat.domain.ChatMessage
 import sikv.lingomate.data.chat.domain.Language
 import sikv.lingomate.data.chat.domain.PracticeType
 import kotlin.random.Random
@@ -18,15 +19,8 @@ class PromptBuilder(
      */
     fun buildSystemPrompt(chatConfig: ChatConfig): String {
         val practiceLanguage = chatConfig.practiceLanguage.promptName
-
-        // Both sides can name the same language. There is then no second language to fall back on: the session runs
-        // entirely in the practice language, and translation practice turns into rephrasing.
-        val monolingual = chatConfig.practiceLanguage == chatConfig.assistantLanguage
-        val explanationLanguage = if (monolingual) {
-            "simple $practiceLanguage"
-        } else {
-            chatConfig.assistantLanguage.promptName
-        }
+        val monolingual = chatConfig.isMonolingual
+        val explanationLanguage = chatConfig.explanationLanguage
 
         val sections = listOf(
             buildRoleSection(practiceLanguage, explanationLanguage, monolingual),
@@ -35,6 +29,44 @@ class PromptBuilder(
             buildStyleSection(practiceLanguage)
         )
         return sections.joinToString(separator = "\n\n")
+    }
+
+    /**
+     * Builds the instructions for recapping a finished chat session. The session itself goes to the model as the
+     * input, written out by [buildRecapTranscript]. The field names match the recap's JSON schema.
+     */
+    fun buildRecapPrompt(chatConfig: ChatConfig): String {
+        val practiceLanguage = chatConfig.practiceLanguage.promptName
+        val explanationLanguage = chatConfig.explanationLanguage
+        return """
+            You are LingoMate, a patient and encouraging language tutor.
+            The input is the transcript of a practice session in which the user was learning $practiceLanguage. The
+            session is over, so do not continue it. Give the user a short recap of how it went.
+            - score: a whole number from 1 to 10 for how well the user did, judged mainly on how accurate and natural
+              their $practiceLanguage was. Take into account how hard what they tried to say was, and ignore typos,
+              missing accents and punctuation unless they change the meaning.
+            - summary: two or three short sentences in $explanationLanguage.
+              Say what the user did well and name the one thing most worth working on next, without listing every mistake.
+            - Judge only the user's lines; the tutor's lines are there for context.
+            - Speak to the user as "you" and write plain text with no markdown.
+        """.trimIndent()
+    }
+
+    /**
+     * Writes a chat session out as plain text for [buildRecapPrompt]. Only delivered messages are kept: they are the
+     * conversation the model actually had.
+     */
+    fun buildRecapTranscript(messages: List<ChatMessage>): String {
+        return messages
+            .filter { it.status == ChatMessage.Status.DELIVERED }
+            .mapNotNull { message ->
+                when (message.role) {
+                    ChatMessage.Role.USER -> "User: ${message.text}"
+                    ChatMessage.Role.ASSISTANT -> "Tutor: ${message.text}"
+                    ChatMessage.Role.SYSTEM -> null
+                }
+            }
+            .joinToString(separator = "\n\n")
     }
 
     private fun buildRoleSection(
@@ -296,6 +328,18 @@ class PromptBuilder(
         )
     }
 }
+
+// Both sides can name the same language. There is then no second language to fall back on: the session runs
+// entirely in the practice language, and translation practice turns into rephrasing.
+private val ChatConfig.isMonolingual: Boolean
+    get() = practiceLanguage == assistantLanguage
+
+private val ChatConfig.explanationLanguage: String
+    get() = if (isMonolingual) {
+        "simple ${practiceLanguage.promptName}"
+    } else {
+        assistantLanguage.promptName
+    }
 
 private val Language.promptName: String
     get() = when (this) {

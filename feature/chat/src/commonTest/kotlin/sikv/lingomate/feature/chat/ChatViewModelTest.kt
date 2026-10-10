@@ -4,7 +4,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
@@ -14,6 +13,7 @@ import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -51,13 +51,37 @@ class ChatViewModelTest {
 
         assertTrue(chatService.sentMessages.isEmpty())
     }
+
+    @Test
+    fun cannotEndChatBeforeAUserMessageIsDelivered() {
+        chatService.chatHistory.value = listOf(
+            message(ChatMessage.Role.ASSISTANT, ChatMessage.Status.DELIVERED),
+            message(ChatMessage.Role.USER, ChatMessage.Status.FAILED)
+        )
+
+        assertFalse(ChatViewModel(chatService).uiState.value.canEndChat)
+    }
+
+    @Test
+    fun canEndChatOnceAUserMessageIsDelivered() {
+        chatService.chatHistory.value = listOf(
+            message(ChatMessage.Role.ASSISTANT, ChatMessage.Status.DELIVERED),
+            message(ChatMessage.Role.USER, ChatMessage.Status.DELIVERED)
+        )
+
+        assertTrue(ChatViewModel(chatService).uiState.value.canEndChat)
+    }
+
+    private fun message(role: ChatMessage.Role, status: ChatMessage.Status): ChatMessage {
+        return ChatMessage(id = "$role-$status", status = status, role = role, text = "Hallo")
+    }
 }
 
 private class FakeChatService : ChatService {
 
     val sentMessages = mutableListOf<String>()
 
-    override val chatHistory: StateFlow<List<ChatMessage>> = MutableStateFlow(emptyList())
+    override val chatHistory = MutableStateFlow<List<ChatMessage>>(emptyList())
 
     override fun startChat(scope: CoroutineScope) {}
 

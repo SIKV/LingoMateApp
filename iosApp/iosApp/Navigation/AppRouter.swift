@@ -11,6 +11,11 @@ final class AppRouter: ObservableObject {
         path.removeLast()
     }
     
+    func replaceLast(with route: Route) {
+        path.removeLast()
+        path.append(route)
+    }
+    
     func navigateToRoot() {
         path.removeLast(path.count)
     }

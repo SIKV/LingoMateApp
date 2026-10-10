@@ -100,3 +100,15 @@ extension ApiKeyProvider {
         NSLocalizedString(localizedNameKey, comment: "")
     }
 }
+
+extension ToolbarContent {
+    // From iOS 26 toolbar items sit on a shared glass background, which would wrap buttons that draw their own.
+    @ToolbarContentBuilder
+    func hidingSharedBackground() -> some ToolbarContent {
+        if #available(iOS 26.0, *) {
+            sharedBackgroundVisibility(.hidden)
+        } else {
+            self
+        }
+    }
+}

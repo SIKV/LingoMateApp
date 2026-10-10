@@ -59,6 +59,7 @@ kotlin {
             api(project(":data:keyValueStorage"))
             api(project(":feature:startChat"))
             api(project(":feature:chat"))
+            api(project(":feature:chatRecap"))
             api(project(":feature:manageApiKeys"))
             api(project(":onDeviceLLM"))
             implementation(libs.kotlinx.coroutines.core)

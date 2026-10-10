@@ -6,6 +6,7 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
+import sikv.lingomate.feature.chatrecap.ChatRecapScreen
 import sikv.lingomate.feature.manageapikeys.ManageApiKeysScreen
 import sikv.lingomate.feature.startchat.StartChatScreen
 
@@ -42,6 +43,19 @@ fun ChatRouteComponent(
             entry<ChatRoute.Chat> { route ->
                 ChatScreen(
                     chatConfig = route.chatConfig,
+                    onBackPressed = {
+                        backStack.removeLastOrNull()
+                    },
+                    onEndChatPressed = { messages ->
+                        // The recap takes the chat's place, so leaving it goes back to where the chat was started.
+                        backStack[backStack.lastIndex] = ChatRoute.ChatRecap(route.chatConfig, messages)
+                    }
+                )
+            }
+            entry<ChatRoute.ChatRecap> { route ->
+                ChatRecapScreen(
+                    chatConfig = route.chatConfig,
+                    messages = route.messages,
                     onBackPressed = {
                         backStack.removeLastOrNull()
                     }
