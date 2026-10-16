@@ -23,7 +23,7 @@ interface ChatRecapService {
 class OpenAIChatRecapService(
     private val chatConfig: ChatConfig,
     private val openAIApi: OpenAIApi,
-    private val promptBuilder: PromptBuilder,
+    private val promptBuilder: RecapPromptBuilder,
     private val json: Json
 ) : ChatRecapService {
 

@@ -1,7 +1,6 @@
 package sikv.lingomate.data.chat.service
 
 import sikv.lingomate.data.chat.domain.ChatConfig
-import sikv.lingomate.data.chat.domain.ChatMessage
 import sikv.lingomate.data.chat.domain.ChatModel
 import sikv.lingomate.data.chat.domain.ChatModelProvider
 import sikv.lingomate.data.chat.domain.Language
@@ -9,13 +8,12 @@ import sikv.lingomate.data.chat.domain.PracticeType
 import kotlin.random.Random
 import kotlin.test.Test
 import kotlin.test.assertContains
-import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-class PromptBuilderTest {
+class ChatPromptBuilderTest {
 
-    private val promptBuilder = PromptBuilder()
+    private val promptBuilder = ChatPromptBuilder()
 
     @Test
     fun promptNamesPracticeAndAssistantLanguage() {
@@ -61,7 +59,7 @@ class PromptBuilderTest {
 
     @Test
     fun conversationPromptPinsOneSituationForWholeSession() {
-        val prompt = PromptBuilder(Random(42)).buildSystemPrompt(
+        val prompt = ChatPromptBuilder(Random(42)).buildSystemPrompt(
             chatConfig(Language.SPANISH, PracticeType.CONVERSATION)
         )
 
@@ -73,7 +71,7 @@ class PromptBuilderTest {
     @Test
     fun conversationSituationsAreCombinedFromIndependentAxes() {
         val situations = (1..40).map { seed ->
-            PromptBuilder(Random(seed)).buildSystemPrompt(
+            ChatPromptBuilder(Random(seed)).buildSystemPrompt(
                 chatConfig(Language.SPANISH, PracticeType.CONVERSATION)
             ).situationLine()
         }
@@ -87,7 +85,7 @@ class PromptBuilderTest {
 
     @Test
     fun translationPromptPinsThemeFocusAndStyle() {
-        val prompt = PromptBuilder(Random(42)).buildSystemPrompt(
+        val prompt = ChatPromptBuilder(Random(42)).buildSystemPrompt(
             chatConfig(Language.SPANISH, PracticeType.TRANSLATION)
         )
 
@@ -101,7 +99,7 @@ class PromptBuilderTest {
     @Test
     fun translationSessionsDoNotAllGetTheSameBrief() {
         val briefs = (1..40).map { seed ->
-            PromptBuilder(Random(seed)).buildSystemPrompt(
+            ChatPromptBuilder(Random(seed)).buildSystemPrompt(
                 chatConfig(Language.SPANISH, PracticeType.TRANSLATION)
             ).briefLine()
         }
@@ -114,7 +112,7 @@ class PromptBuilderTest {
 
     @Test
     fun conversationPromptDoesNotPickTranslationBrief() {
-        val prompt = PromptBuilder(Random(42)).buildSystemPrompt(
+        val prompt = ChatPromptBuilder(Random(42)).buildSystemPrompt(
             chatConfig(Language.SPANISH, PracticeType.CONVERSATION)
         )
 
@@ -170,59 +168,6 @@ class PromptBuilderTest {
                 }
             }
         }
-    }
-
-    @Test
-    fun recapPromptNamesPracticeAndExplanationLanguage() {
-        val prompt = promptBuilder.buildRecapPrompt(
-            chatConfig(Language.SPANISH, PracticeType.CONVERSATION, Language.POLISH)
-        )
-
-        assertContains(prompt, "learning Spanish")
-        assertContains(prompt, "two or three short sentences in Polish")
-    }
-
-    @Test
-    fun sameLanguageRecapExplainsInSimplePracticeLanguage() {
-        val prompt = promptBuilder.buildRecapPrompt(
-            chatConfig(Language.GERMAN, PracticeType.TRANSLATION, Language.GERMAN)
-        )
-
-        assertContains(prompt, "two or three short sentences in simple German")
-    }
-
-    @Test
-    fun recapTranscriptLabelsWhoSaidWhat() {
-        val transcript = promptBuilder.buildRecapTranscript(
-            listOf(
-                message(ChatMessage.Role.ASSISTANT, "¿Qué quieres tomar?"),
-                message(ChatMessage.Role.USER, "Un café, por favor.")
-            )
-        )
-
-        assertEquals("Tutor: ¿Qué quieres tomar?\n\nUser: Un café, por favor.", transcript)
-    }
-
-    @Test
-    fun recapTranscriptLeavesOutMessagesTheModelNeverSaw() {
-        val transcript = promptBuilder.buildRecapTranscript(
-            listOf(
-                message(ChatMessage.Role.SYSTEM, "You are LingoMate."),
-                message(ChatMessage.Role.ASSISTANT, "¿Qué quieres tomar?"),
-                message(ChatMessage.Role.USER, "Un té.", ChatMessage.Status.FAILED),
-                message(ChatMessage.Role.USER, "Un café.", ChatMessage.Status.IN_PROGRESS)
-            )
-        )
-
-        assertEquals("Tutor: ¿Qué quieres tomar?", transcript)
-    }
-
-    private fun message(
-        role: ChatMessage.Role,
-        text: String,
-        status: ChatMessage.Status = ChatMessage.Status.DELIVERED
-    ): ChatMessage {
-        return ChatMessage(id = text, status = status, role = role, text = text)
     }
 
     private fun String.situationLine(): String {

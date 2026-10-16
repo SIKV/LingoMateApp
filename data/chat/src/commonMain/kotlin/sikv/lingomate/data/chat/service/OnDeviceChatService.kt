@@ -17,7 +17,7 @@ import kotlin.uuid.Uuid
 class OnDeviceChatService(
     private val chatConfig: ChatConfig,
     private val onDeviceLLM: OnDeviceLLM,
-    private val promptBuilder: PromptBuilder
+    private val promptBuilder: ChatPromptBuilder
 ) : ChatService {
     private val _chatHistory = MutableStateFlow<List<ChatMessage>>(emptyList())
     override val chatHistory: StateFlow<List<ChatMessage>> = _chatHistory.asStateFlow()

@@ -21,7 +21,7 @@ import kotlin.uuid.Uuid
 class OpenAIChatService(
     private val chatConfig: ChatConfig,
     private val openAIApi: OpenAIApi,
-    private val promptBuilder: PromptBuilder
+    private val promptBuilder: ChatPromptBuilder
 ) : ChatService {
 
     private val _chatHistory = MutableStateFlow<List<ChatMessage>>(emptyList())
