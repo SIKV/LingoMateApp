@@ -80,6 +80,8 @@ struct ChatScreen: View {
                         // The recap takes the chat's place, so leaving it goes back to where the chat was started.
                         appRouter.replaceLast(with: .chatRecap(chatConfig, chatVM.state.messages))
                     }
+                    // The toolbar proposes less width than the title needs, which wraps it onto two lines.
+                    .fixedSize()
                 }
                 .hidingSharedBackground()
             }
