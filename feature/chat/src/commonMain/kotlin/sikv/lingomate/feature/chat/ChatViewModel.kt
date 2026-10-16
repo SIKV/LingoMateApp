@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import sikv.lingomate.data.chat.domain.ChatMessage
 import sikv.lingomate.data.chat.service.ChatService
 import kotlin.native.ObjCName
 
@@ -26,7 +27,12 @@ class ChatViewModel(
             chatService.chatHistory
                 .collect { messageList ->
                     _uiState.update {
-                        it.copy(messages = messageList)
+                        it.copy(
+                            messages = messageList,
+                            canEndChat = messageList.any { message ->
+                                message.role == ChatMessage.Role.USER && message.status == ChatMessage.Status.DELIVERED
+                            }
+                        )
                     }
                 }
         }

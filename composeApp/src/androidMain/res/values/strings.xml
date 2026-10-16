@@ -54,6 +54,14 @@
     <string name="chat_message_status_assistant_failed">Something went wrong. Please start a new chat.</string>
     <string name="chat_user_text_input_placeholder">Type a message…</string>
     <string name="chat_send_message_button_content_description">Send message</string>
+    <string name="chat_end_button">End chat</string>
+
+    <!-- Chat Recap screen -->
+    <string name="chat_recap_back_button_content_description">Back</string>
+    <string name="chat_recap_loading">Preparing your recap…</string>
+    <string name="chat_recap_failed">Couldn\'t prepare your recap.</string>
+    <string name="chat_recap_retry_button">Try again</string>
+    <string name="chat_recap_done_button">Done</string>
 
     <!-- More screen -->
     <string name="more_title">More</string>

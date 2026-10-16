@@ -44,6 +44,12 @@ enum L10n {
     static let chatMessageStatusUserFailed = LocalizedStringKey("chat_message_status_user_failed")
     static let chatMessageStatusAssistantFailed = LocalizedStringKey("chat_message_status_assistant_failed")
     static let chatTypeMessageHint = LocalizedStringKey("chat_type_message_hint")
+    static let chatEndButton = LocalizedStringKey("chat_end_button")
+
+    static let chatRecapLoading = LocalizedStringKey("chat_recap_loading")
+    static let chatRecapFailed = LocalizedStringKey("chat_recap_failed")
+    static let chatRecapRetryButton = LocalizedStringKey("chat_recap_retry_button")
+    static let chatRecapDoneButton = LocalizedStringKey("chat_recap_done_button")
 
     static let moreTitle = LocalizedStringKey("more_title")
     static let moreManageApiKeysTitle = LocalizedStringKey("more_manage_api_keys_title")

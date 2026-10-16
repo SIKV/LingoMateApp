@@ -19,6 +19,7 @@ import kotlinx.serialization.json.Json
 import sikv.lingomate.api.openai.model.OpenAIInputDTO
 import sikv.lingomate.api.openai.model.OpenAIResponsesRequestDTO
 import sikv.lingomate.api.openai.model.OpenAIResponsesResponseDTO
+import sikv.lingomate.api.openai.model.OpenAITextDTO
 import sikv.lingomate.logger.Log
 
 class OpenAIApi(
@@ -30,7 +31,8 @@ class OpenAIApi(
     fun streamResponse(
         model: String,
         input: List<OpenAIInputDTO>,
-        instructions: String
+        instructions: String,
+        text: OpenAITextDTO? = null
     ): Flow<Result<OpenAIResponsesResponseDTO>> = flow {
         Log.d { "Requesting a streamed response. Model: $model, input messages: ${input.size}." }
 
@@ -55,6 +57,7 @@ class OpenAIApi(
                         instructions = instructions,
                         store = false, // Never store the generated response on the Server.
                         stream = true,
+                        text = text,
                     )
                 )
             }

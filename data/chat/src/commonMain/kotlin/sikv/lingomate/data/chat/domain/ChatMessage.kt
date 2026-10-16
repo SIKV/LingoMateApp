@@ -1,7 +1,9 @@
 package sikv.lingomate.data.chat.domain
 
+import kotlinx.serialization.Serializable
 import kotlin.native.ObjCName
 
+@Serializable
 @ObjCName("ChatMessage", exact = true)
 data class ChatMessage(
     val id: String,

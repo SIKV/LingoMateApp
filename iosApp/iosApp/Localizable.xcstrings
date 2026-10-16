@@ -334,6 +334,61 @@
         }
       }
     },
+    "chat_end_button" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "End chat"
+          }
+        }
+      }
+    },
+    "chat_recap_loading" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preparing your recap…"
+          }
+        }
+      }
+    },
+    "chat_recap_failed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn’t prepare your recap."
+          }
+        }
+      }
+    },
+    "chat_recap_retry_button" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Try again"
+          }
+        }
+      }
+    },
+    "chat_recap_done_button" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Done"
+          }
+        }
+      }
+    },
     "manage_api_keys_add_button" : {
       "extractionState" : "manual",
       "localizations" : {

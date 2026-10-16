@@ -16,5 +16,8 @@ data class OpenAIResponsesRequestDTO(
     @SerialName("store")
     val store: Boolean,
     @SerialName("stream")
-    val stream: Boolean
+    val stream: Boolean,
+    // The shape of the reply. Left out, the model replies in plain text.
+    @SerialName("text")
+    val text: OpenAITextDTO? = null
 )
