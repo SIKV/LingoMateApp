@@ -9,7 +9,8 @@ class ChatVM: ObservableObject {
 
     @Published var state = ChatState.companion.empty()
 
-    private var stateTask: Task<Void, Never>?
+    // uiState is a StateFlow, so the only error is CancellationError from cancel(), which needs no handling.
+    private var stateTask: Task<Void, Error>?
     private let viewModel: ChatViewModel
 
     init(chatConfig: ChatConfig) {
@@ -26,13 +27,8 @@ class ChatVM: ObservableObject {
         }
         
         stateTask = Task {
-            do {
-                for try await state in asyncSequence(for: viewModel.uiStateFlow) {
-                    self.state = state
-                }
-            } catch {
-                // FIXME: Handle.
-                print("Failed with error: \(error)")
+            for try await state in asyncSequence(for: viewModel.uiStateFlow) {
+                self.state = state
             }
         }
     }
