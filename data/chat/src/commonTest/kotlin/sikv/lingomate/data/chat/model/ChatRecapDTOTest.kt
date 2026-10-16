@@ -22,10 +22,10 @@ class ChatRecapDTOTest {
 
     @Test
     fun readsTheModelsReply() {
-        val reply = """{"summary": "You ordered politely.", "score": 7}"""
+        val reply = """{"summary": "You ordered politely."}"""
 
         assertEquals(
-            ChatRecap(summary = "You ordered politely.", score = 7),
+            ChatRecap(summary = "You ordered politely."),
             Json.decodeFromString<ChatRecapDTO>(reply).toDomain()
         )
     }

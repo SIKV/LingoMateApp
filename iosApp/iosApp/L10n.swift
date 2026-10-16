@@ -99,13 +99,6 @@ enum L10n {
         )
     }
 
-    static func chatRecapScore(_ score: Int32) -> String {
-        String(
-            format: String(localized: "chat_recap_score"),
-            score
-        )
-    }
-
     static func moreAppVersion(_ version: String) -> String {
         String(
             format: String(localized: "more_app_version"),

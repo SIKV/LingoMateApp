@@ -179,7 +179,6 @@ class PromptBuilderTest {
         )
 
         assertContains(prompt, "learning Spanish")
-        assertContains(prompt, "their Spanish was")
         assertContains(prompt, "two or three short sentences in Polish")
     }
 

@@ -14,8 +14,6 @@ import kotlinx.serialization.json.putJsonObject
 internal data class ChatRecapDTO(
     @SerialName("summary")
     val summary: String,
-    @SerialName("score")
-    val score: Int,
 )
 
 /**
@@ -28,11 +26,9 @@ internal val chatRecapSchema: JsonObject = buildJsonObject {
     put("type", "object")
     putJsonObject("properties") {
         putJsonObject("summary") { put("type", "string") }
-        putJsonObject("score") { put("type", "integer") }
     }
     putJsonArray("required") {
         add("summary")
-        add("score")
     }
     put("additionalProperties", false)
 }

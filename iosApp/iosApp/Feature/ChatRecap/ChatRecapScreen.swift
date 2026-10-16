@@ -38,31 +38,20 @@ struct ChatRecapScreen: View {
     // MARK: - Recap
 
     private func recapView(_ recap: ChatRecap) -> some View {
-        VStack(spacing: Spacing.lg) {
-            Text(L10n.chatRecapScore(recap.score))
-                .font(.system(size: 64, weight: .bold, design: .rounded))
-                .foregroundStyle(Color.accentColor)
-
-            Text(recap.summary)
-                .multilineTextAlignment(.center)
-        }
-        .padding(.horizontal, Spacing.xl)
+        Text(recap.summary)
+            .multilineTextAlignment(.center)
+            .padding(.horizontal, Spacing.xl)
     }
 
     // MARK: - Loading and failure
 
-    // Placeholders in the shape of the recap: the score, then a few lines of summary.
+    // Placeholders in the shape of the recap: a few lines of summary.
     private var loadingState: some View {
-        VStack(spacing: Spacing.lg) {
-            RoundedRectangle(cornerRadius: Radius.xl, style: .continuous)
-                .frame(width: 150, height: 64)
-
-            VStack(spacing: Spacing.sm) {
-                ForEach([0, Spacing.lg, Spacing.xl * 3], id: \.self) { inset in
-                    Capsule()
-                        .frame(height: 14)
-                        .padding(.horizontal, inset)
-                }
+        VStack(spacing: Spacing.sm) {
+            ForEach([0, Spacing.lg, Spacing.xl * 3], id: \.self) { inset in
+                Capsule()
+                    .frame(height: 14)
+                    .padding(.horizontal, inset)
             }
         }
         .foregroundStyle(Color(.systemGray5))

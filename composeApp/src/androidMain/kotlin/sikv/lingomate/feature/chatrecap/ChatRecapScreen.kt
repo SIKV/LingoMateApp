@@ -9,9 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
@@ -30,7 +28,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -42,7 +39,6 @@ import sikv.lingomate.data.chat.domain.ChatConfig
 import sikv.lingomate.data.chat.domain.ChatMessage
 import sikv.lingomate.data.chat.domain.ChatRecap
 import sikv.lingomate.ui.shimmer
-import sikv.lingomate.ui.theme.radius
 import sikv.lingomate.ui.theme.spacing
 
 @OptIn(ExperimentalMaterial3Api::class, KoinExperimentalAPI::class)
@@ -110,12 +106,6 @@ private fun RecapContent(
         modifier = modifier.padding(MaterialTheme.spacing.extraMedium)
     ) {
         Text(
-            text = stringResource(R.string.chat_recap_score, recap.score),
-            style = MaterialTheme.typography.displayLarge,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.primary
-        )
-        Text(
             text = recap.summary,
             style = MaterialTheme.typography.bodyLarge,
             textAlign = TextAlign.Center
@@ -123,7 +113,7 @@ private fun RecapContent(
     }
 }
 
-// Placeholders in the shape of the recap: the score, then a few lines of summary.
+// Placeholders in the shape of the recap: a few lines of summary.
 @Composable
 private fun RecapLoading(modifier: Modifier = Modifier) {
     val loadingDescription = stringResource(R.string.chat_recap_loading)
@@ -137,23 +127,13 @@ private fun RecapLoading(modifier: Modifier = Modifier) {
             .clearAndSetSemantics { contentDescription = loadingDescription }
             .shimmer()
     ) {
-        Box(
-            modifier = Modifier
-                .size(width = 160.dp, height = 64.dp)
-                .background(placeholderColor, RoundedCornerShape(MaterialTheme.radius.medium))
-        )
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)
-        ) {
-            listOf(1f, 0.9f, 0.6f).forEach { widthFraction ->
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth(widthFraction)
-                        .height(16.dp)
-                        .background(placeholderColor, CircleShape)
-                )
-            }
+        listOf(1f, 0.9f, 0.6f).forEach { widthFraction ->
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(widthFraction)
+                    .height(16.dp)
+                    .background(placeholderColor, CircleShape)
+            )
         }
     }
 }

@@ -42,11 +42,9 @@ class PromptBuilder(
             You are LingoMate, a patient and encouraging language tutor.
             The input is the transcript of a practice session in which the user was learning $practiceLanguage. The
             session is over, so do not continue it. Give the user a short recap of how it went.
-            - score: a whole number from 1 to 10 for how well the user did, judged mainly on how accurate and natural
-              their $practiceLanguage was. Take into account how hard what they tried to say was, and ignore typos,
-              missing accents and punctuation unless they change the meaning.
             - summary: two or three short sentences in $explanationLanguage.
               Say what the user did well and name the one thing most worth working on next, without listing every mistake.
+              Ignore typos, missing accents and punctuation unless they change the meaning.
             - Judge only the user's lines; the tutor's lines are there for context.
             - Speak to the user as "you" and write plain text with no markdown.
         """.trimIndent()

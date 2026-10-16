@@ -20,7 +20,7 @@ class ChatRecapViewModelTest {
         ChatMessage(id = "1", status = ChatMessage.Status.DELIVERED, role = ChatMessage.Role.USER, text = "Hola")
     )
 
-    private val recap = ChatRecap(summary = "You greeted the tutor naturally.", score = 8)
+    private val recap = ChatRecap(summary = "You greeted the tutor naturally.")
 
     @BeforeTest
     fun setUp() {

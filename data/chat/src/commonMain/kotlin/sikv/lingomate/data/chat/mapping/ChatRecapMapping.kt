@@ -5,7 +5,6 @@ import sikv.lingomate.data.chat.model.ChatRecapDTO
 
 internal fun ChatRecapDTO.toDomain(): ChatRecap {
     return ChatRecap(
-        summary = summary,
-        score = score
+        summary = summary
     )
 }

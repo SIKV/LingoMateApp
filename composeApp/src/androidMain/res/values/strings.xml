@@ -61,7 +61,6 @@
     <string name="chat_recap_loading">Preparing your recap…</string>
     <string name="chat_recap_failed">Couldn\'t prepare your recap.</string>
     <string name="chat_recap_retry_button">Try again</string>
-    <string name="chat_recap_score">%1$d/10</string>
     <string name="chat_recap_done_button">Done</string>
 
     <!-- More screen -->
