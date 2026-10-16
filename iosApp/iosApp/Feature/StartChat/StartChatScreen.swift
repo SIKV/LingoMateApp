@@ -212,6 +212,8 @@ private struct SelectorRow<Option>: View {
             .padding(.vertical, Spacing.md)
             .contentShape(Rectangle())
         }
+        // Keep the options in original order; by default a menu opening upward lists them in reverse.
+        .menuOrder(.fixed)
         // Without it the menu tints its whole label with the accent color.
         .buttonStyle(.plain)
         .disabled(options.isEmpty)
