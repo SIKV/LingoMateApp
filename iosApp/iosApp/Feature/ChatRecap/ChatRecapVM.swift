@@ -7,7 +7,8 @@ import KMPNativeCoroutinesAsync
 class ChatRecapVM: ObservableObject {
     @Published var state = ChatRecapState.companion.empty()
 
-    private var stateTask: Task<Void, Never>?
+    // uiState is a StateFlow, so the only error is CancellationError from cancel(), which needs no handling.
+    private var stateTask: Task<Void, Error>?
     private let viewModel: ChatRecapViewModel
 
     init(chatConfig: ChatConfig, messages: [ChatMessage]) {
@@ -23,13 +24,8 @@ class ChatRecapVM: ObservableObject {
         }
 
         stateTask = Task {
-            do {
-                for try await state in asyncSequence(for: viewModel.uiStateFlow) {
-                    self.state = state
-                }
-            } catch {
-                // FIXME: Handle.
-                print("Failed with error: \(error)")
+            for try await state in asyncSequence(for: viewModel.uiStateFlow) {
+                self.state = state
             }
         }
     }

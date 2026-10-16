@@ -9,7 +9,8 @@ class ManageApiKeysVM: ObservableObject {
 
     @Published var state = ManageApiKeysState.companion.empty()
 
-    private var stateTask: Task<Void, Never>?
+    // uiState is a StateFlow, so the only error is CancellationError from cancel(), which needs no handling.
+    private var stateTask: Task<Void, Error>?
 
     func listenState() {
         if stateTask != nil {
@@ -17,13 +18,8 @@ class ManageApiKeysVM: ObservableObject {
         }
 
         stateTask = Task {
-            do {
-                for try await state in asyncSequence(for: viewModel.uiStateFlow) {
-                    self.state = state
-                }
-            } catch {
-                // FIXME: Handle.
-                print("Failed with error: \(error)")
+            for try await state in asyncSequence(for: viewModel.uiStateFlow) {
+                self.state = state
             }
         }
     }
