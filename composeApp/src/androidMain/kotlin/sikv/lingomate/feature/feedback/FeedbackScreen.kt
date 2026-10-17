@@ -39,9 +39,6 @@ import org.koin.compose.viewmodel.koinViewModel
 import sikv.lingomate.R
 import sikv.lingomate.ui.theme.spacing
 
-// The counter stays hidden until the message nears its limit.
-private const val MESSAGE_COUNTER_THRESHOLD = FeedbackViewModel.MAX_MESSAGE_LENGTH * 9 / 10
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FeedbackScreen(
@@ -133,18 +130,14 @@ private fun FeedbackForm(
             value = message,
             onValueChange = onMessageChange,
             label = { Text(stringResource(R.string.feedback_message_label)) },
-            supportingText = if (message.length >= MESSAGE_COUNTER_THRESHOLD) {
-                {
-                    Text(
-                        stringResource(
-                            R.string.feedback_message_counter,
-                            message.length,
-                            FeedbackViewModel.MAX_MESSAGE_LENGTH
-                        )
+            supportingText = {
+                Text(
+                    stringResource(
+                        R.string.feedback_message_counter,
+                        message.length,
+                        FeedbackViewModel.MAX_MESSAGE_LENGTH
                     )
-                }
-            } else {
-                null
+                )
             },
             minLines = 6,
             keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
