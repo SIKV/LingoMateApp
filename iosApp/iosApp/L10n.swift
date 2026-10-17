@@ -54,6 +54,8 @@ enum L10n {
     static let moreTitle = LocalizedStringKey("more_title")
     static let moreManageApiKeysTitle = LocalizedStringKey("more_manage_api_keys_title")
     static let moreManageApiKeysSubtitle = LocalizedStringKey("more_manage_api_keys_subtitle")
+    static let moreFeedbackTitle = LocalizedStringKey("more_feedback_title")
+    static let moreFeedbackSubtitle = LocalizedStringKey("more_feedback_subtitle")
 
     static let manageApiKeysTitle = LocalizedStringKey("manage_api_keys_title")
     static let manageApiKeysKeySaved = LocalizedStringKey("manage_api_keys_key_saved")
@@ -74,6 +76,14 @@ enum L10n {
     static let manageApiKeysReplaceConfirmTitle = LocalizedStringKey("manage_api_keys_replace_confirm_title")
     static let manageApiKeysReplaceConfirmButton = LocalizedStringKey("manage_api_keys_replace_confirm_button")
     static let manageApiKeysDeleteConfirmTitle = LocalizedStringKey("manage_api_keys_delete_confirm_title")
+
+    static let feedbackTitle = LocalizedStringKey("feedback_title")
+    static let feedbackInfo = LocalizedStringKey("feedback_info")
+    static let feedbackMessageLabel = LocalizedStringKey("feedback_message_label")
+    static let feedbackEmailLabel = LocalizedStringKey("feedback_email_label")
+    static let feedbackEmailFooter = LocalizedStringKey("feedback_email_footer")
+    static let feedbackSendButton = LocalizedStringKey("feedback_send_button")
+    static let feedbackSent = LocalizedStringKey("feedback_sent")
 
     /// Note under a model that can't be picked yet, naming the provider whose key is missing.
     static func startChatAddProviderKey(_ provider: String) -> String {
@@ -103,6 +113,14 @@ enum L10n {
         String(
             format: String(localized: "more_app_version"),
             version
+        )
+    }
+
+    static func feedbackMessageCounter(_ count: Int, _ maxCount: Int) -> String {
+        String(
+            format: String(localized: "feedback_message_counter"),
+            count,
+            maxCount
         )
     }
 }

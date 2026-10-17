@@ -4,18 +4,19 @@ struct MoreView: View {
     var body: some View {
         List {
             NavigationLink(value: Route.manageApiKeys) {
-                Label {
-                    VStack(alignment: .leading, spacing: Spacing.xs) {
-                        Text(L10n.moreManageApiKeysTitle)
+                MoreRow(
+                    title: L10n.moreManageApiKeysTitle,
+                    subtitle: L10n.moreManageApiKeysSubtitle,
+                    systemImage: "key.fill"
+                )
+            }
 
-                        Text(L10n.moreManageApiKeysSubtitle)
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                    }
-                } icon: {
-                    Image(systemName: "key.fill")
-                        .foregroundStyle(Color.accentColor)
-                }
+            NavigationLink(value: Route.feedback) {
+                MoreRow(
+                    title: L10n.moreFeedbackTitle,
+                    subtitle: L10n.moreFeedbackSubtitle,
+                    systemImage: "exclamationmark.bubble.fill"
+                )
             }
         }
         .safeAreaInset(edge: .bottom) {
@@ -29,5 +30,26 @@ struct MoreView: View {
 
     private var appVersion: String {
         Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? ""
+    }
+}
+
+private struct MoreRow: View {
+    let title: LocalizedStringKey
+    let subtitle: LocalizedStringKey
+    let systemImage: String
+
+    var body: some View {
+        Label {
+            VStack(alignment: .leading, spacing: Spacing.xs) {
+                Text(title)
+
+                Text(subtitle)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
+        } icon: {
+            Image(systemName: systemImage)
+                .foregroundStyle(Color.accentColor)
+        }
     }
 }
