@@ -34,6 +34,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.compose.viewmodel.koinViewModel
 import sikv.lingomate.R
@@ -132,11 +133,13 @@ private fun FeedbackForm(
             label = { Text(stringResource(R.string.feedback_message_label)) },
             supportingText = {
                 Text(
-                    stringResource(
+                    text = stringResource(
                         R.string.feedback_message_counter,
                         message.length,
                         FeedbackViewModel.MAX_MESSAGE_LENGTH
-                    )
+                    ),
+                    textAlign = TextAlign.End,
+                    modifier = Modifier.fillMaxWidth()
                 )
             },
             minLines = 6,
