@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
+import androidx.compose.material.icons.rounded.Feedback
 import androidx.compose.material.icons.rounded.Key
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -29,7 +30,8 @@ import sikv.lingomate.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MoreScreen(
-    onNavigateToManageApiKeys: () -> Unit
+    onNavigateToManageApiKeys: () -> Unit,
+    onNavigateToFeedback: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -48,6 +50,12 @@ fun MoreScreen(
                 title = stringResource(R.string.more_manage_api_keys_title),
                 subtitle = stringResource(R.string.more_manage_api_keys_subtitle),
                 onClick = onNavigateToManageApiKeys
+            )
+            MoreItem(
+                icon = Icons.Rounded.Feedback,
+                title = stringResource(R.string.more_feedback_title),
+                subtitle = stringResource(R.string.more_feedback_subtitle),
+                onClick = onNavigateToFeedback
             )
 
             Spacer(modifier = Modifier.weight(1f))

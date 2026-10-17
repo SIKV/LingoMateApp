@@ -16,6 +16,7 @@ fun appModule() = listOf(
     apiKeyStorageModule(),
     keyValueStorageModule(),
     apiKeyProviderModule,
+    feedbackSenderModule,
     viewModelsModule,
     onDeviceLLMModule(),
 )

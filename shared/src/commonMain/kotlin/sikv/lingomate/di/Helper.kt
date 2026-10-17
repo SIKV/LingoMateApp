@@ -8,6 +8,7 @@ import sikv.lingomate.data.chat.domain.ChatConfig
 import sikv.lingomate.data.chat.domain.ChatMessage
 import sikv.lingomate.feature.chat.ChatViewModel
 import sikv.lingomate.feature.chatrecap.ChatRecapViewModel
+import sikv.lingomate.feature.feedback.FeedbackViewModel
 import sikv.lingomate.feature.manageapikeys.ManageApiKeysViewModel
 import sikv.lingomate.feature.startchat.StartChatViewModel
 
@@ -30,4 +31,6 @@ object ViewModels : KoinComponent {
     ): ChatRecapViewModel = get { parametersOf(chatConfig, messages) }
 
     fun getManageApiKeysViewModel(): ManageApiKeysViewModel = get()
+
+    fun getFeedbackViewModel(): FeedbackViewModel = get()
 }

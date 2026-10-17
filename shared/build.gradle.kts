@@ -61,6 +61,7 @@ kotlin {
             api(project(":feature:chat"))
             api(project(":feature:chatRecap"))
             api(project(":feature:manageApiKeys"))
+            api(project(":feature:feedback"))
             api(project(":onDeviceLLM"))
             implementation(libs.kotlinx.coroutines.core)
             implementation(project(":api:remoteConfig"))
