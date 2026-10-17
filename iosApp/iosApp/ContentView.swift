@@ -3,7 +3,9 @@ import Shared
 
 struct ContentView: View {
     @StateObject private var appRouter = AppRouter()
-    
+    // Lives above the navigation stack so a toast outlasts the screen that showed it.
+    @StateObject private var toastPresenter = ToastPresenter()
+
     var body: some View {
         NavigationStack(path: $appRouter.path) {
             TabView {
@@ -26,9 +28,13 @@ struct ContentView: View {
                     ChatDetailsView()
                 case .manageApiKeys:
                     ManageApiKeysScreen()
+                case .feedback:
+                    FeedbackScreen()
                 }
             }
         }
+        .toastOverlay(toastPresenter)
         .environmentObject(appRouter)
+        .environmentObject(toastPresenter)
     }
 }

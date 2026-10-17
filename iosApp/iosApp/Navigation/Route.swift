@@ -6,4 +6,5 @@ enum Route: Hashable {
     case chatRecap(ChatConfig, [ChatMessage])
     case chatDetails
     case manageApiKeys
+    case feedback
 }
