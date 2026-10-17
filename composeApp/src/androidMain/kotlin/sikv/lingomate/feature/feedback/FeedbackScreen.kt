@@ -151,7 +151,13 @@ private fun FeedbackForm(
             value = email,
             onValueChange = onEmailChange,
             label = { Text(stringResource(R.string.feedback_email_label)) },
-            supportingText = { Text(stringResource(R.string.feedback_email_supporting_text)) },
+            supportingText = {
+                Text(
+                    text = stringResource(R.string.feedback_email_supporting_text),
+                    textAlign = TextAlign.End,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            },
             singleLine = true,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Email,
