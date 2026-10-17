@@ -25,4 +25,11 @@ class FeedbackViewModel(
         )
         _uiState.update { it.copy(isSent = true) }
     }
+
+    companion object {
+        const val MAX_MESSAGE_LENGTH = 2000
+
+        // The longest address the email standard (RFC 5321) allows.
+        const val MAX_EMAIL_LENGTH = 254
+    }
 }
