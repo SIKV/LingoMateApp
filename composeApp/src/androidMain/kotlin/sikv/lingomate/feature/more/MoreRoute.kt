@@ -10,4 +10,7 @@ sealed interface MoreRoute : NavKey {
 
     @Serializable
     data object ManageApiKeys : MoreRoute
+
+    @Serializable
+    data object Feedback : MoreRoute
 }

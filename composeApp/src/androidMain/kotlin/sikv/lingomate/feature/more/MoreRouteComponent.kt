@@ -6,6 +6,7 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
+import sikv.lingomate.feature.feedback.FeedbackScreen
 import sikv.lingomate.feature.manageapikeys.ManageApiKeysScreen
 
 @Composable
@@ -32,11 +33,21 @@ fun MoreRouteComponent(
                 MoreScreen(
                     onNavigateToManageApiKeys = {
                         backStack.add(MoreRoute.ManageApiKeys)
+                    },
+                    onNavigateToFeedback = {
+                        backStack.add(MoreRoute.Feedback)
                     }
                 )
             }
             entry<MoreRoute.ManageApiKeys> {
                 ManageApiKeysScreen(
+                    onBackPressed = {
+                        backStack.removeLastOrNull()
+                    }
+                )
+            }
+            entry<MoreRoute.Feedback> {
+                FeedbackScreen(
                     onBackPressed = {
                         backStack.removeLastOrNull()
                     }
