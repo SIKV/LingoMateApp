@@ -6,6 +6,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import sikv.lingomate.analytics.Analytics
+import sikv.lingomate.analytics.AnalyticsEvent
 import sikv.lingomate.data.apikeystorage.ApiKeyProvider
 import sikv.lingomate.data.apikeystorage.ApiKeyStorage
 import kotlin.native.ObjCName
@@ -20,6 +22,7 @@ import kotlin.native.ObjCName
 @ObjCName("ManageApiKeysViewModel", exact = true)
 class ManageApiKeysViewModel(
     private val apiKeyStorage: ApiKeyStorage,
+    private val analytics: Analytics,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ManageApiKeysState.empty())
@@ -35,12 +38,14 @@ class ManageApiKeysViewModel(
     fun addApiKey(provider: ApiKeyProvider, apiKey: String) {
         apiKeyStorage.store(provider, apiKey)
         refreshStoredProviders()
+        analytics.track(AnalyticsEvent.ApiKeyAdded(provider = provider.name))
     }
 
     /** Removes the stored key for [provider], if present. */
     fun removeApiKey(provider: ApiKeyProvider) {
         apiKeyStorage.remove(provider)
         refreshStoredProviders()
+        analytics.track(AnalyticsEvent.ApiKeyRemoved(provider = provider.name))
     }
 
     private fun refreshStoredProviders() {

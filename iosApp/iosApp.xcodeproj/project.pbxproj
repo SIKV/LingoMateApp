@@ -12,6 +12,7 @@
 		C52A1E072ECFAE390006A82C /* KMPNativeCoroutinesCore in Frameworks */ = {isa = PBXBuildFile; productRef = C52A1E062ECFAE390006A82C /* KMPNativeCoroutinesCore */; };
 		C52A1E092ECFAE390006A82C /* KMPNativeCoroutinesRxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = C52A1E082ECFAE390006A82C /* KMPNativeCoroutinesRxSwift */; };
 		C5C86D703071711A00DB32CB /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = C5C86D6F3071711A00DB32CB /* Sentry */; };
+		C5F1A0033080000000A0C001 /* PostHog in Frameworks */ = {isa = PBXBuildFile; productRef = C5F1A0023080000000A0C001 /* PostHog */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +55,7 @@
 				C52A1E052ECFAE390006A82C /* KMPNativeCoroutinesCombine in Frameworks */,
 				C52A1E072ECFAE390006A82C /* KMPNativeCoroutinesCore in Frameworks */,
 				C52A1E092ECFAE390006A82C /* KMPNativeCoroutinesRxSwift in Frameworks */,
+				C5F1A0033080000000A0C001 /* PostHog in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -103,6 +105,7 @@
 				C52A1E062ECFAE390006A82C /* KMPNativeCoroutinesCore */,
 				C52A1E082ECFAE390006A82C /* KMPNativeCoroutinesRxSwift */,
 				C5C86D6F3071711A00DB32CB /* Sentry */,
+				C5F1A0023080000000A0C001 /* PostHog */,
 			);
 			productName = iosApp;
 			productReference = CDEBB6388EA4A20D5FE0047C /* LingoMate.app */;
@@ -135,6 +138,7 @@
 			packageReferences = (
 				C52A1E012ECFAE390006A82C /* XCRemoteSwiftPackageReference "KMP-NativeCoroutines" */,
 				C5C86D6E3071711A00DB32CB /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
+				C5F1A0013080000000A0C001 /* XCRemoteSwiftPackageReference "posthog-ios" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 75587AF2D6DA16E60E46083E /* Products */;
@@ -419,6 +423,14 @@
 				version = 8.58.2;
 			};
 		};
+		C5F1A0013080000000A0C001 /* XCRemoteSwiftPackageReference "posthog-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/PostHog/posthog-ios.git";
+			requirement = {
+				kind = exactVersion;
+				version = 3.92.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -446,6 +458,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = C5C86D6E3071711A00DB32CB /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
 			productName = Sentry;
+		};
+		C5F1A0023080000000A0C001 /* PostHog */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C5F1A0013080000000A0C001 /* XCRemoteSwiftPackageReference "posthog-ios" */;
+			productName = PostHog;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

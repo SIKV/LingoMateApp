@@ -21,7 +21,8 @@ val viewModelsModule = module {
 
     viewModel {
         ManageApiKeysViewModel(
-            apiKeyStorage = get()
+            apiKeyStorage = get(),
+            analytics = get()
         )
     }
 
@@ -33,14 +34,17 @@ val viewModelsModule = module {
 
     viewModel { (chatConfig: ChatConfig) ->
         ChatViewModel(
-            chatService = get { parametersOf(chatConfig) }
+            chatConfig = chatConfig,
+            chatService = get { parametersOf(chatConfig) },
+            analytics = get()
         )
     }
 
     viewModel { (chatConfig: ChatConfig, messages: List<ChatMessage>) ->
         ChatRecapViewModel(
             messages = messages,
-            chatRecapService = get { parametersOf(chatConfig) }
+            chatRecapService = get { parametersOf(chatConfig) },
+            analytics = get()
         )
     }
 }

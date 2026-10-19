@@ -5,13 +5,23 @@ import Shared
 struct iOSApp: App {
     
     init() {
-        OnDeviceLLM_iosKt.setIOSOnDeviceLLMProvider(protocol: IOSOnDeviceLLMProvider())
-        HelperKt.doInitKoinIOS()
         #if DEBUG
-        SentryKt.doInitSentry(isDebug: true)
+        let isDebug = true
         #else
-        SentryKt.doInitSentry(isDebug: false)
+        let isDebug = false
         #endif
+
+        OnDeviceLLM_iosKt.setIOSOnDeviceLLMProvider(protocol: IOSOnDeviceLLMProvider())
+
+        HelperKt.doInitKoinIOS(
+            analytics: IOSAnalytics(
+                projectToken: PostHogProjectTokenKt.postHogProjectToken,
+                host: PostHogHostKt.postHogHost,
+                isDebug: isDebug
+            )
+        )
+
+        SentryKt.doInitSentry(isDebug: isDebug)
     }
     
     var body: some Scene {

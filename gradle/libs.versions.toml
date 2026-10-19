@@ -69,6 +69,8 @@ kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
 
 mlkit-genai-prompt = { module = "com.google.mlkit:genai-prompt", version = "1.0.0-beta2" }
 
+posthog-android = { module = "com.posthog:posthog-android", version = "3.72.3" }
+
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
