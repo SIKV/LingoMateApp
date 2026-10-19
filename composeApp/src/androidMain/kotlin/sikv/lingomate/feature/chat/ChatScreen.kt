@@ -283,7 +283,10 @@ private fun MessageInputBar(
                 modifier = Modifier.weight(1f),
                 maxLines = 4,
                 singleLine = false,
-                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences)
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Sentences,
+                    autoCorrectEnabled = false
+                )
             )
             Spacer(modifier = Modifier.size(8.dp))
             IconButton(

@@ -105,6 +105,7 @@ struct ChatScreen: View {
             TextField(L10n.chatTypeMessageHint, text: $inputText, axis: .vertical)
                 .textFieldStyle(.plain)
                 .lineLimit(1...5)
+                .autocorrectionDisabled()
                 .submitLabel(.send)
                 .focused($isInputFocused)
                 .onSubmit {
