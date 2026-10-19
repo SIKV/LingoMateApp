@@ -72,10 +72,8 @@ enum L10n {
     static let manageApiKeysHideKey = LocalizedStringKey("manage_api_keys_hide_key")
     static let manageApiKeysSaveButton = LocalizedStringKey("manage_api_keys_save_button")
     static let manageApiKeysCancelButton = LocalizedStringKey("manage_api_keys_cancel_button")
-    static let manageApiKeysDeleteButton = LocalizedStringKey("manage_api_keys_delete_button")
     static let manageApiKeysReplaceConfirmTitle = LocalizedStringKey("manage_api_keys_replace_confirm_title")
     static let manageApiKeysReplaceConfirmButton = LocalizedStringKey("manage_api_keys_replace_confirm_button")
-    static let manageApiKeysDeleteConfirmTitle = LocalizedStringKey("manage_api_keys_delete_confirm_title")
 
     static let feedbackTitle = LocalizedStringKey("feedback_title")
     static let feedbackInfo = LocalizedStringKey("feedback_info")
@@ -97,14 +95,6 @@ enum L10n {
     static func manageApiKeysReplaceConfirmMessage(_ provider: String) -> String {
         String(
             format: String(localized: "manage_api_keys_replace_confirm_message"),
-            provider
-        )
-    }
-
-    /// Confirmation body naming the provider whose key is about to be deleted.
-    static func manageApiKeysDeleteConfirmMessage(_ provider: String) -> String {
-        String(
-            format: String(localized: "manage_api_keys_delete_confirm_message"),
             provider
         )
     }

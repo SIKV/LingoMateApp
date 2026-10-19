@@ -510,39 +510,6 @@
         }
       }
     },
-    "manage_api_keys_delete_button" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Delete"
-          }
-        }
-      }
-    },
-    "manage_api_keys_delete_confirm_message" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The key for %@ will be removed from this device."
-          }
-        }
-      }
-    },
-    "manage_api_keys_delete_confirm_title" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Delete API key?"
-          }
-        }
-      }
-    },
     "manage_api_keys_empty_info" : {
       "extractionState" : "manual",
       "localizations" : {
