@@ -8,13 +8,18 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import sikv.lingomate.analytics.Analytics
+import sikv.lingomate.analytics.AnalyticsEvent
+import sikv.lingomate.data.chat.domain.ChatConfig
 import sikv.lingomate.data.chat.domain.ChatMessage
 import sikv.lingomate.data.chat.service.ChatService
 import kotlin.native.ObjCName
 
 @ObjCName("ChatViewModel", exact = true)
 class ChatViewModel(
-    private val chatService: ChatService
+    chatConfig: ChatConfig,
+    private val chatService: ChatService,
+    private val analytics: Analytics
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ChatState.empty())
@@ -38,6 +43,16 @@ class ChatViewModel(
         }
 
         chatService.startChat(viewModelScope)
+
+        analytics.track(
+            AnalyticsEvent.ChatStarted(
+                chatModelProvider = chatConfig.chatModel.provider.name,
+                chatModel = chatConfig.chatModel.model,
+                practiceLanguage = chatConfig.practiceLanguage.name,
+                assistantLanguage = chatConfig.assistantLanguage.name,
+                practiceType = chatConfig.practiceType.name
+            )
+        )
     }
 
     fun sendMessage(message: String) {
@@ -45,6 +60,7 @@ class ChatViewModel(
         if (trimmedMessage.isEmpty()) return
 
         chatService.sendMessage(trimmedMessage, viewModelScope)
+        analytics.track(AnalyticsEvent.MessageSent)
     }
 
     fun retryMessage(messageId: String) {

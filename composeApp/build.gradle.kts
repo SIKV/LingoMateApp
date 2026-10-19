@@ -22,6 +22,7 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             implementation(libs.androidx.navigation3.runtime)
             implementation(libs.androidx.navigation3.ui)
+            implementation(libs.posthog.android)
         }
         commonMain.dependencies {
             implementation(compose.runtime)

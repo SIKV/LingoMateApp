@@ -7,7 +7,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
+import sikv.lingomate.analytics.Analytics
+import sikv.lingomate.analytics.AnalyticsEvent
+import sikv.lingomate.data.chat.domain.ChatConfig
 import sikv.lingomate.data.chat.domain.ChatMessage
+import sikv.lingomate.data.chat.domain.ChatModel
+import sikv.lingomate.data.chat.domain.ChatModelProvider
+import sikv.lingomate.data.chat.domain.Language
+import sikv.lingomate.data.chat.domain.PracticeType
 import sikv.lingomate.data.chat.service.ChatService
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
@@ -19,7 +26,18 @@ import kotlin.test.assertTrue
 @OptIn(ExperimentalCoroutinesApi::class)
 class ChatViewModelTest {
 
+    private val chatConfig = ChatConfig(
+        chatModel = ChatModel(provider = ChatModelProvider.OPEN_AI, model = "gpt-4o-mini"),
+        practiceLanguage = Language.GERMAN,
+        assistantLanguage = Language.ENGLISH,
+        practiceType = PracticeType.CONVERSATION
+    )
+
     private val chatService = FakeChatService()
+
+    private val trackedEvents = mutableListOf<AnalyticsEvent>()
+
+    private fun viewModel() = ChatViewModel(chatConfig, chatService, Analytics(trackedEvents::add))
 
     @BeforeTest
     fun setUp() {
@@ -33,21 +51,21 @@ class ChatViewModelTest {
 
     @Test
     fun trimsSpacesAroundTheMessage() {
-        ChatViewModel(chatService).sendMessage("  Hallo, wie geht's?\n ")
+        viewModel().sendMessage("  Hallo, wie geht's?\n ")
 
         assertEquals(listOf("Hallo, wie geht's?"), chatService.sentMessages)
     }
 
     @Test
     fun keepsSpacesInsideTheMessage() {
-        ChatViewModel(chatService).sendMessage("Guten  Morgen")
+        viewModel().sendMessage("Guten  Morgen")
 
         assertEquals(listOf("Guten  Morgen"), chatService.sentMessages)
     }
 
     @Test
     fun ignoresABlankMessage() {
-        ChatViewModel(chatService).sendMessage(" \n\t ")
+        viewModel().sendMessage(" \n\t ")
 
         assertTrue(chatService.sentMessages.isEmpty())
     }
@@ -59,7 +77,7 @@ class ChatViewModelTest {
             message(ChatMessage.Role.USER, ChatMessage.Status.FAILED)
         )
 
-        assertFalse(ChatViewModel(chatService).uiState.value.canEndChat)
+        assertFalse(viewModel().uiState.value.canEndChat)
     }
 
     @Test
@@ -69,7 +87,39 @@ class ChatViewModelTest {
             message(ChatMessage.Role.USER, ChatMessage.Status.DELIVERED)
         )
 
-        assertTrue(ChatViewModel(chatService).uiState.value.canEndChat)
+        assertTrue(viewModel().uiState.value.canEndChat)
+    }
+
+    @Test
+    fun tracksTheChatStartWithItsConfig() {
+        viewModel()
+
+        assertEquals(
+            listOf<AnalyticsEvent>(
+                AnalyticsEvent.ChatStarted(
+                    chatModelProvider = "OPEN_AI",
+                    chatModel = "gpt-4o-mini",
+                    practiceLanguage = "GERMAN",
+                    assistantLanguage = "ENGLISH",
+                    practiceType = "CONVERSATION"
+                )
+            ),
+            trackedEvents
+        )
+    }
+
+    @Test
+    fun tracksASentMessage() {
+        viewModel().sendMessage("Hallo")
+
+        assertEquals(AnalyticsEvent.MessageSent, trackedEvents.last())
+    }
+
+    @Test
+    fun doesNotTrackABlankMessage() {
+        viewModel().sendMessage(" \n\t ")
+
+        assertFalse(trackedEvents.contains(AnalyticsEvent.MessageSent))
     }
 
     private fun message(role: ChatMessage.Role, status: ChatMessage.Status): ChatMessage {

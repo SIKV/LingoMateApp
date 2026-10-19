@@ -5,6 +5,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
+import sikv.lingomate.analytics.Analytics
+import sikv.lingomate.analytics.AnalyticsEvent
 import sikv.lingomate.data.chat.domain.ChatMessage
 import sikv.lingomate.data.chat.domain.ChatRecap
 import sikv.lingomate.data.chat.service.ChatRecapService
@@ -22,6 +24,11 @@ class ChatRecapViewModelTest {
 
     private val recap = ChatRecap(summary = "You greeted the tutor naturally.")
 
+    private val trackedEvents = mutableListOf<AnalyticsEvent>()
+
+    private fun viewModel(chatRecapService: ChatRecapService) =
+        ChatRecapViewModel(messages, chatRecapService, Analytics(trackedEvents::add))
+
     @BeforeTest
     fun setUp() {
         Dispatchers.setMain(UnconfinedTestDispatcher())
@@ -36,21 +43,21 @@ class ChatRecapViewModelTest {
     fun recapsTheMessagesItWasGiven() {
         val chatRecapService = FakeChatRecapService(Result.success(recap))
 
-        ChatRecapViewModel(messages, chatRecapService)
+        viewModel(chatRecapService)
 
         assertEquals(listOf(messages), chatRecapService.requestedMessages)
     }
 
     @Test
     fun showsTheRecapOnceItArrives() {
-        val viewModel = ChatRecapViewModel(messages, FakeChatRecapService(Result.success(recap)))
+        val viewModel = viewModel(FakeChatRecapService(Result.success(recap)))
 
         assertEquals(ChatRecapState(recap = recap), viewModel.uiState.value)
     }
 
     @Test
     fun reportsAFailedRecap() {
-        val viewModel = ChatRecapViewModel(messages, FakeChatRecapService(Result.failure(Exception())))
+        val viewModel = viewModel(FakeChatRecapService(Result.failure(Exception())))
 
         assertEquals(ChatRecapState(hasFailed = true), viewModel.uiState.value)
     }
@@ -58,12 +65,26 @@ class ChatRecapViewModelTest {
     @Test
     fun retryReplacesTheFailureWithTheRecap() {
         val chatRecapService = FakeChatRecapService(Result.failure(Exception()))
-        val viewModel = ChatRecapViewModel(messages, chatRecapService)
+        val viewModel = viewModel(chatRecapService)
 
         chatRecapService.result = Result.success(recap)
         viewModel.retry()
 
         assertEquals(ChatRecapState(recap = recap), viewModel.uiState.value)
+    }
+
+    @Test
+    fun tracksTheRecapWithTheUserMessageCount() {
+        val messages = messages + ChatMessage(
+            id = "2",
+            status = ChatMessage.Status.DELIVERED,
+            role = ChatMessage.Role.ASSISTANT,
+            text = "¡Hola!"
+        )
+
+        ChatRecapViewModel(messages, FakeChatRecapService(Result.success(recap)), Analytics(trackedEvents::add))
+
+        assertEquals(listOf<AnalyticsEvent>(AnalyticsEvent.ChatRecapOpened(userMessageCount = 1)), trackedEvents)
     }
 }
 

@@ -46,6 +46,7 @@ kotlin {
                 implementation(libs.kotlin.stdlib)
                 implementation(libs.androidx.lifecycle.viewmodelCompose)
                 implementation(project(":data:chat"))
+                implementation(project(":analytics"))
             }
         }
 

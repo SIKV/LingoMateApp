@@ -8,26 +8,39 @@ plugins {
     alias(libs.plugins.sentry)
 }
 
-val localProperties = providers.fileContents(rootProject.layout.projectDirectory.file("local.properties")).asText
+val localProperties: Provider<Properties> = providers.fileContents(rootProject.layout.projectDirectory.file("local.properties")).asText
     .map { text -> Properties().apply { load(text.reader()) } }
 
-// Takes the DSN from local.properties for local builds and from an environment variable on CI.
-// Without either, the DSN is empty and Sentry stays disabled.
-fun generateSentryDsn(sourceSet: String, localPropertiesKey: String, environmentVariable: String) =
-    tasks.register("generate${sourceSet.replaceFirstChar(Char::uppercase)}SentryDsn") {
-        val dsn = localProperties.map { it.getProperty(localPropertiesKey) }
+// Takes a value from local.properties for local builds and from an environment variable on CI.
+// Without either, the value is empty and the SDK that reads it stays disabled.
+fun generateBuildValue(
+    name: String,
+    declaration: String,
+    sourceSet: String,
+    localPropertiesKey: String,
+    environmentVariable: String,
+): TaskProvider<Task> =
+    tasks.register("generate${sourceSet.replaceFirstChar(Char::uppercase)}$name") {
+        val value: Provider<String> = localProperties.map { it.getProperty(localPropertiesKey) }
             .orElse(providers.environmentVariable(environmentVariable))
             .orElse("")
-        val outputDir = layout.buildDirectory.dir("generated/sentryDsn/$sourceSet")
-        inputs.property("dsn", dsn)
+        val outputDir: Provider<Directory> = layout.buildDirectory.dir("generated/$name/$sourceSet")
+        inputs.property("value", value)
         outputs.dir(outputDir)
         doLast {
-            outputDir.get().file("sikv/lingomate/SentryDsn.kt").asFile.apply {
+            outputDir.get().file("sikv/lingomate/$name.kt").asFile.apply {
                 parentFile.mkdirs()
-                writeText("package sikv.lingomate\n\ninternal actual val sentryDsn: String = \"${dsn.get()}\"\n")
+                writeText("package sikv.lingomate\n\n$declaration = \"${value.get()}\"\n")
             }
         }
     }
+
+fun generateSentryDsn(sourceSet: String, localPropertiesKey: String, environmentVariable: String): TaskProvider<Task> =
+    generateBuildValue("SentryDsn", "internal actual val sentryDsn: String", sourceSet, localPropertiesKey, environmentVariable)
+
+// One PostHog project serves both apps, so its values go to commonMain.
+fun generatePostHogValue(name: String, localPropertiesKey: String, environmentVariable: String): TaskProvider<Task> =
+    generateBuildValue("PostHog$name", "val postHog$name: String", "commonMain", localPropertiesKey, environmentVariable)
 
 kotlin {
     androidTarget {
@@ -63,12 +76,17 @@ kotlin {
             api(project(":feature:manageApiKeys"))
             api(project(":feature:feedback"))
             api(project(":onDeviceLLM"))
+            api(project(":analytics"))
             implementation(libs.kotlinx.coroutines.core)
             implementation(project(":api:remoteConfig"))
             implementation(project(":api:openai"))
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+        }
+        commonMain {
+            kotlin.srcDir(generatePostHogValue("ProjectToken", "posthog.projectToken", "POSTHOG_PROJECT_TOKEN"))
+            kotlin.srcDir(generatePostHogValue("Host", "posthog.host", "POSTHOG_HOST"))
         }
         androidMain {
             kotlin.srcDir(generateSentryDsn("androidMain", "sentry.dsn.android", "SENTRY_DSN_ANDROID"))

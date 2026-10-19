@@ -8,6 +8,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import sikv.lingomate.analytics.Analytics
+import sikv.lingomate.analytics.AnalyticsEvent
 import sikv.lingomate.data.chat.domain.ChatMessage
 import sikv.lingomate.data.chat.service.ChatRecapService
 import kotlin.native.ObjCName
@@ -15,7 +17,8 @@ import kotlin.native.ObjCName
 @ObjCName("ChatRecapViewModel", exact = true)
 class ChatRecapViewModel(
     private val messages: List<ChatMessage>,
-    private val chatRecapService: ChatRecapService
+    private val chatRecapService: ChatRecapService,
+    analytics: Analytics
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ChatRecapState.empty())
@@ -25,6 +28,12 @@ class ChatRecapViewModel(
 
     init {
         loadRecap()
+
+        analytics.track(
+            AnalyticsEvent.ChatRecapOpened(
+                userMessageCount = messages.count { it.role == ChatMessage.Role.USER }
+            )
+        )
     }
 
     fun retry() {
