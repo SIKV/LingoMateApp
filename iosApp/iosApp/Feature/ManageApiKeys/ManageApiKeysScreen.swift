@@ -5,21 +5,9 @@ struct ManageApiKeysScreen: View {
     @StateObject private var manageApiKeysVM = ManageApiKeysVM()
 
     @State private var showAddSheet = false
-    @State private var providersPendingDeletion: [ApiKeyProvider] = []
 
     private var storedProviders: [ApiKeyProvider] {
         manageApiKeysVM.state.storedProviders
-    }
-
-    private var showsDeleteConfirmation: Binding<Bool> {
-        Binding(
-            get: { !providersPendingDeletion.isEmpty },
-            set: { isPresented in
-                if !isPresented {
-                    providersPendingDeletion = []
-                }
-            }
-        )
     }
 
     var body: some View {
@@ -53,26 +41,6 @@ struct ManageApiKeysScreen: View {
                 onAdd: manageApiKeysVM.addApiKey
             )
         }
-        .confirmationDialog(
-            L10n.manageApiKeysDeleteConfirmTitle,
-            isPresented: showsDeleteConfirmation,
-            titleVisibility: .visible
-        ) {
-            Button(L10n.manageApiKeysDeleteButton, role: .destructive) {
-                providersPendingDeletion.forEach(manageApiKeysVM.removeApiKey)
-                providersPendingDeletion = []
-            }
-
-            Button(L10n.manageApiKeysCancelButton, role: .cancel) { }
-        } message: {
-            Text(
-                L10n.manageApiKeysDeleteConfirmMessage(
-                    providersPendingDeletion
-                        .map(\.localizedNameString)
-                        .joined(separator: ", ")
-                )
-            )
-        }
         .task {
             manageApiKeysVM.listenState()
         }
@@ -89,9 +57,8 @@ struct ManageApiKeysScreen: View {
                 ForEach(storedProviders, id: \.storageKey) { provider in
                     ApiKeyRow(provider: provider)
                 }
-                // Deleting a key is irreversible, so the swipe only stages it.
                 .onDelete { offsets in
-                    providersPendingDeletion = offsets.map { storedProviders[$0] }
+                    offsets.map { storedProviders[$0] }.forEach(manageApiKeysVM.removeApiKey)
                 }
             } footer: {
                 Text(L10n.manageApiKeysListFooter)
