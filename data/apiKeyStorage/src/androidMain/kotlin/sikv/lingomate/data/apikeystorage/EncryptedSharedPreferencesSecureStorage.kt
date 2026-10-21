@@ -44,6 +44,7 @@ internal class EncryptedSharedPreferencesSecureStorage(
     }
 
     private companion object {
+        // The app's backup rules exclude this file by name, so keep them in sync when renaming it.
         const val PREFS_FILE_NAME = "api_key_storage"
     }
 }
