@@ -86,11 +86,7 @@ struct ChatScreen: View {
                 .hidingSharedBackground()
             }
         }
-        .safeAreaInset(edge: .bottom) {
-            inputBar
-                .background(.ultraThinMaterial)
-                .overlay(Divider(), alignment: .top)
-        }
+        .bottomInputBar(inputBar)
     }
 
     private func scrollToLastMessage(_ proxy: ScrollViewProxy) {
@@ -100,34 +96,55 @@ struct ChatScreen: View {
         }
     }
     
+    @ViewBuilder
     private var inputBar: some View {
-        HStack(alignment: .bottom, spacing: Spacing.sm) {
-            TextField(L10n.chatTypeMessageHint, text: $inputText, axis: .vertical)
-                .textFieldStyle(.plain)
-                .lineLimit(1...5)
-                .autocorrectionDisabled()
-                .submitLabel(.send)
-                .focused($isInputFocused)
-                .onSubmit {
-                    send()
-                }
-                .padding(.vertical, Spacing.sm)
-                .padding(.horizontal, Spacing.lg)
-                .background(
-                    fieldShape.fill(Color(.secondarySystemBackground))
-                )
-                .overlay(
-                    fieldShape.stroke(
-                        isInputFocused ? Color.accentColor.opacity(0.55) : Color.gray.opacity(0.2),
-                        lineWidth: 1
+        if #available(iOS 26.0, *) {
+            // The send button sits inside the glass field, as in Messages, so the disabled one reads against the
+            // glass rather than the messages beneath. Corners stay concentric with the button's.
+            HStack(alignment: .bottom, spacing: Spacing.sm) {
+                inputField
+                    .padding(.leading, Spacing.md)
+                sendButton
+            }
+            .padding(Spacing.xs)
+            .glassEffect(
+                .regular.interactive(),
+                in: .rect(cornerRadius: GradientButton.height / 2 + Spacing.xs)
+            )
+            .padding(.horizontal, Spacing.md)
+            .padding(.vertical, Spacing.sm)
+        } else {
+            HStack(alignment: .bottom, spacing: Spacing.sm) {
+                inputField
+                    .padding(.horizontal, Spacing.lg)
+                    .background(
+                        fieldShape.fill(Color(.secondarySystemBackground))
                     )
-                )
-                .animation(.easeInOut(duration: 0.2), value: isInputFocused)
-
-            sendButton
+                    .overlay(
+                        fieldShape.stroke(
+                            isInputFocused ? Color.accentColor.opacity(0.55) : Color.gray.opacity(0.2),
+                            lineWidth: 1
+                        )
+                    )
+                    .animation(.easeInOut(duration: 0.2), value: isInputFocused)
+                sendButton
+            }
+            .padding(.horizontal, Spacing.md)
+            .padding(.vertical, Spacing.sm)
         }
-        .padding(.horizontal, Spacing.md)
-        .padding(.vertical, Spacing.sm)
+    }
+
+    private var inputField: some View {
+        TextField(L10n.chatTypeMessageHint, text: $inputText, axis: .vertical)
+            .textFieldStyle(.plain)
+            .lineLimit(1...5)
+            .autocorrectionDisabled()
+            .submitLabel(.send)
+            .focused($isInputFocused)
+            .onSubmit {
+                send()
+            }
+            .padding(.vertical, Spacing.sm)
     }
 
     private var fieldShape: RoundedRectangle {
@@ -147,6 +164,22 @@ struct ChatScreen: View {
         
         chatVM.send(text)
         inputText = ""
+    }
+}
+
+private extension View {
+    // From iOS 26 the bar floats over the messages, and the scroll edge effect fades them out beneath it.
+    @ViewBuilder
+    func bottomInputBar(_ bar: some View) -> some View {
+        if #available(iOS 26.0, *) {
+            safeAreaBar(edge: .bottom) { bar }
+        } else {
+            safeAreaInset(edge: .bottom) {
+                bar
+                    .background(.ultraThinMaterial)
+                    .overlay(Divider(), alignment: .top)
+            }
+        }
     }
 }
 

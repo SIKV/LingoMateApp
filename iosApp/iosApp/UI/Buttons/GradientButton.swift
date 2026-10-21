@@ -6,7 +6,7 @@ struct GradientButton: View {
         case title(LocalizedStringKey, fillsWidth: Bool)
     }
 
-    private static let height: CGFloat = 38
+    static let height: CGFloat = 38
 
     private let content: Content
     private let action: () -> Void
