@@ -340,7 +340,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "End chat"
+            "value" : "End Chat"
           }
         }
       }
@@ -373,7 +373,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Try again"
+            "value" : "Try Again"
           }
         }
       }
@@ -472,7 +472,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Send feedback"
+            "value" : "Send Feedback"
           }
         }
       }
@@ -483,7 +483,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Add API key"
+            "value" : "Add API Key"
           }
         }
       }
@@ -494,7 +494,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Add API key"
+            "value" : "Add API Key"
           }
         }
       }
@@ -527,7 +527,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No API keys yet"
+            "value" : "No API Keys Yet"
           }
         }
       }
@@ -626,7 +626,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Replace API key?"
+            "value" : "Replace API Key?"
           }
         }
       }
@@ -637,7 +637,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Replace API key"
+            "value" : "Replace API Key"
           }
         }
       }
@@ -670,7 +670,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "API keys"
+            "value" : "API Keys"
           }
         }
       }
@@ -681,7 +681,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Version %@"
+            "value" : "LingoMate %@"
           }
         }
       }
@@ -703,7 +703,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Send feedback"
+            "value" : "Send Feedback"
           }
         }
       }
@@ -725,7 +725,18 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Manage API keys"
+            "value" : "Manage API Keys"
+          }
+        }
+      }
+    },
+    "more_privacy_policy" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Privacy Policy"
           }
         }
       }
@@ -791,7 +802,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Manage API keys"
+            "value" : "Manage API Keys"
           }
         }
       }

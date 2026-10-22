@@ -1,29 +1,37 @@
 import SwiftUI
 
 struct MoreView: View {
+    private static let privacyPolicyUrl = URL(string: "https://github.com/SIKV/LingoMateApp/blob/main/PRIVACY.md")!
+
     var body: some View {
         List {
-            NavigationLink(value: Route.manageApiKeys) {
-                MoreRow(
-                    title: L10n.moreManageApiKeysTitle,
-                    subtitle: L10n.moreManageApiKeysSubtitle,
-                    systemImage: "key.fill"
-                )
-            }
+            Section {
+                NavigationLink(value: Route.manageApiKeys) {
+                    MoreRow(
+                        title: L10n.moreManageApiKeysTitle,
+                        subtitle: L10n.moreManageApiKeysSubtitle,
+                        systemImage: "key.fill"
+                    )
+                }
 
-            NavigationLink(value: Route.feedback) {
-                MoreRow(
-                    title: L10n.moreFeedbackTitle,
-                    subtitle: L10n.moreFeedbackSubtitle,
-                    systemImage: "exclamationmark.bubble.fill"
-                )
+                NavigationLink(value: Route.feedback) {
+                    MoreRow(
+                        title: L10n.moreFeedbackTitle,
+                        subtitle: L10n.moreFeedbackSubtitle,
+                        systemImage: "exclamationmark.bubble.fill"
+                    )
+                }
+            } footer: {
+                VStack(spacing: Spacing.xs) {
+                    Link(L10n.morePrivacyPolicy, destination: Self.privacyPolicyUrl)
+                        .font(.caption)
+
+                    Text(L10n.moreAppVersion(appVersion))
+                        .font(.caption2)
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.top, Spacing.lg)
             }
-        }
-        .safeAreaInset(edge: .bottom) {
-            Text(L10n.moreAppVersion(appVersion))
-                .font(.caption2)
-                .foregroundStyle(.secondary)
-                .padding(.bottom, Spacing.sm)
         }
         .navigationTitle(L10n.moreTitle)
     }
