@@ -33,13 +33,11 @@ Shared code is split into small modules rather than one monolithic
 
 ## Screenshots
 
-#### Android
-<img width="250" src="https://github.com/user-attachments/assets/b7a4cb4c-be18-4fca-a643-0072ecb69696" />
-<img width="250" src="https://github.com/user-attachments/assets/59a7349a-5312-4e19-a21c-3a7c554aa87f" />
+<img width="250" src="https://github.com/user-attachments/assets/4177eafd-84f0-4b60-a0b5-8821d44e1cff" />
 
-#### iOS
-<img width="250" src="https://github.com/user-attachments/assets/6a2ad3a5-6359-463b-a1fc-b82e059327de" />
-<img width="250" src="https://github.com/user-attachments/assets/11cd875a-18c2-42a5-9417-004a63e15c8a" />
+<img width="250" src="https://github.com/user-attachments/assets/e3786eb6-7826-4d04-8a67-8ea187f24ac3" />
+
+<img width="250" src="https://github.com/user-attachments/assets/01ca7674-c793-46bb-8475-8150b8351b5e" />
 
 ## Remote config
 
@@ -56,7 +54,7 @@ in. It is stored with `EncryptedSharedPreferences` on Android and the `Keychain`
 
 ## Crash reporting and analytics
 
-Crash reports go to Sentry and usage analytics to PostHog.
+Crash reports go to `Sentry` and usage analytics to `PostHog`.
 
 ## Privacy
 
