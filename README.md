@@ -4,26 +4,32 @@
 
 ![publish-remote-config](https://github.com/SIKV/LingoMateApp/actions/workflows/publish-remote-config.yml/badge.svg)
 
-### 🚧 Work in progress 🚧
-
 A cross-platform language-learning chat app built with Kotlin Multiplatform.
 Business logic, networking, persistence, and state management are shared;
 the UI is fully native on each platform (no Compose Multiplatform on iOS).
+
+## Features
+
+- Practice a language by chatting with a model, either as a **conversation**
+  about real-life situations or as **translation** of sentences into the language you're learning.
+- Pick the model, the language to practice, and the language the assistant explains in.
+- End a chat to get a recap of the session.
+- Send feedback from the app.
 
 ## Structure
 
 Shared code is split into small modules rather than one monolithic
 `shared` module.
 
-- `shared` — umbrella KMP module, wires everything together via Koin DI
-- `api/*` — networking layer (Ktor + kotlinx.serialization)
-- `data/*` — repositories, persistence, services
-- `feature/*` — shared feature logic (view models, state)
-- `onDeviceLLM` — on-device LLM support (stubs for now)
-- `logger` — logging (Kermit)  
-- `composeApp` — Android app (Jetpack Compose)
-- `iosApp` — iOS app (SwiftUI, Xcode project)
-
+- `shared` — umbrella KMP module, wires everything together via Koin DI.
+- `api/*` — networking layer (Ktor + kotlinx.serialization).
+- `data/*` — repositories, persistence, services.
+- `feature/*` — shared feature logic (view models, state).
+- `onDeviceLLM` — on-device LLM support (stubs for now).
+- `analytics` — analytics interface each app implements with the PostHog SDK.
+- `logger` — logging (Kermit).
+- `composeApp` — Android app (Jetpack Compose).
+- `iosApp` — iOS app (SwiftUI).
 
 ## Screenshots
 
@@ -47,3 +53,11 @@ fails, so the app still starts offline.
 
 The key is entered in the app, not at build time: open **Manage API keys** and paste it
 in. It is stored with `EncryptedSharedPreferences` on Android and the `Keychain` on iOS.
+
+## Crash reporting and analytics
+
+Crash reports go to Sentry and usage analytics to PostHog.
+
+## Privacy
+
+See [PRIVACY.md](PRIVACY.md) for what the app collects and where it goes.
