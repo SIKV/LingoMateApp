@@ -56,6 +56,7 @@ enum L10n {
     static let moreManageApiKeysSubtitle = LocalizedStringKey("more_manage_api_keys_subtitle")
     static let moreFeedbackTitle = LocalizedStringKey("more_feedback_title")
     static let moreFeedbackSubtitle = LocalizedStringKey("more_feedback_subtitle")
+    static let morePrivacyPolicy = LocalizedStringKey("more_privacy_policy")
 
     static let manageApiKeysTitle = LocalizedStringKey("manage_api_keys_title")
     static let manageApiKeysKeySaved = LocalizedStringKey("manage_api_keys_key_saved")
