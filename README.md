@@ -8,6 +8,10 @@ A cross-platform language-learning chat app built with Kotlin Multiplatform.
 Business logic, networking, persistence, and state management are shared;
 the UI is fully native on each platform (no Compose Multiplatform on iOS).
 
+## Get the App
+
+[![ TestFlight](https://img.shields.io/badge/%20TestFlight-Join%20Beta-0D96F6)](https://testflight.apple.com/join/TD7FWBh6)
+
 ## Features
 
 - Practice a language by chatting with a model, either as a **conversation**
