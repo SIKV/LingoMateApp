@@ -10,7 +10,9 @@ the UI is fully native on each platform (no Compose Multiplatform on iOS).
 
 ## Get the App
 
-[![ TestFlight](https://img.shields.io/badge/%20TestFlight-Join%20Beta-0D96F6)](https://testflight.apple.com/join/TD7FWBh6)
+[![Android](https://img.shields.io/badge/Android-Download%20APK-3DDC84)](https://github.com/SIKV/LingoMateApp/releases/latest)
+[![ TestFlight](https://img.shields.io/badge/%20TestFlight-Join%20Beta-0D96F6)](https://testflight.apple.com/join/TD7FWBh6)
+
 
 ## Features
 
