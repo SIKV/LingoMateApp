@@ -8,21 +8,17 @@ plugins {
     alias(libs.plugins.sentry)
 }
 
-val localProperties: Provider<Properties> = providers.fileContents(rootProject.layout.projectDirectory.file("local.properties")).asText
+val secretsProperties: Provider<Properties> = providers.fileContents(rootProject.layout.projectDirectory.file("secrets.properties")).asText
     .map { text -> Properties().apply { load(text.reader()) } }
 
-// Takes a value from local.properties for local builds and from an environment variable on CI.
-// Without either, the value is empty and the SDK that reads it stays disabled.
 fun generateBuildValue(
     name: String,
     declaration: String,
     sourceSet: String,
-    localPropertiesKey: String,
-    environmentVariable: String,
+    propertiesKey: String,
 ): TaskProvider<Task> =
     tasks.register("generate${sourceSet.replaceFirstChar(Char::uppercase)}$name") {
-        val value: Provider<String> = localProperties.map { it.getProperty(localPropertiesKey) }
-            .orElse(providers.environmentVariable(environmentVariable))
+        val value: Provider<String> = secretsProperties.map { it.getProperty(propertiesKey) }
             .orElse("")
         val outputDir: Provider<Directory> = layout.buildDirectory.dir("generated/$name/$sourceSet")
         inputs.property("value", value)
@@ -35,12 +31,12 @@ fun generateBuildValue(
         }
     }
 
-fun generateSentryDsn(sourceSet: String, localPropertiesKey: String, environmentVariable: String): TaskProvider<Task> =
-    generateBuildValue("SentryDsn", "internal actual val sentryDsn: String", sourceSet, localPropertiesKey, environmentVariable)
+fun generateSentryDsn(sourceSet: String, propertiesKey: String): TaskProvider<Task> =
+    generateBuildValue("SentryDsn", "internal actual val sentryDsn: String", sourceSet, propertiesKey)
 
 // One PostHog project serves both apps, so its values go to commonMain.
-fun generatePostHogValue(name: String, localPropertiesKey: String, environmentVariable: String): TaskProvider<Task> =
-    generateBuildValue("PostHog$name", "val postHog$name: String", "commonMain", localPropertiesKey, environmentVariable)
+fun generatePostHogValue(name: String, propertiesKey: String): TaskProvider<Task> =
+    generateBuildValue("PostHog$name", "val postHog$name: String", "commonMain", propertiesKey)
 
 kotlin {
     androidTarget {
@@ -85,14 +81,14 @@ kotlin {
             implementation(libs.kotlin.test)
         }
         commonMain {
-            kotlin.srcDir(generatePostHogValue("ProjectToken", "posthog.projectToken", "POSTHOG_PROJECT_TOKEN"))
-            kotlin.srcDir(generatePostHogValue("Host", "posthog.host", "POSTHOG_HOST"))
+            kotlin.srcDir(generatePostHogValue("ProjectToken", "posthogProjectToken"))
+            kotlin.srcDir(generatePostHogValue("Host", "posthogHost"))
         }
         androidMain {
-            kotlin.srcDir(generateSentryDsn("androidMain", "sentry.dsn.android", "SENTRY_DSN_ANDROID"))
+            kotlin.srcDir(generateSentryDsn("androidMain", "sentryDSNAndroid"))
         }
         iosMain {
-            kotlin.srcDir(generateSentryDsn("iosMain", "sentry.dsn.ios", "SENTRY_DSN_IOS"))
+            kotlin.srcDir(generateSentryDsn("iosMain", "sentryDSNIOS"))
         }
     }
 

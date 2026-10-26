@@ -1,5 +1,5 @@
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -44,10 +44,22 @@ kotlin {
     }
 }
 
+val secretsProperties = Properties().apply {
+    rootProject.file("secrets.properties").takeIf { it.exists() }?.inputStream()?.use(::load)
+}
+
 android {
     namespace = "sikv.lingomate"
     compileSdk = Configs.ANDROID_COMPILE_SDK
 
+    signingConfigs {
+        create("release") {
+            secretsProperties.getProperty("androidKeystoreFile")?.let { storeFile = rootProject.file(it) }
+            storePassword = secretsProperties.getProperty("androidKeystorePassword")
+            keyAlias = secretsProperties.getProperty("androidKeyAlias")
+            keyPassword = secretsProperties.getProperty("androidKeyPassword")
+        }
+    }
     defaultConfig {
         applicationId = "sikv.lingomate"
         minSdk = Configs.ANDROID_MIN_SDK
@@ -64,8 +76,9 @@ android {
         }
     }
     buildTypes {
-        getByName("release") {
-            isMinifyEnabled = false
+        release {
+            isMinifyEnabled = true
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     compileOptions {
